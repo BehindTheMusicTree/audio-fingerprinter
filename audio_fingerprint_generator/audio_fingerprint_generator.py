@@ -36,7 +36,9 @@ def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optiona
             raise error
 
     try:
-        return acoustid.fingerprint_file(path=file_path)
+        duration, fingerprint = acoustid.fingerprint_file(path=file_path)
+        print(file_path)
+        print(f'Fingerprint: {fingerprint}')
     except acoustid.FingerprintGenerationError as error:
         if error.args[0] == 'fpcalc exited with status 2':
             raise AudioFileProbablyTooShortForFingerprintGenerationError(
