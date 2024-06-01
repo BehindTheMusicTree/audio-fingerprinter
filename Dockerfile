@@ -6,13 +6,12 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
     apt-get install -y software-properties-common && \ 
     add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get install -y python3.12 python3-pip libchromaprint-tools ffmpeg && \
+    apt-get install -y python3.12 python3-pip libchromaprint-tools ffmpeg python3.12-distutils && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
 RUN python3.12 -m pip install --upgrade pip && \
-    python3.12 -m pip install setuptools && \
     python3.12 -m pip install --no-cache-dir -r requirements.txt
 
 RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
