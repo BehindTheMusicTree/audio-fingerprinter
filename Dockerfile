@@ -1,18 +1,22 @@
-FROM python:3.12.3-alpine
+FROM ubuntu:20.04
 
-COPY . /app
 WORKDIR /app
 
-RUN ls && \
-    apt update && \
-    apt install -y libchromaprint-tools ffmpeg && \
-    rm -rf /var/lib/apt/lists/* && \
-    cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get install -y python3.12 python3-pip libchromaprint-tools ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN python3.12 -m pip install --upgrade pip && \
+    python3.12 -m pip install --no-cache-dir -r requirements.txt
+
+RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     chmod +x bin/fpcalc && \
-    cp env/variables/test/.env .env && \
-    pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    cp env/variables/test/.env .env
 
 ENV PATH="/app/bin:${PATH}"
 
-ENTRYPOINT [ "python", "__main__.py" ]
+ENTRYPOINT [ "python3.12", "__main__.py" ]
