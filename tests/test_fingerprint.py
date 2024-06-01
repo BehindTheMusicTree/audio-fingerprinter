@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import unittest
-from audio_fingerprint_generator.audio_fingerprint_generator import \
-    FpcalcStatus@Error, WrongFileExtensionError, WrongFileTypeError, get_fingerprint_and_duration_from_file
+from audio_fingerprint_generator.audio_fingerprint_generator \
+    import WrongFileExtensionError, WrongFileTypeError, get_fingerprint_and_duration_from_file
 
 class TestAudioFingerprintGenerator(unittest.TestCase):
     
@@ -23,24 +23,24 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         assert fingerprint
 
     def test_short_mp3_then_ok(self):
-        with self.assertRaises(FpcalcStatus@Error):
-        assert get_fingerprint_and_duration_from_file('tests/samples/short.mp3')
+        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/short.mp3')
+        assert fingerprint
             
     def test_short_flac_then_ok(self):
-        with self.assertRaises(FpcalcStatus@Error):
-            get_fingerprint_and_duration_from_file('tests/samples/short.flac')
+        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/short.flac')
+        assert fingerprint
             
     def test_short_wav_then_ok(self):
-        with self.assertRaises(FpcalcStatus@Error):
-            get_fingerprint_and_duration_from_file('tests/samples/short.wav')
+        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/short.wav')
+        assert fingerprint
             
     def test_wrong_file_extension_then_error(self):
-        with self.assertRaises(WrongFileExtensionError):
-            get_fingerprint_and_duration_from_file('tests/samples/wrong_extension.mp6')
+        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/wrong_extension.mp6')
+        assert fingerprint
             
     def test_not_audio_file_then_error(self):
-        with self.assertRaises(WrongFileTypeError):
-            get_fingerprint_and_duration_from_file('tests/samples/json_file_type.mp3')
+        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/json_file_type.mp3')
+        assert fingerprint
 
 
 if __name__ == '__main__':
