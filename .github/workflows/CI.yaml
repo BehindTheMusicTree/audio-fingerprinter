@@ -23,7 +23,7 @@ jobs:
 
       - name: Add fpcalc to PATH
         run: |
-          ls -all "${{ github.workspace }}"
+          ls -all "${{ github.workspace }}/bin"
           echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
           fpcalc --version
 
