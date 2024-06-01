@@ -3,8 +3,12 @@
 import os
 from typing import Optional, Tuple
 import acoustid
+import pydub
+import mimetypes
 from django.core.files.uploadedfile import TemporaryUploadedFile, InMemoryUploadedFile
 import tempfile
+
+import pydub.exceptions
 
 class AudioFileProbablyTooShortForFingerprintGenerationError(Exception):
     pass
@@ -12,10 +16,24 @@ class AudioFileProbablyTooShortForFingerprintGenerationError(Exception):
 class WrongFileExtensionError(Exception):
     pass
 
+class WrongFileTypeError(Exception):
+    pass
+
 def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optional[float], Optional[bytes]]:
     _, extension = os.path.splitext(file_path)
-    if extension.lower() not in ['.mp3', '.wav', '.flac']:
-        raise WrongFileExtensionError(f'Invalid file extension {extension}. Only .mp3, .wav, and .flac are supported.')
+    
+    mime_type = mimetypes.guess_type(file_path)[0]
+    if mime_type is None or not mime_type.startswith('audio/'):
+        raise WrongFileExtensionError(f'Invalid file type {mime_type}. Only audio types are allowed.')
+
+    try:
+        with open(file_path, 'rb') as f:
+            pydub.AudioSegment.from_file(f, format=extension[1:])
+    except Exception as error:
+        if isinstance(error, pydub.exceptions.CouldntDecodeError) and 'error code: 183' in error.args[0]:            
+            raise WrongFileTypeError(f'Invalid file type. Only audio types are allowed.')
+        else:
+            raise error
 
     try:
         return acoustid.fingerprint_file(path=file_path)
