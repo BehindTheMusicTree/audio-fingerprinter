@@ -6,8 +6,8 @@ from audio_fingerprint_generator.audio_fingerprint_generator import get_fingerpr
 
 
 def main(file_obj):
-    fingerprint, duration = get_fingerprint_and_duration_from_file(file_obj)
-    print(f'Fingerprint: {fingerprint}, Duration: {duration}')
+    duration, fingerprint = get_fingerprint_and_duration_from_file(file_obj)
+    print(f'Duration: {duration}, Fingerprint: {fingerprint}')
 
 if __name__ == "__main__":
     import argparse
