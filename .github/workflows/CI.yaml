@@ -21,13 +21,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Add fpcalc to PATH
+      - name: Install FFmpeg
         run: |
-          echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Add fpcalc to PATH
+        run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
 
       - name: Run tests
-        run: |
-          python -m unittest discover
+        run: python -m unittest discover
 
   Build-and-Push-to-DockerHub:
     needs: Tests
