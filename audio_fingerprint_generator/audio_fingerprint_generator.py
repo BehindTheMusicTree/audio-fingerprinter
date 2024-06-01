@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import config as config
 import os
 from typing import Optional, Tuple
 import acoustid
@@ -30,8 +31,11 @@ def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optiona
         with open(file_path, 'rb') as f:
             pydub.AudioSegment.from_file(f, format=extension[1:])
     except Exception as error:
-        if isinstance(error, pydub.exceptions.CouldntDecodeError) and 'error code: 183' in error.args[0]:            
-            raise WrongFileTypeError(f'Invalid file type. Only audio types are allowed.')
+        if isinstance(error, pydub.exceptions.CouldntDecodeError):
+            first_error = error.args[0]
+            if (config.ENV == config.ENV_VALUES.DEV and 'error code: 183' in first_error) or \
+                (config.ENV == config.ENV_VALUES.GITHUB_CI and 'error code: 1' in first_error):         
+                raise WrongFileTypeError(f'Invalid file type. Only audio types are allowed.')
         else:
             raise error
 
