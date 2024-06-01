@@ -11,7 +11,7 @@ RUN apt-get update && \
 
 COPY . .
 
-RUN python3.12 -m pip install --upgrade pip && \
+RUN python3.12 -m pip install pip==21.2.4 && \
     python3.12 -m pip install --no-cache-dir -r requirements.txt
 
 RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
