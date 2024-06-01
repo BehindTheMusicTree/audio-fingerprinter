@@ -5,11 +5,10 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pydub acoustid
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Copiez votre script Python dans l'image
 COPY . /app
 WORKDIR /app
 
-# Exécutez votre script Python lorsque le conteneur est lancé
-CMD ["python", "your_script.py"]
+ENTRYPOINT [ "python", "__main__.py" ]
