@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+import argparse
+
+from fingerprint_generator import get_fingerprint_and_duration_from_file
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+
+def main(file_obj):
+    fingerprint, duration = get_fingerprint_and_duration_from_file(file_obj)
+    print(f'Fingerprint: {fingerprint}, Duration: {duration}')
+
+if __name__ == "__main__":
+    import argparse
+    print('Hello')
+    parser = argparse.ArgumentParser(description='Generate fingerprint and duration from audio file.')
+    parser.add_argument('file', type=str, help='The audio file.')
+    args = parser.parse_args()
+    main(args.file)
