@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from typing import Optional
+from typing import Optional, Tuple
 import acoustid
 from django.core.files.uploadedfile import TemporaryUploadedFile, InMemoryUploadedFile
 import tempfile
@@ -9,13 +9,20 @@ import tempfile
 class AudioFileProbablyTooShortForFingerprintGenerationError(Exception):
     pass
 
-def get_fingerprint_and_duration_from_file_path(file_path: str) -> tuple[Optional[float], Optional[bytes]]:
+class WrongFileExtensionError(Exception):
+    pass
+
+def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optional[float], Optional[bytes]]:
+    _, extension = os.path.splitext(file_path)
+    if extension.lower() not in ['.mp3', '.wav', '.flac']:
+        raise WrongFileExtensionError(f'Invalid file extension {extension}. Only .mp3, .wav, and .flac are supported.')
+
     try:
         return acoustid.fingerprint_file(path=file_path)
     except acoustid.FingerprintGenerationError as error:
         if error.args[0] == 'fpcalc exited with status 2':
             raise AudioFileProbablyTooShortForFingerprintGenerationError(
-                'fpcalc exited with status 2. Make sure the file is an audio file and that it is not to short.')
+                'fpcalc exited with status 2. Make sure the file is an audio file and that it is not too short.')
         else:
             raise error
 

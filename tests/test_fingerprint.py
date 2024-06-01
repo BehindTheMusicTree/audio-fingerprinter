@@ -2,7 +2,7 @@
 
 import unittest
 from audio_fingerprint_generator.audio_fingerprint_generator import \
-    AudioFileProbablyTooShortForFingerprintGenerationError, get_fingerprint_and_duration_from_file
+    AudioFileProbablyTooShortForFingerprintGenerationError, WrongFileExtensionError, get_fingerprint_and_duration_from_file
 
 class TestAudioFingerprintGenerator(unittest.TestCase):
     
@@ -33,6 +33,10 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
     def test_short_wav_then_error(self):
         with self.assertRaises(AudioFileProbablyTooShortForFingerprintGenerationError):
             get_fingerprint_and_duration_from_file('tests/samples/short.wav')
+            
+    def test_wrong_file_extension_then_error(self):
+        with self.assertRaises(WrongFileExtensionError):
+            get_fingerprint_and_duration_from_file('tests/samples/wrongextension.mp6')
 
 
 if __name__ == '__main__':
