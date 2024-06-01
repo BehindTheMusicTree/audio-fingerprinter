@@ -24,7 +24,7 @@ jobs:
       - name: Install FFmpeg
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg=7:4.4.2-0ubuntu0.22.04.1
 
       - name: Add fpcalc to PATH
         run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
