@@ -2,7 +2,7 @@
 
 import unittest
 from audio_fingerprint_generator.audio_fingerprint_generator import \
-    AudioFileProbablyTooShortForFingerprintGenerationError, WrongFileExtensionError, WrongFileTypeError, get_fingerprint_and_duration_from_file
+    FpcalcStatus@Error, WrongFileExtensionError, WrongFileTypeError, get_fingerprint_and_duration_from_file
 
 class TestAudioFingerprintGenerator(unittest.TestCase):
     
@@ -10,28 +10,28 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             get_fingerprint_and_duration_from_file('path/to/non/existing/file')
         
-    def test_mp3(self):
+    def test_mp3_track_then_ok(self):
         _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/Bonnie Tyler - Total Eclipse of the Heart.mp3')
         assert fingerprint
         
-    def test_flac(self):
+    def test_flac_track_then_ok(self):
         _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/oostil - drown (massano remix).flac')
         assert fingerprint
 
-    def test_wav(self):
+    def test_wav_track_then_ok(self):
         _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/Y do i - Carmina Burana Remix.wav')
         assert fingerprint
 
-    def test_short_mp3_then_error(self):
-        with self.assertRaises(AudioFileProbablyTooShortForFingerprintGenerationError):
-            get_fingerprint_and_duration_from_file('tests/samples/short.mp3')
+    def test_short_mp3_then_ok(self):
+        with self.assertRaises(FpcalcStatus@Error):
+        assert get_fingerprint_and_duration_from_file('tests/samples/short.mp3')
             
-    def test_short_flac_then_error(self):
-        with self.assertRaises(AudioFileProbablyTooShortForFingerprintGenerationError):
+    def test_short_flac_then_ok(self):
+        with self.assertRaises(FpcalcStatus@Error):
             get_fingerprint_and_duration_from_file('tests/samples/short.flac')
             
-    def test_short_wav_then_error(self):
-        with self.assertRaises(AudioFileProbablyTooShortForFingerprintGenerationError):
+    def test_short_wav_then_ok(self):
+        with self.assertRaises(FpcalcStatus@Error):
             get_fingerprint_and_duration_from_file('tests/samples/short.wav')
             
     def test_wrong_file_extension_then_error(self):
