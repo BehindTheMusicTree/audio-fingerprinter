@@ -35,7 +35,7 @@ jobs:
 
       - name: Set env variables file
         run: |
-          cp ${{ github.workspace }}/env/variables/github-ci ${{ github.workspace }}/.env
+          cp ${{ github.workspace }}/env/variables/github-ci/.env ${{ github.workspace }}/.env
           echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
 
       - name: Run tests
