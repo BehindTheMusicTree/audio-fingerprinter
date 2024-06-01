@@ -10,7 +10,7 @@ import tempfile
 
 import pydub.exceptions
 
-class FpcalcStatusError(Exception):
+class FpcalcStatus2Error(Exception):
     pass
 
 class WrongFileExtensionError(Exception):
@@ -42,7 +42,8 @@ def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optiona
         return duration, fingerprint
     except acoustid.FingerprintGenerationError as error:
         if error.args[0] == 'fpcalc exited with status 2':
-            raise FpcalcStatusError('fpcalc exited with status 2. Make sure the file is an audio is not corrupted.')
+            raise FpcalcStatus2Error('fpcalc exited with status 2. Make sure the file is an audio is not corrupted. ' +
+                                     'On Macos, it may mean that the audio file is too short for a fingerprint to be generated.')
         else:
             raise error
 
