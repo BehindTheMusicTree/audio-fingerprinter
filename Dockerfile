@@ -11,4 +11,6 @@ RUN pip install --upgrade pip && \
 COPY . /app
 WORKDIR /app
 
+ENV PATH="/app/bin:${PATH}"
+
 ENTRYPOINT [ "python", "__main__.py" ]
