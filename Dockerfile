@@ -11,6 +11,10 @@ RUN pip install --upgrade pip && \
 COPY . /app
 WORKDIR /app
 
+RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
+    chmod +x bin/fpcalc && \
+    cp env/variables/test/.env .env
+
 ENV PATH="/app/bin:${PATH}"
 
 ENTRYPOINT [ "python", "__main__.py" ]
