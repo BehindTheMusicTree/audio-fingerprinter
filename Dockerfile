@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 WORKDIR /app
 
 RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
     apt-get install -y software-properties-common && \ 
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get install -y python3.12 python3-pip libchromaprint-tools ffmpeg && \
