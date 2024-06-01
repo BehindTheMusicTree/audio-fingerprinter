@@ -23,7 +23,7 @@ jobs:
 
       - name: Add fpcalc to PATH
         run: |
-          export PATH=$PATH:$(pwd)/bin
+          echo "${{ github.workspace }}/bin/fpcalc" >> $GITHUB_PATH
           fpcalc --version
 
       - name: Run tests
