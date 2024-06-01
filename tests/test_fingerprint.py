@@ -35,12 +35,12 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         assert fingerprint
             
     def test_wrong_file_extension_then_error(self):
-        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/wrong_extension.mp6')
-        assert fingerprint
+        with self.assertRaises(WrongFileExtensionError):
+            get_fingerprint_and_duration_from_file('tests/samples/wrong_extension.mp6')
             
     def test_not_audio_file_then_error(self):
-        _, fingerprint = get_fingerprint_and_duration_from_file('tests/samples/json_file_type.mp3')
-        assert fingerprint
+        with self.assertRaises(WrongFileTypeError):
+            get_fingerprint_and_duration_from_file('tests/samples/json_file_type.mp3')
 
 
 if __name__ == '__main__':
