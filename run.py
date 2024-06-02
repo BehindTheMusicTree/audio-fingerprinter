@@ -48,7 +48,7 @@ def create_app():
                     isinstance(e, WrongFileTypeError)):
                 return error_response(error_message, 400)
             if isinstance(e, FpcalcStatus2Error):
-                return error_response(error_message, 500)
+                return error_response(error_message, 422)
             return error_response(error_message, 500)
 
     return app
