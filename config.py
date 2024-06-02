@@ -32,7 +32,7 @@ class ProdConfig(Config):
 
 class ENV_VALUES:
     DEV = 'DEV'
-    GITHUB_CI_TEST = 'GITHUB_CI'
+    GITHUB_CI_TEST = 'GITHUB_CI_TEST'
     TEST = 'TEST'
     PROD = 'PROD'
 
