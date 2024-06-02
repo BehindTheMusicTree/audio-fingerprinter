@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import base64
 import os
 
-import werkzeug
 from app.audio_fingerprint_generator import ERROR_CODES_STR
 import config as config
 import unittest
@@ -103,7 +103,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
             assert type(response) is OkResponseObject
             print(response.fingerprint)
-            assert response.fingerprint == b'AQAAAA'
+            assert base64.b64decode(response.fingerprint) == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
         response = self.post_generate_audio_fingerprint('short.wav')
