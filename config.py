@@ -38,4 +38,6 @@ class ENV_VALUES:
 
 
 ENV = os.getenv('ENV')
+print('ENV')
+print(ENV)
 PORT = int(os.getenv('PORT'))  # type: ignore

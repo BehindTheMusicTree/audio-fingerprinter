@@ -13,7 +13,7 @@ jobs:
         run: echo "Setting up environment variables"
         env:
           ENV: GITHUB_CI_TEST
-          PORT: ${{ secrets.APP_PORT }}
+          PORT: 5000
 
       - name: Checkout code
         uses: actions/checkout@v2
