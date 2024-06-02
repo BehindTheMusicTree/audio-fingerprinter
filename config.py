@@ -12,3 +12,4 @@ class ENV_VALUES:
     
 
 ENV = os.getenv('ENV')
+PORT = os.getenv('PORT')

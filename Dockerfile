@@ -2,6 +2,10 @@ FROM ubuntu:22.04
 
 WORKDIR /app
 
+ARG port
+
+ENV PORT=$port
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
     apt-get install -y software-properties-common curl && \ 

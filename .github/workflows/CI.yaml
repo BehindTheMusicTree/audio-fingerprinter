@@ -7,11 +7,15 @@ on:
 jobs:
   Tests:
     runs-on: ubuntu-22.04
-    env:
-      ENV: "GITHUB_CI"
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Set CI env variables
+        run: echo "Setting up environment variables"
+        env:
+          PORT: ${{ secrets.APP_PORT }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v2
@@ -31,11 +35,6 @@ jobs:
       - name: Add right fpcalc to PATH
         run: |
           cp ${{ github.workspace }}/env/fpcalc/fpcalc-ubuntu ${{ github.workspace }}/bin/fpcalc
-          echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
-
-      - name: Set env variables file
-        run: |
-          cp ${{ github.workspace }}/env/variables/github-ci/.env ${{ github.workspace }}/.env
           echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
 
       - name: Run tests
@@ -60,6 +59,8 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ secrets.DOCKER_TAG }}
+          build-args: |
+            port=${{ secrets.APP_PORT }}
 
   Call-Webhook:
     needs: Build-and-Push-to-DockerHub

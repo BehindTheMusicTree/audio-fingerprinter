@@ -47,7 +47,7 @@ def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optiona
     except acoustid.FingerprintGenerationError as error:
         if error.args[0] == 'fpcalc exited with status 2':
             raise FpcalcStatus2Error('fpcalc exited with status 2. Make sure the file is an audio is not corrupted. ' +
-                                     'On Macos, it may mean that the audio file is too short for a fingerprint to be generated.')
+                                     'On MacOS, it may mean that the audio file is too short for a fingerprint to be generated.')
         else:
             raise error
 
