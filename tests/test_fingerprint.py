@@ -102,6 +102,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
             assert type(response) is OkResponseObject
+            print(response.fingerprint)
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
