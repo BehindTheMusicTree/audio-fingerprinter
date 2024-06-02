@@ -28,12 +28,9 @@ class BadRequestResponseObject(ResponseObject):
     message: str
 
 
-class InternalServerErrorResponseObject(ResponseObject):
-    pass
-
-
 class UnprocessableEntityResponseObject(ResponseObject):
-    pass
+    status: int
+    message: str
 
 
 class TestAudioFingerprintGenerator(unittest.TestCase):
@@ -53,12 +50,14 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             schema = class_schema(OkResponseObject)()
         elif response.status_code == 400:
             schema = class_schema(BadRequestResponseObject)()
+        elif response.status_code == 422:
+            schema = class_schema(UnprocessableEntityResponseObject)()
         elif response.status_code == 500:
             print(f"Internal server error: {response.data}")
         else:
             print(f"Unexpected status code: {response.status_code}")
 
-        assert response.status_code in [200, 400]
+        assert response.status_code in [200, 400, 422]
 
         if schema:
             try:
@@ -92,33 +91,36 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
     def test_short_mp3_then_depends_on_os(self):
         response = self.post_generate_audio_fingerprint('short.mp3')
         if config.ENV == config.ENV_VALUES.DEV:
-            assert type(response) is OkResponseObject
-            assert response.fingerprint
+            assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
-
-            assert fingerprint == b'AQAAAA'
+            assert type(response) is OkResponseObject
+            assert response.fingerprint == b'AQAAAA'
 
     def test_short_flac_then_depends_on_os(self):
         response = self.post_generate_audio_fingerprint('short.flac')
         if config.ENV == config.ENV_VALUES.DEV:
-
+            assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
-
-            assert fingerprint == b'AQAAAA'
+            assert type(response) is OkResponseObject
+            assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
         response = self.post_generate_audio_fingerprint('short.wav')
         if config.ENV == config.ENV_VALUES.DEV:
-
+            assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
-
-            assert fingerprint == b'AQAAAA'
+            assert type(response) is OkResponseObject
+            assert response.fingerprint == b'AQAAAA'
 
     def test_wrong_file_extension_then_error(self):
         response = self.post_generate_audio_fingerprint('wrong_extension.mp6')
+        assert type(response) is BadRequestResponseObject
+        assert ERROR_CODES_STR.WRONG_FILE_EXTENSION in response.message
 
     def test_not_audio_file_then_error(self):
         response = self.post_generate_audio_fingerprint('json_file_type.mp3')
+        assert type(response) is BadRequestResponseObject
+        assert ERROR_CODES_STR.WRONG_FILE_TYPE in response.message
 
     if __name__ == '__main__':
         unittest.main()
