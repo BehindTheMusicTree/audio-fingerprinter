@@ -36,7 +36,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         self.app = app.test_client()
 
     def post_generate_audio_fingerprint(self, filename) -> ResponseObject:
-        file_path = os.getcwd() + " " + filename
+        file_path = os.getcwd() + "/tests/samples/" + filename
         response = self.app.post('/generate-audio-fingerprint',
                                  data=json.dumps({'filepath': file_path}),
                                  content_type='application/json')
@@ -66,9 +66,9 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         if type(response) == BadRequestResponseObject:
             assert ERROR_CODES_STR.FILE_NOT_FOUND in response.message
 
-        # def test_mp3_track_then_ok(self):
-        #     response = self.post_generate_audio_fingerprint('Bonnie Tyler - Total Eclipse of the Heart.mp3')
-        #     assert response.status ==
+    def test_mp3_track_then_ok(self):
+        response = self.post_generate_audio_fingerprint('Bonnie Tyler - Total Eclipse of the Heart.mp3')
+        self.assertEqual(type(response), OkResponseObject)
 
         # def test_flac_track_then_ok(self):
         #     response = self.post_generate_audio_fingerprint('oostil - drown (massano remix).flac')
