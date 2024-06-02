@@ -7,14 +7,10 @@ on:
 jobs:
   Tests:
     runs-on: ubuntu-22.04
-
+    env:
+      ENV: GITHUB_CI_TEST
+      PORT: 5000
     steps:
-      - name: Set CI env variables
-        run: echo "Setting up environment variables"
-        env:
-          ENV: GITHUB_CI_TEST
-          PORT: 5000
-
       - name: Checkout code
         uses: actions/checkout@v2
 
