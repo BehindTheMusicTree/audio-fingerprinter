@@ -65,10 +65,14 @@ jobs:
     needs: Build-and-Push-to-DockerHub
     runs-on: ubuntu-latest
 
+    # steps:
+    #   - name: Call webhook
+    #     uses: distributhor/workflow-webhook@v1
+    #     env:
+    #       webhook_type: "json-extended"
+    #       webhook_url: ${{ secrets.WEBHOOK_URL }}
+    #       webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+
     steps:
-      - name: Call webhook
-        uses: distributhor/workflow-webhook@v1
-        env:
-          webhook_type: "json-extended"
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+      - name: Deploy docker container webhook
+        run: curl -X POST ${{ secrets.WEBHOOK_URL }}
