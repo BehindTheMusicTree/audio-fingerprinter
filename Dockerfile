@@ -20,4 +20,6 @@ RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
 
 ENV PATH="/app/bin:${PATH}"
 
+EXPOSE 8000
+
 ENTRYPOINT [ "python3.12", "__main__.py" ]
