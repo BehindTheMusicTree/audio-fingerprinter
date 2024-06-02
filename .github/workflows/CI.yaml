@@ -12,6 +12,7 @@ jobs:
       - name: Set CI env variables
         run: echo "Setting up environment variables"
         env:
+          ENV: GITHUB_CI_TEST
           PORT: ${{ secrets.APP_PORT }}
 
       - name: Checkout code
