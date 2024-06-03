@@ -5,6 +5,7 @@ WORKDIR /app
 ARG port
 
 ENV PORT=$port
+ENV ENV=TEST
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
