@@ -70,7 +70,6 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             print(f"Unexpected status code: {response.status_code}")
 
         assert response.status_code in [200, 400, 422]
-        print(schema)
         if schema:
             try:
                 return schema.load(response.json)
@@ -88,19 +87,16 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
     def test_mp3_track_then_ok(self):
         response = self.post_generate_audio_fingerprint('Bonnie Tyler - Total Eclipse of the Heart.mp3')
         assert type(response) is OkResponseObject
-        print(response.fingerprint)
         assert response.fingerprint
 
     def test_flac_track_then_ok(self):
         response = self.post_generate_audio_fingerprint('oostil - drown (massano remix).flac')
         assert type(response) is OkResponseObject
-        print(response.fingerprint)
         assert response.fingerprint
 
     def test_wav_track_then_ok(self):
         response = self.post_generate_audio_fingerprint('Y do i - Carmina Burana Remix.wav')
         assert type(response) is OkResponseObject
-        print(response.fingerprint)
         assert response.fingerprint
 
     def test_short_mp3_then_depends_on_os(self):
@@ -117,7 +113,6 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
             assert type(response) is OkResponseObject
-            print(response.fingerprint)
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
@@ -127,6 +122,16 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
+
+    def test_huge_flac_then_ok(self):
+        response = self.post_generate_audio_fingerprint('Muse - Knights of Cydonia - 147Mo.flac')
+        assert type(response) is OkResponseObject
+        assert response.fingerprint
+
+    def test_huge_wav_then_ok(self):
+        response = self.post_generate_audio_fingerprint('msolo - Sandstorm Remix - 66Mo.wav')
+        assert type(response) is OkResponseObject
+        assert response.fingerprint
 
     def test_wrong_file_extension_then_error(self):
         response = self.post_generate_audio_fingerprint('wrong_extension.mp6')
