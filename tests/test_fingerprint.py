@@ -52,7 +52,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
 
     def post_generate_audio_fingerprint(self, filename) -> ResponseObject:
         file_path = os.getcwd() + "/tests/samples/" + filename
-        response = self.app.post('/generate-audio-fingerprint',
+        response = self.app.post('/generate-audio-fingerprint/',
                                  data=json.dumps({'filepath': file_path}),
                                  content_type='application/json')
 
@@ -123,10 +123,11 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
-    def test_huge_flac_then_ok(self):
-        response = self.post_generate_audio_fingerprint('Muse - Knights of Cydonia - 147Mo.flac')
-        assert type(response) is OkResponseObject
-        assert response.fingerprint
+    # The file is too big to be uploaded on GitHub (100Mo limit)
+    # def test_huge_flac_then_ok(self):
+    #     response = self.post_generate_audio_fingerprint('Muse - Knights of Cydonia - 147Mo.flac')
+    #     assert type(response) is OkResponseObject
+    #     assert response.fingerprint
 
     def test_huge_wav_then_ok(self):
         response = self.post_generate_audio_fingerprint('msolo - Sandstorm Remix - 66Mo.wav')
