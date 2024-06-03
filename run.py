@@ -11,6 +11,13 @@ from app.audio_fingerprint_generator \
 
 def create_app():
     app = Flask(__name__)
+
+    # Disable strict slashes in the URL routing rules.
+    # When this is set to False, the trailing slash in the URL is optional.
+    # This means that Flask will respond to both '/generate-audio-fingerprint' and '/generate-audio-fingerprint/'.
+    # If this was set to True (the default), Flask would strictly differentiate between the two URLs.
+    app.url_map.strict_slashes = False
+
     if config.ENV == config.ENV_VALUES.TEST:
         app.config.from_object(config.TestConfig)
     elif config.ENV == config.ENV_VALUES.DEV:
@@ -32,7 +39,7 @@ def create_app():
         DURATION: str = 'duration'
         FINGERPRINT: str = 'fingerprint'
 
-    @app.route('/generate-audio-fingerprint/', methods=['POST'])
+    @app.route('/generate-audio-fingerprint', methods=['POST'])
     def generate_audio_fingerprint():
         if POST_FIELDS.FILE_PATH not in request.json:
             return error_response('No filepath in the request', 400)
