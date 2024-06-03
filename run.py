@@ -32,7 +32,7 @@ def create_app():
         DURATION: str = 'duration'
         FINGERPRINT: str = 'fingerprint'
 
-    @app.route('/generate-audio-fingerprint', methods=['POST'])
+    @app.route('/generate-audio-fingerprint/', methods=['POST'])
     def generate_audio_fingerprint():
         if POST_FIELDS.FILE_PATH not in request.json:
             return error_response('No filepath in the request', 400)
