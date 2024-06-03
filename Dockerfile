@@ -16,7 +16,7 @@ RUN apt-get update && \
 
 COPY . .
 
-RUN python3.12 -m install --no-cache-dir --ignore-installed -r requirements.txt
+RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     chmod +x bin/fpcalc && \
