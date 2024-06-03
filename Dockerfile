@@ -23,6 +23,8 @@ RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
 
 ENV PATH="/app/bin:${PATH}"
 
-EXPOSE 8000
+EXPOSE $PORT
 
-ENTRYPOINT [ "python3.12", "__main__.py" ]
+ENV FLASK_APP=run.py
+ENV FLASK_RUN_HOST=0.0.0.0
+CMD ["flask", "run"]
