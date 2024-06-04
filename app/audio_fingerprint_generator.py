@@ -6,8 +6,6 @@ from typing import Optional, Tuple
 import acoustid
 import pydub
 import mimetypes
-from django.core.files.uploadedfile import TemporaryUploadedFile, InMemoryUploadedFile
-import tempfile
 
 import pydub.exceptions
 
