@@ -8,7 +8,6 @@ from app.audio_fingerprint_generator import ERROR_CODES_STR
 import config as config
 import unittest
 import json
-from dataclasses import dataclass
 from marshmallow_dataclass import class_schema
 import marshmallow
 from marshmallow import Schema, fields
@@ -30,7 +29,8 @@ class OkResponseObject(ResponseObject):
     def __init__(self, data: dict):
         self.duration = data.get('duration')
         self.fingerprint_str = data.get('fingerprint_str')
-        self.fingerprint = base64.b64decode(data.get('fingerprint')) if data.get('fingerprint') else None
+        self.fingerprint = base64.b64decode(data.get('fingerprint')) if data.get(
+            'fingerprint') else None  # type: ignore
 
 
 class BadRequestResponseObject(ResponseObject):
@@ -58,7 +58,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
 
         if response.status_code == 200:
             schema = OkResponseObjectSchema()
-            data = schema.load(response.json)
+            data = schema.load(response.json)  # type: ignore
             return OkResponseObject(data)
         elif response.status_code == 400:
             schema = class_schema(BadRequestResponseObject)()
@@ -72,7 +72,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         assert response.status_code in [200, 400, 422]
         if schema:
             try:
-                return schema.load(response.json)
+                return schema.load(response.json)  # type: ignore
             except marshmallow.exceptions.ValidationError as err:
                 print(f"Error deserializing JSON to ErrorResponseObject: {err}")
 
