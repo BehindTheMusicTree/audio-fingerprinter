@@ -41,11 +41,19 @@ def create_app():
 
     @app.route('/generate-audio-fingerprint', methods=['POST'])
     def generate_audio_fingerprint():
-        if POST_FIELDS.FILE_PATH not in request.json:
+        if POST_FIELDS.FILE_PATH not in request.json:  # type: ignore
             return error_response('No filepath in the request', 400)
+
+        if not isinstance(request.json, dict):
+            return error_response('Request body is not a dictionary', 400)
+
         filepath = request.json[POST_FIELDS.FILE_PATH]
         try:
             duration, fingerprint = get_fingerprint_and_duration_from_file(filepath)
+
+            if not isinstance(fingerprint, bytes):
+                return error_response('Error generating the fingerprint: fingerprint is not bytes', 500)
+
             fingerprint_b64 = base64.b64encode(fingerprint).decode()
             return {RESPONSE_FIELDS.DURATION: duration, RESPONSE_FIELDS.FINGERPRINT: fingerprint_b64}
         except Exception as e:
