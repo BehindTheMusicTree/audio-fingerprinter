@@ -5,7 +5,6 @@ setup(
     version='0.1',
     packages=find_packages(),
     install_requires=['pyacoustid==1.3.0',
-                      'django==5.0.6',
                       'setuptools==69.2.0',
                       'pydub==0.25.1',
                       'flask==3.0.3',
