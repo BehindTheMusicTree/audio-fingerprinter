@@ -39,3 +39,7 @@ class ENV_VALUES:
 
 ENV = os.getenv('ENV')
 PORT = int(os.getenv('PORT'))  # type: ignore
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH = '/var/audio-fingerprint-generator/pool/'

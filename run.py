@@ -6,7 +6,7 @@ from flask import Flask, request
 import config as config
 from app.audio_fingerprint_generator \
     import FpcalcStatus2Error, WrongFileExtensionError, WrongFileTypeError, FileNotFoundError, \
-    get_fingerprint_and_duration_from_file
+    get_fingerprint_and_duration_from_file_name
 
 
 def create_app():
@@ -33,7 +33,7 @@ def create_app():
         return {'status': status, 'message': message}, status
 
     class POST_FIELDS:
-        FILE_PATH: str = 'filepath'
+        FILE_NAME: str = 'filename'
 
     class RESPONSE_FIELDS:
         DURATION: str = 'duration'
@@ -41,15 +41,15 @@ def create_app():
 
     @app.route('/generate-audio-fingerprint', methods=['POST'])
     def generate_audio_fingerprint():
-        if POST_FIELDS.FILE_PATH not in request.json:  # type: ignore
-            return error_response('No filepath in the request', 400)
+        if POST_FIELDS.FILE_NAME not in request.json:  # type: ignore
+            return error_response('No filename in the request', 400)
 
         if not isinstance(request.json, dict):
             return error_response('Request body is not a dictionary', 400)
 
-        filepath = request.json[POST_FIELDS.FILE_PATH]
+        filename = request.json[POST_FIELDS.FILE_NAME]
         try:
-            duration, fingerprint = get_fingerprint_and_duration_from_file(filepath)
+            duration, fingerprint = get_fingerprint_and_duration_from_file_name(filename)
 
             if not isinstance(fingerprint, bytes):
                 return error_response('Error generating the fingerprint: fingerprint is not bytes', 500)

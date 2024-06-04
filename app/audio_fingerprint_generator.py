@@ -51,7 +51,12 @@ class FileNotFoundError(AppError):
         super().__init__(ERROR_CODES_STR.FILE_NOT_FOUND, message)
 
 
-def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optional[float], Optional[bytes]]:
+def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optional[float], Optional[bytes]]:
+    file_path = os.path.join(config.AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH, file_name)
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool durectory.')
+
     _, extension = os.path.splitext(file_path)
 
     mime_type = mimetypes.guess_type(file_path)[0]
@@ -79,22 +84,3 @@ def get_fingerprint_and_duration_from_file_path(file_path: str) -> Tuple[Optiona
                 'On MacOS, it may mean that the audio file is too short for a fingerprint to be generated.')
         else:
             raise error
-
-
-def get_fingerprint_and_duration_from_file(file) -> tuple[Optional[float], Optional[bytes]]:
-    if isinstance(file, str):
-        file = os.path.expanduser(file)
-        if not os.path.exists(file):
-            raise FileNotFoundError(f'The file {file} does not exist.')
-        return get_fingerprint_and_duration_from_file_path(file)
-    elif isinstance(file, InMemoryUploadedFile):
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            for chunk in file.chunks():
-                tmp.write(chunk)
-            return get_fingerprint_and_duration_from_file_path(tmp.name)
-    elif isinstance(file, TemporaryUploadedFile):
-        if not os.path.exists(file.file.name):
-            raise FileNotFoundError('The temporary file does not exist.')
-        return get_fingerprint_and_duration_from_file_path(file.file.name)
-    else:
-        raise TypeError('file must be a file path string, a Django InMemoryUploadedFile or a Django TemporaryUploadedFile')
