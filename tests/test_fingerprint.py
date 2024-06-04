@@ -29,8 +29,10 @@ class OkResponseObject(ResponseObject):
     def __init__(self, data: dict):
         self.duration = data.get('duration')
         self.fingerprint_str = data.get('fingerprint_str')
-        self.fingerprint = base64.b64decode(data.get('fingerprint')) if data.get(
-            'fingerprint') else None  # type: ignore
+        data_fingerprint = data.get('fingerprint')
+        if not data_fingerprint:
+            raise ValueError('No fingerprint in the data')
+        self.fingerprint = base64.b64decode(data_fingerprint)
 
 
 class BadRequestResponseObject(ResponseObject):
@@ -58,7 +60,13 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
 
         if response.status_code == 200:
             schema = OkResponseObjectSchema()
-            data = schema.load(response.json)  # type: ignore
+            if response.json is None:
+                raise Exception('No JSON in the response')
+            data = schema.load(response.json)
+
+            if not isinstance(data, dict):
+                raise Exception('Data is not a dictionary')
+
             return OkResponseObject(data)
         elif response.status_code == 400:
             schema = class_schema(BadRequestResponseObject)()
