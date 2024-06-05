@@ -53,7 +53,7 @@ def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optiona
     file_path = os.path.join(config.AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH, file_name)
 
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool durectory.')
+        raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
 
     _, extension = os.path.splitext(file_path)
 
