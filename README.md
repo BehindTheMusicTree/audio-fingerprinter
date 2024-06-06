@@ -1,1 +1,1 @@
-# audio-fingerprint-generator
+# audio-fingerprinter
