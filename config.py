@@ -42,4 +42,4 @@ PORT = int(os.getenv('PORT'))  # type: ignore
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH = '/tmp/audio-fingerprint-generator/pool/'
+AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH = '/tmp/audio-fingerprinter/pool/'

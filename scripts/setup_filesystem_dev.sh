@@ -1,6 +1,6 @@
 #!/bin/bash
 
-appFilesToAnalyseDirAbsPath=/tmp/audio-fingerprint-generator/pool/
-sudo mkdir -p $appFilesToAnalyseDirAbsPath
-sudo chmod 775 $appFilesToAnalyseDirAbsPath
-sudo chown -R $USER $appFilesToAnalyseDirAbsPath
+poolAbsPath=/tmp/audio-fingerprinter/pool/
+sudo mkdir -p $poolAbsPath
+sudo chmod 775 $poolAbsPath
+sudo chown -R $USER $poolAbsPath

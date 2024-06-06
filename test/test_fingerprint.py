@@ -45,7 +45,7 @@ class UnprocessableEntityResponseObject(ResponseObject):
     message: str
 
 
-class TestAudioFingerprintGenerator(unittest.TestCase):
+class TestAudioFingerprinter(unittest.TestCase):
 
     response_object = None
 
@@ -61,11 +61,11 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         file_path = os.path.join(config.AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH, filename)
         os.system(f"rm '{file_path}'")
 
-    def post_generate_audio_fingerprint(self, filename, testing_missing_file=False) -> ResponseObject:
+    def post_fingerprint_audio(self, filename, testing_missing_file=False) -> ResponseObject:
 
         if not testing_missing_file:
             self.copy_file_to_files_to_pool(filename)
-        response = self.app.post('/generate-audio-fingerprint/',
+        response = self.app.post('/fingerprint-audio/',
                                  data=json.dumps({'filename': filename}),
                                  content_type='application/json')
 
@@ -105,28 +105,28 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         return ResponseObject()
 
     def test_file_path_doesnt_exist_then_error(self):
-        response = self.post_generate_audio_fingerprint(filename='non_existent_file.mp3', testing_missing_file=True)
+        response = self.post_fingerprint_audio(filename='non_existent_file.mp3', testing_missing_file=True)
         self.assertEqual(type(response), BadRequestResponseObject)
         if type(response) == BadRequestResponseObject:
             assert ERROR_CODES_STR.FILE_NOT_FOUND in response.message
 
     def test_mp3_track_then_ok(self):
-        response = self.post_generate_audio_fingerprint('Bonnie Tyler - Total Eclipse of the Heart.mp3')
+        response = self.post_fingerprint_audio('Bonnie Tyler - Total Eclipse of the Heart.mp3')
         assert type(response) is OkResponseObject
         assert response.fingerprint
 
     def test_flac_track_then_ok(self):
-        response = self.post_generate_audio_fingerprint('oostil - drown (massano remix).flac')
+        response = self.post_fingerprint_audio('oostil - drown (massano remix).flac')
         assert type(response) is OkResponseObject
         assert response.fingerprint
 
     def test_wav_track_then_ok(self):
-        response = self.post_generate_audio_fingerprint('Y do i - Carmina Burana Remix.wav')
+        response = self.post_fingerprint_audio('Y do i - Carmina Burana Remix.wav')
         assert type(response) is OkResponseObject
         assert response.fingerprint
 
     def test_short_mp3_then_depends_on_os(self):
-        response = self.post_generate_audio_fingerprint('short.mp3')
+        response = self.post_fingerprint_audio('short.mp3')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
@@ -134,7 +134,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_flac_then_depends_on_os(self):
-        response = self.post_generate_audio_fingerprint('short.flac')
+        response = self.post_fingerprint_audio('short.flac')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
@@ -142,7 +142,7 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
-        response = self.post_generate_audio_fingerprint('short.wav')
+        response = self.post_fingerprint_audio('short.wav')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
         if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
@@ -150,12 +150,12 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
             assert response.fingerprint == b'AQAAAA'
 
     def test_huge_wav_then_ok(self):
-        response = self.post_generate_audio_fingerprint('msolo - Sandstorm Remix - 66Mo.wav')
+        response = self.post_fingerprint_audio('msolo - Sandstorm Remix - 66Mo.wav')
         assert type(response) is OkResponseObject
         assert response.fingerprint
 
     def test_not_audio_file_then_error(self):
-        response = self.post_generate_audio_fingerprint('json_file_type.mp3')
+        response = self.post_fingerprint_audio('json_file_type.mp3')
         assert type(response) is BadRequestResponseObject
         assert ERROR_CODES_STR.WRONG_FILE_TYPE in response.message
 
