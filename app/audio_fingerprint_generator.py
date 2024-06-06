@@ -5,7 +5,6 @@ import os
 from typing import Optional, Tuple
 import acoustid
 import pydub
-import mimetypes
 
 import pydub.exceptions
 
@@ -31,12 +30,6 @@ class FpcalcStatus2Error(AppError):
         super().__init__(ERROR_CODES_STR.FPCALC_STATUS_2, message)
 
 
-class WrongFileExtensionError(AppError):
-
-    def __init__(self, message: str) -> None:
-        super().__init__(ERROR_CODES_STR.WRONG_FILE_EXTENSION, message)
-
-
 class WrongFileTypeError(AppError):
 
     def __init__(self, message: str) -> None:
@@ -56,10 +49,6 @@ def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optiona
         raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
 
     _, extension = os.path.splitext(file_path)
-
-    mime_type = mimetypes.guess_type(file_path)[0]
-    if mime_type is None or not mime_type.startswith('audio/'):
-        raise WrongFileExtensionError(f'Invalid file type {mime_type}. Only audio types are allowed.')
 
     try:
         with open(file_path, 'rb') as f:

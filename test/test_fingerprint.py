@@ -154,11 +154,6 @@ class TestAudioFingerprintGenerator(unittest.TestCase):
         assert type(response) is OkResponseObject
         assert response.fingerprint
 
-    def test_wrong_file_extension_then_error(self):
-        response = self.post_generate_audio_fingerprint('wrong_extension.mp6')
-        assert type(response) is BadRequestResponseObject
-        assert ERROR_CODES_STR.WRONG_FILE_EXTENSION in response.message
-
     def test_not_audio_file_then_error(self):
         response = self.post_generate_audio_fingerprint('json_file_type.mp3')
         assert type(response) is BadRequestResponseObject
