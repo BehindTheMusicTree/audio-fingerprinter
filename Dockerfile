@@ -17,10 +17,14 @@ RUN apt-get update && \
 
 COPY . .
 
+ENV AudioFingerPrintGeneratorPoolDir=/tmp/audio-fingerprint-generator/pool/
+
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
-    chmod +x bin/fpcalc
+    chmod +x bin/fpcalc && \
+    mkdir -p ${AudioFingerPrintGeneratorPoolDir} && \
+    chmod -R 777 ${AudioFingerPrintGeneratorPoolDir}
 
 ENV PATH="/app/bin:${PATH}"
 
