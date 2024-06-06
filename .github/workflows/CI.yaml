@@ -60,7 +60,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ secrets.DOCKER_TAG }}
           build-args: |
-            port=${{ secrets.APP_PORT }}
+            port=${{ secrets.TEST_APP_PORT }}
 
   Call-Webhook:
     needs: Build-and-Push-to-DockerHub
