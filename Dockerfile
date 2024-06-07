@@ -8,6 +8,7 @@ ARG port
 ENV PORT=$port
 ENV ENV=TEST
 
+# software-properties-common is required for add-apt-repository
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
@@ -16,7 +17,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # To run gunicorn as a non-root user without password prompt
-RUN apt-get install -y gosu
+RUN apt-get install -y wget && \
+wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
+chmod +x /usr/local/bin/gosu
 
 COPY requirements.txt .
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
