@@ -35,6 +35,6 @@ RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     mkdir -p ${PoolDir} && \
     chmod -R 777 ${PoolDir}
 
-EXPOSE $PORT
+EXPOSE 3000
 
-CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "run:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:${PORT}", "run:app"]
