@@ -9,9 +9,9 @@ ENV PORT=$port
 ENV ENV=TEST
 
 RUN apt-get update && \
-    add-apt-repository ppa:deadsnakes/ppa && \  
-    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
-    apt-get install -y software-properties-common curl python3.12 libchromaprint-tools ffmpeg python3.12-distutils && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get install -y curl python3.12 libchromaprint-tools ffmpeg python3.12-distutils && \
     curl https://bootstrap.pypa.io/get-pip.py | python3.12 && \
     rm -rf /var/lib/apt/lists/*
 
@@ -31,6 +31,3 @@ RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     chmod -R 777 ${PoolDir}
 
 EXPOSE $PORT
-
-ENV FLASK_APP=run.py
-ENV FLASK_RUN_HOST=0.0.0.0
