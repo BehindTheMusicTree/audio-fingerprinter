@@ -15,7 +15,8 @@ RUN apt-get update && \
     curl https://bootstrap.pypa.io/get-pip.py | python3.12 && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install gunicorn
+# To run gunicorn as a non-root user without password prompt
+RUN apt-get install -y gosu
 
 COPY requirements.txt .
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
@@ -33,4 +34,3 @@ EXPOSE $PORT
 
 ENV FLASK_APP=run.py
 ENV FLASK_RUN_HOST=0.0.0.0
-CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "run:app"]
