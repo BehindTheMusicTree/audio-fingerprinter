@@ -10,5 +10,6 @@ setup(
                       'flask==3.0.3',
                       'marshmallow==3.21.2',
                       'marshmallow_dataclass==8.6.1',
-                      'python-dotenv==1.0.1'],
+                      'python-dotenv==1.0.1',
+                      'gunicorn==22.0.0'],
 )
