@@ -17,7 +17,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # To run gunicorn as a non-root user without password prompt
-RUN apt-get install -y wget && \
+RUN apt-get update && apt-get install -y wget && \
 wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
 chmod +x /usr/local/bin/gosu
 
