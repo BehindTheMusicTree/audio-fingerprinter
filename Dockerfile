@@ -37,4 +37,4 @@ RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
 
 EXPOSE 3000
 
-CMD ["gunicorn", "-b", "0.0.0.0:${PORT}", "run:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "run:app"]
