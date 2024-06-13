@@ -61,19 +61,10 @@ jobs:
           build-args: |
             port=${{ secrets.TEST_APP_PORT }}
 
-  call-redeployment-webhook:
-    name: Call redeployment webhook
-    needs: build-and-push-to-dockerhub
-    runs-on: ubuntu-latest
-
-    # steps:
-    #   - name: Call webhook
-    #     uses: distributhor/workflow-webhook@v1
-    #     env:
-    #       webhook_type: "json-extended"
-    #       webhook_url: ${{ secrets.WEBHOOK_URL }}
-    #       webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-
-    steps:
-      - name: Deploy docker container webhook
-        run: curl -X POST ${{ secrets.TEST_SERVER_REDEPLOYMENT_WEBHOOK_URL }}
+  redeploy-webhook-call:
+    name: Redeploy webhook call
+    needs: [build-and-push-to-dockerhub]
+    uses: Bodzify/bodzify-redeploy-webhook-action/.github/workflows/workflow.yml@main
+    with:
+      env: TEST
+    secrets: inherit
