@@ -5,7 +5,9 @@ on:
     branches: [main, dev]
 
 jobs:
-  Tests:
+
+  tests:
+    name: Tests
     runs-on: ubuntu-22.04
     env:
       ENV: GITHUB_CI_TEST
@@ -39,8 +41,9 @@ jobs:
       - name: Run tests
         run: python -m unittest discover
 
-  Build-and-Push-to-DockerHub:
-    needs: Tests
+  build-and-push-to-dockerhub:
+    name: Build / Push to DockerHub
+    needs: tests
     runs-on: ubuntu-latest
 
     steps:
@@ -54,12 +57,13 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ secrets.DOCKER_TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_REPO }}:${{ vars.IMAGE_TAG }}
           build-args: |
             port=${{ secrets.TEST_APP_PORT }}
 
-  Call-Webhook:
-    needs: Build-and-Push-to-DockerHub
+  call-redeployment-webhook:
+    name: Call redeployment webhook
+    needs: build-and-push-to-dockerhub
     runs-on: ubuntu-latest
 
     # steps:
