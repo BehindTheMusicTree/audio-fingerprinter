@@ -76,4 +76,4 @@ jobs:
 
     steps:
       - name: Deploy docker container webhook
-        run: curl -X POST ${{ secrets.WEBHOOK_URL }}
+        run: curl -X POST ${{ secrets.TEST_SERVER_REDEPLOYMENT_WEBHOOK_URL }}
