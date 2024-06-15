@@ -1,12 +1,7 @@
-# Image ubuntu:22.04 used for all fingerprints env (except dev) for consistent fingerprint generation
+# Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
 FROM ubuntu:22.04
 
 WORKDIR /app
-
-ARG port
-
-ENV PORT=$port
-ENV ENV=TEST
 
 # software-properties-common is required for add-apt-repository
 RUN apt-get update && \
@@ -29,6 +24,10 @@ RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.
 COPY . .
 
 ENV PoolDir=/tmp/audio-fingerprinter/pool/
+ENV LogDir=/var/log/audio-fingerprinter/
+
+RUN mkdir -p ${LogDir} && \
+    chmod -R 777 ${LogDir}
 
 RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     chmod +x bin/fpcalc && \

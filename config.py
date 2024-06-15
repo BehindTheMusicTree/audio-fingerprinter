@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import logging
 import os
 import dotenv
+from logging.handlers import RotatingFileHandler
 
 dotenv.load_dotenv()
 
@@ -9,25 +11,41 @@ dotenv.load_dotenv()
 class Config(object):
     DEBUG = False
     TESTING = False
+    LOG_LEVEL = logging.INFO
+    GENERAL_LOG_FILE = None
+    REQUEST_LOG_FILE = None
 
 
 class DevConfig(Config):
     DEBUG = True
+    TESTING = False
+    LOG_LEVEL = logging.DEBUG
+    GENERAL_LOG_FILE = 'log/general.log'
+    REQUEST_LOG_FILE = 'log/request.log'
 
 
 class GithubCiTestConfig(Config):
     TESTING = True
     DEBUG = False
+    LOG_LEVEL = logging.DEBUG
+    GENERAL_LOG_FILE = 'log/general.log'
+    REQUEST_LOG_FILE = 'log/request.log'
 
 
 class TestConfig(Config):
     TESTING = True
     DEBUG = True
+    LOG_LEVEL = logging.DEBUG
+    GENERAL_LOG_FILE = '/var/log/audio-fingerprinter/general.log'
+    REQUEST_LOG_FILE = '/var/log/audio-fingerprinter/request.log'
 
 
 class ProdConfig(Config):
     TESTING = False
     DEBUG = False
+    LOG_LEVEL = logging.INFO
+    GENERAL_LOG_FILE = '/var/log/audio-fingerprintergeneral.log'
+    REQUEST_LOG_FILE = '/var/log/audio-fingerprinter/request.log'
 
 
 class ENV_VALUES:

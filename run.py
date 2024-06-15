@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import logging
+from logging.handlers import RotatingFileHandler
 import base64
 from flask import Flask, request
 
@@ -11,22 +13,55 @@ from app.audio_fingerprint_generator \
 def create_app():
     app = Flask(__name__)
 
+    if config.ENV == config.ENV_VALUES.DEV:
+        app.config.from_object(config.DevConfig)
+    elif config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
+        app.config.from_object(config.GithubCiTestConfig)
+    elif config.ENV == config.ENV_VALUES.TEST:
+        app.config.from_object(config.TestConfig)
+    elif config.ENV == config.ENV_VALUES.PROD:
+        app.config.from_object(config.ProdConfig)
+    else:
+        raise ValueError(f'Invalid ENV value {config.ENV}')
+
+    general_log_handler = RotatingFileHandler(app.config['GENERAL_LOG_FILE'], maxBytes=10240, backupCount=10)
+    general_log_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s '
+        '[in %(pathname)s:%(lineno)d]'
+    ))
+
+    general_log_handler.setLevel(app.config['LOG_LEVEL'])
+    app.logger.addHandler(general_log_handler)
+    app.logger.setLevel(app.config['LOG_LEVEL'])
+
+    request_log_handler = RotatingFileHandler(app.config['REQUEST_LOG_FILE'], maxBytes=10240, backupCount=10)
+    request_log_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s '
+    ))
+    request_log_handler.setLevel(app.config['LOG_LEVEL'])
+
+    request_logger = logging.getLogger('request')
+    request_logger.addHandler(request_log_handler)
+    request_logger.setLevel(app.config['LOG_LEVEL'])
+
+    # Log each request
+    @app.after_request
+    def after_request(response):
+        request_logger.info(
+            '%s %s %s %s %s',
+            request.remote_addr,
+            request.method,
+            request.scheme,
+            request.full_path,
+            response.status
+        )
+        return response
+
     # Disable strict slashes in the URL routing rules.
     # When this is set to False, the trailing slash in the URL is optional.
     # This means that Flask will respond to both '/generate-audio-fingerprint' and '/generate-audio-fingerprint/'.
     # If this was set to True (the default), Flask would strictly differentiate between the two URLs.
     app.url_map.strict_slashes = False
-
-    if config.ENV == config.ENV_VALUES.TEST:
-        app.config.from_object(config.TestConfig)
-    elif config.ENV == config.ENV_VALUES.DEV:
-        app.config.from_object(config.DevConfig)
-    elif config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
-        app.config.from_object(config.GithubCiTestConfig)
-    elif config.ENV == config.ENV_VALUES.PROD:
-        app.config.from_object(config.ProdConfig)
-    else:
-        raise ValueError(f'Invalid ENV value {config.ENV}')
 
     def error_response(message, status):
         return {'status': status, 'message': message}, status
