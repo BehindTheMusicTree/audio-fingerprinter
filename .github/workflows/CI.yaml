@@ -79,7 +79,7 @@ jobs:
       # POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB and POSTGRES_PORT env variables are required by the postgres image
       - name: Set environment variables on server
         run: |
-          ENV_FILE_PATH="${{ secrets.TEST_SERVER_DOCKER_COMPOSE_DIR }}${{ vars.AUDIO_FINGERPRINTER_ENV_VARIABLES_FILENAME }}"
+          ENV_FILE_PATH="${{ vars.TEST_SERVER_DOCKER_COMPOSE_DIR }}${{ vars.AUDIO_FINGERPRINTER_ENV_VARIABLES_FILENAME }}"
           ssh ${{ secrets.TEST_SERVER_SSH_BODZIFY_USERNAME }}@${{ vars.TEST_SERVER_URL }} "
             rm -f $ENV_FILE_PATH &&
             echo 'ENV=TEST' >> $ENV_FILE_PATH &&
