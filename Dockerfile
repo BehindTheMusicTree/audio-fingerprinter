@@ -23,13 +23,12 @@ RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.
 
 COPY . .
 
-ENV PoolDir=/tmp/audio-fingerprinter/pool/
-ENV LogDir=/var/log/audio-fingerprinter/
+ENV PoolDir=/tmp/bodzify-audio-fingerprinter/pool/
+ENV LogDir=/var/log/bodzify-audio-fingerprinter/
 
 RUN mkdir -p ${LogDir} && \
-    chmod -R 777 ${LogDir}
-
-RUN cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
+    chmod -R 777 ${LogDir} && \
+    cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
     chmod +x bin/fpcalc && \
     mkdir -p ${PoolDir} && \
     chmod -R 777 ${PoolDir}

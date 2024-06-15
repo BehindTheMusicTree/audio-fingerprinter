@@ -3,7 +3,6 @@
 import logging
 import os
 import dotenv
-from logging.handlers import RotatingFileHandler
 
 dotenv.load_dotenv()
 
@@ -36,16 +35,16 @@ class TestConfig(Config):
     TESTING = True
     DEBUG = True
     LOG_LEVEL = logging.DEBUG
-    GENERAL_LOG_FILE = '/var/log/audio-fingerprinter/general.log'
-    REQUEST_LOG_FILE = '/var/log/audio-fingerprinter/request.log'
+    GENERAL_LOG_FILE = '/var/log/bodzify-audio-fingerprinter/general.log'
+    REQUEST_LOG_FILE = '/var/log/bodzify-audio-fingerprinter/request.log'
 
 
 class ProdConfig(Config):
     TESTING = False
     DEBUG = False
     LOG_LEVEL = logging.INFO
-    GENERAL_LOG_FILE = '/var/log/audio-fingerprintergeneral.log'
-    REQUEST_LOG_FILE = '/var/log/audio-fingerprinter/request.log'
+    GENERAL_LOG_FILE = '/var/log/bodzify-audio-fingerprintergeneral.log'
+    REQUEST_LOG_FILE = '/var/log/bodzify-audio-fingerprinter/request.log'
 
 
 class ENV_VALUES:
@@ -60,4 +59,4 @@ PORT = int(os.getenv('PORT'))  # type: ignore
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH = '/tmp/audio-fingerprinter/pool/'
+AUDIO_FINGERPRINT_POOL_DIR_ABS_PATH = '/tmp/bodzify-audio-fingerprinter/pool/'

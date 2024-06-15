@@ -1,11 +1,11 @@
 #!/bin/bash
 
-poolAbsPath=/tmp/audio-fingerprinter/pool/
+poolAbsPath=/tmp/bodzify-audio-fingerprinter/pool/
 sudo mkdir -p $poolAbsPath
 sudo chmod 775 $poolAbsPath
 sudo chown -R $USER $poolAbsPath
 
-logAbsPath=log/
-sudo mkdir -p $logAbsPath
-sudo chmod 775 $logAbsPath
-sudo chown -R $USER $logAbsPath
+logRelPath=log/
+sudo mkdir -p $logRelPath
+sudo chmod 775 $logRelPath
+sudo chown -R $USER $logRelPath
