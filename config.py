@@ -43,7 +43,7 @@ class ProdConfig(Config):
     TESTING = False
     DEBUG = False
     LOG_LEVEL = logging.INFO
-    GENERAL_LOG_FILE = '/var/log/bodzify-audio-fingerprintergeneral.log'
+    GENERAL_LOG_FILE = '/var/log/bodzify-audio-fingerprinter/general.log'
     REQUEST_LOG_FILE = '/var/log/bodzify-audio-fingerprinter/request.log'
 
 
