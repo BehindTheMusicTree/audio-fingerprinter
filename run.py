@@ -15,7 +15,7 @@ def create_app():
 
     if config.ENV == config.ENV_VALUES.DEV:
         app.config.from_object(config.DevConfig)
-    elif config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
+    elif config.ENV == config.ENV_VALUES.CI_TEST:
         app.config.from_object(config.GithubCiTestConfig)
     elif config.ENV == config.ENV_VALUES.TEST:
         app.config.from_object(config.TestConfig)

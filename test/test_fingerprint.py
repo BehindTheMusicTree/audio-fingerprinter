@@ -129,7 +129,7 @@ class TestAudioFingerprinter(unittest.TestCase):
         response = self.post_fingerprint_audio('short.mp3')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
+        if config.ENV == config.ENV_VALUES.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
@@ -137,7 +137,7 @@ class TestAudioFingerprinter(unittest.TestCase):
         response = self.post_fingerprint_audio('short.flac')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
+        if config.ENV == config.ENV_VALUES.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
@@ -145,7 +145,7 @@ class TestAudioFingerprinter(unittest.TestCase):
         response = self.post_fingerprint_audio('short.wav')
         if config.ENV == config.ENV_VALUES.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if config.ENV == config.ENV_VALUES.GITHUB_CI_TEST:
+        if config.ENV == config.ENV_VALUES.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
