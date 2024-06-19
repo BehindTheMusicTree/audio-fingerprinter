@@ -11,9 +11,11 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-22.04
+    environment:
+      name: CI_TEST
     env:
-      ENV: GITHUB_CI_TEST
-      APP_PORT: 5000
+      ENV: CI_TEST
+      APP_PORT: ${{ secrets.APP_PORT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -35,7 +37,7 @@ jobs:
           echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
 
       - name: Set up filesystem
-        run: bash ${{ github.workspace }}/scripts/setup_filesystem.github_ci_test.sh
+        run: bash ${{ github.workspace }}/scripts/filesystem_setup.ci_test.sh
 
       - name: Run tests
         run: python -m unittest discover
@@ -44,6 +46,8 @@ jobs:
     name: Build / Push to DockerHub
     needs: tests
     runs-on: ubuntu-latest
+    environment:
+      name: TEST
 
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +85,7 @@ jobs:
           ssh ${{ secrets.TEST_SERVER_SSH_BODZIFY_USERNAME }}@${{ vars.TEST_SERVER_URL }} "
             rm -f $ENV_FILE_PATH &&
             echo 'ENV=TEST' >> $ENV_FILE_PATH &&
-            echo 'APP_PORT=${{ secrets.TEST_APP_PORT }}' >> $ENV_FILE_PATH
+            echo 'APP_PORT=${{ secrets.APP_PORT }}' >> $ENV_FILE_PATH
           "
 
   redeploy-webhook-call:
