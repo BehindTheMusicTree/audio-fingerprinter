@@ -55,7 +55,12 @@ class ENV_VALUES:
 
 
 ENV = os.getenv('ENV')
-APP_PORT = int(os.getenv('APP_PORT'))  # type: ignore
+if ENV is None:
+    raise EnvironmentError('ENV not set')
+
+APP_PORT = os.getenv('APP_PORT')
+if APP_PORT is None:
+    raise EnvironmentError('APP_PORT not set')
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

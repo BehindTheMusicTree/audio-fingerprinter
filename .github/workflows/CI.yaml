@@ -65,8 +65,10 @@ jobs:
 
   set-env-variables-on-server:
     name: Set environment variables on server
+    needs: build-and-push-to-dockerhub
     runs-on: ubuntu-latest
-    needs: [build-and-push-to-dockerhub]
+    environment:
+      name: TEST
     steps:
       - uses: actions/checkout@v4
       - uses: webfactory/ssh-agent@v0.9.0
