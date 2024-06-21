@@ -105,6 +105,7 @@ jobs:
       name: TEST
     env:
       DOCKER_COMPOSE_PART_FILENAME: ${{ vars.DOCKER_COMPOSE_PART_FILENAME }}
+      APP_PORT: ${{ secrets.APP_PORT }}
 
     steps:
       - uses: actions/checkout@v4
