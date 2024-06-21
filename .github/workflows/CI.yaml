@@ -120,11 +120,11 @@ jobs:
 
       - name: Generate partial docker compose file
         env:
-          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-          IMAGE_REPO: ${{ env.IMAGE_REPO }}
           CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
           ENV_VARIABLES_FILENAME: ${{ vars.ENV_VARIABLES_FILENAME }}
         run: |
+          echo "DOCKER_COMPOSE_PART_FILENAME: ${{ env.DOCKER_COMPOSE_PART_FILENAME }}"
+          echo "DOCKER_COMPOSE_PART_FILENAME: $DOCKER_COMPOSE_PART_FILENAME"
           bash ${{ github.workspace }}/scripts/generate_docker_compose_part.sh
 
       - name: Transfer partial docker-compose on server
