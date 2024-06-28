@@ -70,8 +70,8 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
           build-args: |
-            POOL_DIR_SYMLINK_TARGET=${{ vars.POOL_DIR_SYMLINK_TARGET }}
-            LOG_DIR_SYMLINK_TARGET=${{ vars.LOG_DIR_SYMLINK_TARGET }}
+            POOL_DIR_SYMLINK_TARGET=${{ vars.AUDIO_FINGERPRINTER_POOL_SYMLINK_TARGET }}
+            LOG_DIR_SYMLINK_TARGET=${{ vars.AUDIO_FINGERPRINTER_LOG_SYMLINK_TARGET }}
 
   redeploy-webhook-call:
     name: Redeploy webhook call
