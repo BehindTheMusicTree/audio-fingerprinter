@@ -21,14 +21,15 @@ RUN apt-get update && \
     curl https://bootstrap.pypa.io/get-pip.py | python3.12 && \
     rm -rf /var/lib/apt/lists/*
 
+COPY . .
+
 # To run gunicorn as a non-root user without password prompt
 # Second apt-get update is necessary to take into account the new repositories from add-apt-repository 
 # ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y wget && \
 wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
-chmod +x /usr/local/bin/gosu
+chmod +x /usr/local/bin/gosu scripts/setup_filesystem.sh
 
-COPY . .
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 RUN scripts/setup_filesystem.sh && \
