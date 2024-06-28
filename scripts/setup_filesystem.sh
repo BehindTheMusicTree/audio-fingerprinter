@@ -8,15 +8,15 @@ if [ ! -d "$POOL_DIR" ]; then
     sudo mkdir -p "$POOL_DIR"
 fi
 
-POOL_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_POOL_SYMLINK_TARGET
-if [ -n "$POOL_SYMLINK_TARGET" ]; then
-    echo "POOL_SYMLINK_TARGET is set to $POOL_SYMLINK_TARGET"
-    if [ ! -L "$POOL_SYMLINK_TARGET" ]; then
+POOL_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_POOL_DIR_SYMLINK_TARGET
+if [ -n "$POOL_DIR_SYMLINK_TARGET" ]; then
+    echo "POOL_DIR_SYMLINK_TARGET is set to $POOL_DIR_SYMLINK_TARGET"
+    if [ ! -L "$POOL_DIR_SYMLINK_TARGET" ]; then
         echo "Creating symlink for pool directory..."
-        sudo ln -s "$POOL_DIR" "$POOL_SYMLINK_TARGET"
+        sudo ln -s "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
     fi
 else
-    echo "POOL_SYMLINK_TARGET is not set"
+    echo "POOL_DIR_SYMLINK_TARGET is not set"
 fi
 
 if [ ! -d "$LOG_DIR" ]; then
@@ -24,15 +24,15 @@ if [ ! -d "$LOG_DIR" ]; then
     sudo mkdir -p "$LOG_DIR"
 fi
 
-LOG_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_LOG_SYMLINK_TARGET
-if [ -n "$LOG_SYMLINK_TARGET" ]; then
-    echo "LOG_SYMLINK_TARGET is set to $LOG_SYMLINK_TARGET"
-    if [ ! -L "$LOG_SYMLINK_TARGET" ]; then
+LOG_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_LOG_DIR_SYMLINK_TARGET
+if [ -n "$LOG_DIR_SYMLINK_TARGET" ]; then
+    echo "LOG_DIR_SYMLINK_TARGET is set to $LOG_DIR_SYMLINK_TARGET"
+    if [ ! -L "$LOG_DIR_SYMLINK_TARGET" ]; then
         echo "Creating symlink for log directory..."
-        sudo ln -s "$LOG_DIR" "$LOG_SYMLINK_TARGET"
+        sudo ln -s "$LOG_DIR" "$LOG_DIR_SYMLINK_TARGET"
     fi
 else
-    echo "LOG_SYMLINK_TARGET is not set"
+    echo "LOG_DIR_SYMLINK_TARGET is not set"
 fi
 
 sudo chmod 775 "$POOL_DIR" "$LOG_DIR"

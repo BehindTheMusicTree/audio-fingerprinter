@@ -31,7 +31,6 @@ wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.
 chmod +x /usr/local/bin/gosu
 
 RUN chmod +x scripts/setup_filesystem.sh
-RUN ls scripts
 
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
