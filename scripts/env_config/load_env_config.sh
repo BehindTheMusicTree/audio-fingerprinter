@@ -34,9 +34,9 @@ currentEnvLower=$(echo "$ENV" | tr '[:upper:]' '[:lower:]')
 
 envConfig=$(echo "$config" | jq -r --arg env "$currentEnvLower" '.["environments"][$env]')
 
-export EXTERNAL_DIRS_NEEDED=$(echo "$envConfig" | jq -r '.externalLogNeeded')
+export EXTERNAL_LOG_NEEDED=$(echo "$envConfig" | jq -r '.externalLogNeeded')
 
-defaultInternalPaths=$(echo "$config" | jq -r '.["defaultInternalPaths"]')
+internalPaths=$(echo "$config" | jq -r '.["internalPaths"]')
 
-export POOL_DEFAULT_INTERNAL_DIR=$(echo "$defaultInternalPaths" | jq -r '.["pool"]')
-export LOG_DEFAULT_INTERNAL_DIR=$(echo "$defaultInternalPaths" | jq -r '.["log"]')
+export POOL_DIR=$(echo "$internalPaths" | jq -r '.["pool"]')
+export LOG_DEFAULT_INTERNAL_DIR=$(echo "$internalPaths" | jq -r '.["logDefault"]')

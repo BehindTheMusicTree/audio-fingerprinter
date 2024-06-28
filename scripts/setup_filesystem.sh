@@ -5,13 +5,29 @@ source "${SCRIPTS_DIR}/env_config/set_env_from_config.sh"
 
 if [ ! -d "$POOL_DIR" ]; then
     echo "Creating pool directory..."
-    sudo mkdir -p $POOL_DIR
+    sudo mkdir -p "$POOL_DIR"
+fi
+
+if [ ! -d "$POOL_DIR" ]; then
+    echo "Creating pool directory..."
+    sudo mkdir -p "$POOL_DIR"
+fi
+
+POOL_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_POOL_SYMLINK_TARGET
+if [ -n "$POOL_SYMLINK_TARGET" ]; then
+    echo "POOL_SYMLINK_TARGET is set to $POOL_SYMLINK_TARGET"
+    if [ ! -L "$POOL_SYMLINK_TARGET" ]; then
+        echo "Creating symlink for pool directory..."
+        sudo ln -s "$POOL_DIR" "$POOL_SYMLINK_TARGET"
+    fi
+else
+    echo "POOL_SYMLINK_TARGET is not set"
 fi
 
 if [ ! -d "$LOG_DIR" ]; then
     echo "Creating log directory..."
-    sudo mkdir -p $LOG_DIR
+    sudo mkdir -p "$LOG_DIR"
 fi
 
-sudo chmod 775 $POOL_DIR $LOG_DIR
-sudo chown -R $USER $POOL_DIR $LOG_DIR
+sudo chmod 775 "$POOL_DIR" "$LOG_DIR"
+sudo chown -R $USER "$POOL_DIR" "$LOG_DIR"

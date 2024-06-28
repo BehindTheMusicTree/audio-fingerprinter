@@ -9,7 +9,7 @@ class CONFIG_KEYS:
     class ENV:
         NAME = 'NAME'
         DEBUG = 'DEBUG'
-        EXTERNAL_LOG_NEEDED = 'EXTERNAL_DIRS_NEEDED'
+        EXTERNAL_LOG_NEEDED = 'EXTERNAL_LOG_NEEDED'
         LOG_LEVEL = 'LOG_LEVEL'
 
     class INTERNAL_PATHS:

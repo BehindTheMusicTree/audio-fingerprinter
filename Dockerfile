@@ -1,15 +1,14 @@
 # Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
 FROM ubuntu:22.04
 
-ARG POOL_DIR
+ARG POOL_DIR_SYMLINK
 ARG LOG_DIR
 
-RUN if [ -z "$POOL_DIR" ]; then echo "The POOL_DIR argument is not provided" >&2; exit 1; fi
 RUN if [ -z "$LOG_DIR" ]; then echo "The LOG_DIR argument is not provided" >&2; exit 1; fi
 
 ENV ENV=TEST \
-    PoolDir=$POOL_DIR \
-    LogDir=$LOG_DIR
+    POOL_DIR_SYMLIMK=$POOL_DIR_SYMLINK \
+    LOG_DIR=$LOG_DIR
 
 WORKDIR /app
 
@@ -28,10 +27,8 @@ RUN apt-get update && apt-get install -y wget && \
 wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
 chmod +x /usr/local/bin/gosu
 
-COPY requirements.txt .
-RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
-
 COPY . .
+RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 RUN scripts/setup_filesystem.sh && \
     cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
