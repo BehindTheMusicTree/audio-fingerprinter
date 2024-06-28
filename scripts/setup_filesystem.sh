@@ -1,7 +1,6 @@
 #!/bin/bash
 
-SCRIPTS_DIR=$(dirname "$0")/
-PROJECT_PATH=$(dirname "$SCRIPTS_DIR")/
+SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
 
 source "${SCRIPTS_DIR}set_env_from_config_settings.sh"
 
