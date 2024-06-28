@@ -17,7 +17,7 @@ WORKDIR /app
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get install -y curl python3.12 libchromaprint-tools ffmpeg python3.12-distutils && \
+    apt-get install -y curl jq python3.12 libchromaprint-tools ffmpeg python3.12-distutils && \
     curl https://bootstrap.pypa.io/get-pip.py | python3.12 && \
     rm -rf /var/lib/apt/lists/*
 

@@ -13,7 +13,7 @@ fi
 echo "ENV is set to $ENV"
 
 export LOG_DIR=${PROJECT_DIR}$LOG_DIR
-echo "Setting LOG_DIR to $LOG_DIR"
+echo "Setting LOG_DIR to $(realpath "$LOG_DIR")"
 
 export POOL_DIR=${PROJECT_DIR}$POOL_DIR
-echo "Setting POOL_DIR to $POOL_DIR"
+echo "Setting POOL_DIR to $(realpath "$POOL_DIR")"
