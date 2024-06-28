@@ -34,4 +34,3 @@ else
 fi
 
 chmod 775 "$POOL_DIR" "$LOG_DIR"
-chown -R $USER "$POOL_DIR" "$LOG_DIR"
