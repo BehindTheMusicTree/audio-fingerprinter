@@ -28,7 +28,10 @@ COPY . .
 # ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y wget && \
 wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
-chmod +x /usr/local/bin/gosu scripts/setup_filesystem.sh
+chmod +x /usr/local/bin/gosu
+
+RUN chmod +x scripts/setup_filesystem.sh
+RUN ls scripts
 
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
