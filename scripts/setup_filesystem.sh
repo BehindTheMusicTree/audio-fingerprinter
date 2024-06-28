@@ -8,7 +8,6 @@ if [ ! -d "$POOL_DIR" ]; then
     mkdir -p "$POOL_DIR"
 fi
 
-POOL_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_POOL_DIR_SYMLINK_TARGET
 if [ -n "$POOL_DIR_SYMLINK_TARGET" ]; then
     echo "POOL_DIR_SYMLINK_TARGET is set to $POOL_DIR_SYMLINK_TARGET"
     if [ ! -L "$POOL_DIR_SYMLINK_TARGET" ]; then
@@ -24,7 +23,6 @@ if [ ! -d "$LOG_DIR" ]; then
     mkdir -p "$LOG_DIR"
 fi
 
-LOG_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_LOG_DIR_SYMLINK_TARGET
 if [ -n "$LOG_DIR_SYMLINK_TARGET" ]; then
     echo "LOG_DIR_SYMLINK_TARGET is set to $LOG_DIR_SYMLINK_TARGET"
     if [ ! -L "$LOG_DIR_SYMLINK_TARGET" ]; then
