@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-echo "SCRIPT_DIR is set to $SCRIPT_DIR"
+SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
+echo "SCRIPTS_DIR is set to $SCRIPTS_DIR"
 source "${SCRIPTS_DIR}/env_config/set_env_from_config.sh"
 
 if [ ! -d "$POOL_DIR" ]; then
