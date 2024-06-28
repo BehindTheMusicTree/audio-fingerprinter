@@ -2,19 +2,19 @@
 	"environments": {
 		"dev": {
 			"debug": true,
-			"externalDirsNeeded": false
+			"externalLogNeeded": false
 		},
 		"ciTest": {
 			"debug": true,
-			"externalDirsNeeded": false
+			"externalLogNeeded": false
 		},
 		"test": {
 			"debug": true,
-			"externalDirsNeeded": true
+			"externalLogNeeded": true
 		}
 	},
-	"defaultInternalPaths": {
+	"internalPaths": {
 		"pool": "pool/",
-		"log": "log/"
+		"logDefault": "log/"
 	}
 }
