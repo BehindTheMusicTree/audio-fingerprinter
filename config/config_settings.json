@@ -1,0 +1,24 @@
+{
+	"environments": {
+		"dev": {
+			"debug": true,
+			"externalDirsNeeded": false
+		},
+		"ciTest": {
+			"debug": true,
+			"externalDirsNeeded": false
+		},
+		"build": {
+			"debug": false,
+			"externalDirsNeeded": true
+		},
+		"test": {
+			"debug": true,
+			"externalDirsNeeded": true
+		}
+	},
+	"defaultInternalPaths": {
+		"pool": "pool/",
+		"log": "log/"
+	}
+}

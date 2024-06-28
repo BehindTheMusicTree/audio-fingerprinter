@@ -1,0 +1,19 @@
+#!/bin/bash
+
+SCRIPTS_DIR=$(dirname "$0")/
+PROJECT_PATH=$(dirname "$SCRIPTS_DIR")/
+
+source "${SCRIPTS_DIR}set_env_from_config.sh"
+
+if [ ! -d "$POOL_DIR" ]; then
+    echo "Creating pool directory..."
+    sudo mkdir -p $POOL_DIR
+fi
+
+if [ ! -d "$LOG_DIR" ]; then
+    echo "Creating log directory..."
+    sudo mkdir -p $LOG_DIR
+fi
+
+sudo chmod 775 $POOL_DIR $LOG_DIR
+sudo chown -R $USER $POOL_DIR $LOG_DIR

@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler
 import base64
 from flask import Flask, request
 
-import config as config
+from config import config
 from app.audio_fingerprint_generator \
     import FpcalcStatus2Error, WrongFileTypeError, FileNotFoundError, get_fingerprint_and_duration_from_file_name
 
@@ -13,39 +13,28 @@ from app.audio_fingerprint_generator \
 def create_app():
     app = Flask(__name__)
 
-    if config.ENV == config.ENV_VALUES.DEV:
-        app.config.from_object(config.DevConfig)
-    elif config.ENV == config.ENV_VALUES.CI_TEST:
-        app.config.from_object(config.GithubCiTestConfig)
-    elif config.ENV == config.ENV_VALUES.TEST:
-        app.config.from_object(config.TestConfig)
-    elif config.ENV == config.ENV_VALUES.PROD:
-        app.config.from_object(config.ProdConfig)
-    else:
-        raise ValueError(f'Invalid ENV value {config.ENV}')
-
-    general_log_handler = RotatingFileHandler(app.config['GENERAL_LOG_FILE'], maxBytes=10240, backupCount=10)
+    general_log_handler = RotatingFileHandler(config.GENERAL_LOG_FILE, maxBytes=10240, backupCount=10)
     general_log_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
         '[in %(pathname)s:%(lineno)d]'
     ))
 
-    general_log_handler.setLevel(app.config['LOG_LEVEL'])
+    general_log_handler.setLevel(config.LOG_LEVEL)
     app.logger.addHandler(general_log_handler)
-    app.logger.setLevel(app.config['LOG_LEVEL'])
+    app.logger.setLevel(config.LOG_LEVEL)
 
-    request_log_handler = RotatingFileHandler(app.config['REQUEST_LOG_FILE'], maxBytes=10240, backupCount=10)
+    request_log_handler = RotatingFileHandler(config.REQUEST_LOG_FILE, maxBytes=10240, backupCount=10)
     request_log_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
     ))
-    request_log_handler.setLevel(app.config['LOG_LEVEL'])
+    request_log_handler.setLevel(config.LOG_LEVEL)
 
     request_logger = logging.getLogger('request')
     request_logger.addHandler(request_log_handler)
-    request_logger.setLevel(app.config['LOG_LEVEL'])
+    request_logger.setLevel(config.LOG_LEVEL)
 
     # Log each request
-    @app.after_request
+    @ app.after_request
     def after_request(response):
         request_logger.info(
             '%s %s %s %s %s',
@@ -73,7 +62,7 @@ def create_app():
         DURATION: str = 'duration'
         FINGERPRINT: str = 'fingerprint'
 
-    @app.route('/fingerprint-audio', methods=['POST'])
+    @ app.route('/fingerprint-audio', methods=['POST'])
     def generate_audio_fingerprint():
         if POST_FIELDS.FILE_NAME not in request.json:  # type: ignore
             return error_response('No filename in the request', 400)

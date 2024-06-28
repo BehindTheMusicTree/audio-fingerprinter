@@ -1,6 +1,16 @@
 # Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
 FROM ubuntu:22.04
 
+ARG POOL_DIR
+ARG LOG_DIR
+
+RUN if [ -z "$POOL_DIR" ]; then echo "The POOL_DIR argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$LOG_DIR" ]; then echo "The LOG_DIR argument is not provided" >&2; exit 1; fi
+
+ENV ENV=TEST \
+    PoolDir=$POOL_DIR \
+    LogDir=$LOG_DIR
+
 WORKDIR /app
 
 # software-properties-common is required for add-apt-repository
@@ -23,16 +33,6 @@ RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.
 
 COPY . .
 
-ENV PoolDir=/tmp/bodzify-audio-fingerprinter/pool/
-ENV LogDir=/var/log/bodzify-audio-fingerprinter/
-
-RUN mkdir -p ${LogDir} && \
-    chmod -R 777 ${LogDir} && \
+RUN scripts/setup_filesystem.sh && \
     cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
-    chmod +x bin/fpcalc && \
-    mkdir -p ${PoolDir} && \
-    chmod -R 777 ${PoolDir}
-
-EXPOSE 3000
-
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "run:app"]
+    chmod +x bin/fpcalc
