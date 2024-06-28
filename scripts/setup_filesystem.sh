@@ -5,7 +5,7 @@ source "${SCRIPTS_DIR}env_config/set_env_from_config.sh"
 
 if [ ! -d "$POOL_DIR" ]; then
     echo "Creating pool directory..."
-    sudo mkdir -p "$POOL_DIR"
+    mkdir -p "$POOL_DIR"
 fi
 
 POOL_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_POOL_DIR_SYMLINK_TARGET
@@ -13,7 +13,7 @@ if [ -n "$POOL_DIR_SYMLINK_TARGET" ]; then
     echo "POOL_DIR_SYMLINK_TARGET is set to $POOL_DIR_SYMLINK_TARGET"
     if [ ! -L "$POOL_DIR_SYMLINK_TARGET" ]; then
         echo "Creating symlink for pool directory..."
-        sudo ln -s "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
+        ln -s "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
     fi
 else
     echo "POOL_DIR_SYMLINK_TARGET is not set"
@@ -21,7 +21,7 @@ fi
 
 if [ ! -d "$LOG_DIR" ]; then
     echo "Creating log directory..."
-    sudo mkdir -p "$LOG_DIR"
+    mkdir -p "$LOG_DIR"
 fi
 
 LOG_DIR_SYMLINK_TARGET=$AUDIO_FINGERPRINTER_LOG_DIR_SYMLINK_TARGET
@@ -29,11 +29,11 @@ if [ -n "$LOG_DIR_SYMLINK_TARGET" ]; then
     echo "LOG_DIR_SYMLINK_TARGET is set to $LOG_DIR_SYMLINK_TARGET"
     if [ ! -L "$LOG_DIR_SYMLINK_TARGET" ]; then
         echo "Creating symlink for log directory..."
-        sudo ln -s "$LOG_DIR" "$LOG_DIR_SYMLINK_TARGET"
+        ln -s "$LOG_DIR" "$LOG_DIR_SYMLINK_TARGET"
     fi
 else
     echo "LOG_DIR_SYMLINK_TARGET is not set"
 fi
 
-sudo chmod 775 "$POOL_DIR" "$LOG_DIR"
-sudo chown -R $USER "$POOL_DIR" "$LOG_DIR"
+chmod 775 "$POOL_DIR" "$LOG_DIR"
+chown -R $USER "$POOL_DIR" "$LOG_DIR"
