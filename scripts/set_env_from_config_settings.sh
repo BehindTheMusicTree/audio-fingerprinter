@@ -5,7 +5,13 @@ SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SO
 PROJECT_DIR=$(dirname "$SCRIPT_DIR")/
 
 cd "$(dirname "$0")"
-source "./load_config.sh"
+source "./load_config_settings.sh"
+
+if [ -z $ENV ]; then
+    echo "ENV is not set"
+    exit 1
+fi
+echo "ENV is set to $ENV"
 
 if [ -z $EXTERNAL_DIRS_NEEDED ]; then
     echo "EXTERNAL_DIRS_NEEDED is not set"

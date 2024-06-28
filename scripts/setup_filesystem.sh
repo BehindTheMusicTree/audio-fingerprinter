@@ -3,7 +3,7 @@
 SCRIPTS_DIR=$(dirname "$0")/
 PROJECT_PATH=$(dirname "$SCRIPTS_DIR")/
 
-source "${SCRIPTS_DIR}set_env_from_config.sh"
+source "${SCRIPTS_DIR}set_env_from_config_settings.sh"
 
 if [ ! -d "$POOL_DIR" ]; then
     echo "Creating pool directory..."
