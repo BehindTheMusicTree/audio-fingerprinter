@@ -1,14 +1,15 @@
 # Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
 FROM ubuntu:22.04
 
-ARG POOL_DIR_SYMLINK
-ARG LOG_DIR
+ARG POOL_DIR_SYMLINK_TARGET
+ARG LOG_DIR_SYMLINK_TARGET
 
-RUN if [ -z "$LOG_DIR" ]; then echo "The LOG_DIR argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$POOL_DIR_SYMLINK_TARGET" ]; then echo "The POOL_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$LOG_DIR_SYMLINK_TARGET" ]; then echo "The LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
 
 ENV ENV=TEST \
-    POOL_DIR_SYMLIMK=$POOL_DIR_SYMLINK \
-    LOG_DIR=$LOG_DIR
+    POOL_DIR_SYMLINK_TARGET=$POOL_DIR_SYMLINK_TARGET \
+    LOG_DIR_SYMLINK_TARGET=$LOG_DIR_SYMLINK_TARGET
 
 WORKDIR /app
 
