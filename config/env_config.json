@@ -8,10 +8,6 @@
 			"debug": true,
 			"externalDirsNeeded": false
 		},
-		"build": {
-			"debug": false,
-			"externalDirsNeeded": true
-		},
 		"test": {
 			"debug": true,
 			"externalDirsNeeded": true
