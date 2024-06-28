@@ -8,6 +8,14 @@ from config.env_config_loader import ENV_CONFIG, DEFAULT_INTERNAL_PATHS, CONFIG_
 
 dotenv.load_dotenv()
 
+
+class ENV_NAMES:
+    DEV = 'DEV'
+    CI_TEST = 'CI_TEST'
+    TEST = 'TEST'
+    PROD = 'PROD'
+
+
 APP_PORT = os.getenv('APP_PORT')
 if APP_PORT is None:
     raise EnvironmentError('APP_PORT not set')

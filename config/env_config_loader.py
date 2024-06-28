@@ -5,13 +5,6 @@ import os
 import re
 
 
-class ENV_NAMES:
-    DEV = 'DEV'
-    CI_TEST = 'CI_TEST'
-    TEST = 'TEST'
-    PROD = 'PROD'
-
-
 class CONFIG_KEYS:
     class ENV:
         NAME = 'NAME'
@@ -59,7 +52,6 @@ def transform_key_from_lower_camel_case_to_capital_snake_case(key):
 CONFIG = transform_all_keys_from_lower_camel_case_to_capital_snake_case(CONFIG_WITH_KEYS_IN_CAMEL_CASE)
 
 ENVIRONMENTS_CONFIG = CONFIG.get('ENVIRONMENTS', {})
-print(f"ENVIRONMENTS_CONFIG: {ENVIRONMENTS_CONFIG}")
 
 ENV = os.getenv('ENV')
 ENV_CONFIG = None
@@ -67,8 +59,6 @@ if ENV is None:
     raise EnvironmentError("The ENV variable is not set")
 else:
     ENV_CONFIG = ENVIRONMENTS_CONFIG[ENV]
-    print(f"ENV_CONFIG: {ENV_CONFIG}")
-
     ENV_CONFIG[CONFIG_KEYS.ENV.NAME] = ENV
 
 DEFAULT_INTERNAL_PATHS = CONFIG.get('DEFAULT_INTERNAL_PATHS', {})
