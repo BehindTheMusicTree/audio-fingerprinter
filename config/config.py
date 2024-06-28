@@ -4,7 +4,7 @@ import logging
 import os
 from pathlib import Path
 import dotenv
-from config.config_settings_loader import ENV_NAMES, ENV_CONFIG, DEFAULT_INTERNAL_PATHS, CONFIG_KEYS
+from config.env_config_loader import ENV_CONFIG, DEFAULT_INTERNAL_PATHS, CONFIG_KEYS
 
 dotenv.load_dotenv()
 

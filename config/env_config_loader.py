@@ -24,7 +24,7 @@ class CONFIG_KEYS:
         LOG = 'LOG'
 
 
-CONFIG_SETTINGS_FILE = 'config/config_settings.json'
+CONFIG_SETTINGS_FILE = 'config/env_config.json'
 
 
 def load_config(config_path=CONFIG_SETTINGS_FILE):
