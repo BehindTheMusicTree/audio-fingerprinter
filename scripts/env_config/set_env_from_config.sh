@@ -2,7 +2,7 @@
 
 # Get the directory of the script even when it's called from another script
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-PROJECT_DIR=$SCRIPT_DIR/../../
+PROJECT_DIR=$SCRIPT_DIR../../
 
 source "$SCRIPT_DIR/load_env_config.sh"
 
