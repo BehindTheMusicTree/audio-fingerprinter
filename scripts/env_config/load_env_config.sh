@@ -2,7 +2,7 @@
 
 # Get the directory of the script even when it's called from another script
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)
-ENV_PATH=$SCRIPT_DIR/../.env
+ENV_PATH=$SCRIPT_DIR/../../.env
 
 if [ -f "$ENV_PATH" ]; then
     echo "Loading environment variables from ${ENV_PATH}..."
@@ -14,11 +14,11 @@ if [ -f "$ENV_PATH" ]; then
     done < "$ENV_PATH"
 
 	if [ -z $ENV ]; then
-		echo "ENV is not set in the .env file"
+		echo "ENV is not set"
 		exit 1
     fi
 
-    CONFIG_PATH="$SCRIPT_DIR/../config.json"
+    CONFIG_PATH="$SCRIPT_DIR/../../config/env_config.json"
     if [ ! -f "$CONFIG_PATH" ]; then
         echo "Configuration file '${CONFIG_PATH}' was not found."
         exit 1

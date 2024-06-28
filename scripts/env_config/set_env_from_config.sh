@@ -4,8 +4,7 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
 PROJECT_DIR=$(dirname "$SCRIPT_DIR")/
 
-source "$SCRIPT_DIR/load_env_config
-.sh"
+source "$SCRIPT_DIR/load_env_config.sh"
 
 if [ -z $ENV ]; then
     echo "ENV is not set"
