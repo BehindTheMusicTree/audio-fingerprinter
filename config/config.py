@@ -6,6 +6,7 @@ from pathlib import Path
 import dotenv
 from config.env_config_loader import ENV_CONFIG, INTERNAL_PATHS, CONFIG_KEYS
 
+ENV_FILE = Path(os.path.dirname(os.path.abspath(__file__))).parent / 'env/.env'
 dotenv.load_dotenv()
 
 
