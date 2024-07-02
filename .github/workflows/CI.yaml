@@ -20,7 +20,7 @@ jobs:
       name: CI_TEST
     env:
       ENV: ${{ vars.ENV }}
-      APP_IS_DOCKERIZED: False
+      APP_IS_DOCKERIZED: 'false'
       DEBUG: ${{ vars.DEBUG }}
       APP_IS_EXPOSED: ${{ vars.APP_IS_EXPOSED }}
       APP_PORT: ${{ secrets.APP_PORT }}
