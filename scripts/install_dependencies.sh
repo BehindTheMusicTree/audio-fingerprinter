@@ -4,6 +4,7 @@
 # Stop on error
 set -e
 
+echo "APP_IS_DOCKERIZED is $APP_IS_DOCKERIZED"
 if [ -z $APP_IS_DOCKERIZED ]; then
     echo "APP_IS_DOCKERIZED must be set."
     exit 1
