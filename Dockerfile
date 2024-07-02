@@ -1,39 +1,44 @@
 # Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
 FROM ubuntu:22.04
 
+ARG APP_IS_EXPOSED
 ARG POOL_DIR_SYMLINK_TARGET
-ARG LOG_DIR_SYMLINK_TARGET
+ARG FLASK_LOG_DIR_SYMLINK_TARGET
+ARG GUNICORN_LOG_DIR_SYMLINK_TARGET
+ARG POOL_INTERNAL_DIR
+ARG FLASK_LOGS_ARE_NEEDED
+ARG FLASK_LOG_DIR
+ARG FLASK_LOG_APP_FILENAME
+ARG FLASK_LOG_ERROR_FILENAME
+ARG FLASK_LOG_REQUESTS_FILENAME
 
+RUN if [ -z "$APP_IS_EXPOSED" ]; then echo "The APP_IS_EXPOSED argument is not provided" >&2; exit 1; fi
 RUN if [ -z "$POOL_DIR_SYMLINK_TARGET" ]; then echo "The POOL_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$LOG_DIR_SYMLINK_TARGET" ]; then echo "The LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOG_DIR_SYMLINK_TARGET" ]; then echo "The FLASK_LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$GUNICORN_LOG_DIR_SYMLINK_TARGET" ]; then echo "The GUNICORN_LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$POOL_INTERNAL_DIR" ]; then echo "The POOL_INTERNAL_DIR argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOGS_ARE_NEEDED" ]; then echo "The FLASK_LOGS_ARE_NEEDED argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOG_DIR" ]; then echo "The FLASK_LOG_DIR argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOG_APP_FILENAME" ]; then echo "The FLASK_LOG_APP_FILENAME argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOG_ERROR_FILENAME" ]; then echo "The FLASK_LOG_ERROR_FILENAME argument is not provided" >&2; exit 1; fi
+RUN if [ -z "$FLASK_LOG_REQUESTS_FILENAME" ]; then echo "The FLASK_LOG_REQUESTS_FILENAME argument is not provided" >&2; exit 1; fi
 
-ENV ENV=TEST \
+ENV APP_IS_DOCKERIZED=true \
+    ENV=TEST \
+    APP_IS_EXPOSED=$APP_IS_EXPOSED \
     POOL_DIR_SYMLINK_TARGET=$POOL_DIR_SYMLINK_TARGET \
-    LOG_DIR_SYMLINK_TARGET=$LOG_DIR_SYMLINK_TARGET
+    FLASK_LOG_DIR_SYMLINK_TARGET=$FLASK_LOG_DIR_SYMLINK_TARGET \
+    GUNICORN_LOG_DIR_SYMLINK_TARGET=$GUNICORN_LOG_DIR_SYMLINK_TARGET \
+    POOL_INTERNAL_DIR=$POOL_INTERNAL_DIR \
+    FLASK_LOGS_ARE_NEEDED=$FLASK_LOGS_ARE_NEEDED \
+    FLASK_LOG_DIR=$FLASK_LOG_DIR \
+    FLASK_LOG_APP_FILENAME=$FLASK_LOG_APP_FILENAME \
+    FLASK_LOG_ERROR_FILENAME=$FLASK_LOG_ERROR_FILENAME \
+    FLASK_LOG_REQUESTS_FILENAME=$FLASK_LOG_REQUESTS_FILENAME
 
 WORKDIR /app
 
-# software-properties-common is required for add-apt-repository
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata software-properties-common && \
-    add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get install -y curl jq python3.12 libchromaprint-tools ffmpeg python3.12-distutils && \
-    curl https://bootstrap.pypa.io/get-pip.py | python3.12 && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY . .
-
-# To run gunicorn as a non-root user without password prompt
-# Second apt-get update is necessary to take into account the new repositories from add-apt-repository 
-# ppa:deadsnakes/ppa
-RUN apt-get update && apt-get install -y wget && \
-wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
-chmod +x /usr/local/bin/gosu
-
 RUN chmod +x scripts/setup_filesystem.sh
-
+RUN bash scripts/install_dependencies.sh
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
-
-RUN scripts/setup_filesystem.sh && \
-    cp env/fpcalc/fpcalc-ubuntu bin/fpcalc && \
-    chmod +x bin/fpcalc

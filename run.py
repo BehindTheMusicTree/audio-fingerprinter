@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler
 import base64
 from flask import Flask, request
 
-from config import config
+import settings
 from app.audio_fingerprint_generator \
     import FpcalcStatus2Error, WrongFileTypeError, FileNotFoundError, get_fingerprint_and_duration_from_file_name
 
@@ -13,25 +13,24 @@ from app.audio_fingerprint_generator \
 def create_app():
     app = Flask(__name__)
 
-    general_log_handler = RotatingFileHandler(config.GENERAL_LOG_FILE, maxBytes=10240, backupCount=10)
-    general_log_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(levelname)s: %(message)s '
-        '[in %(pathname)s:%(lineno)d]'
-    ))
+    if settings.LOGS_ARE_NEEDED:
+        app_log_handler = RotatingFileHandler(settings.LOG_APP_FILE, maxBytes=10240, backupCount=10)
+        app_log_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'
+        ))
+        app_log_handler.setLevel(settings.LOG_LEVEL)
+        app.logger.addHandler(app_log_handler)
+        app.logger.setLevel(settings.LOG_LEVEL)
 
-    general_log_handler.setLevel(config.LOG_LEVEL)
-    app.logger.addHandler(general_log_handler)
-    app.logger.setLevel(config.LOG_LEVEL)
-
-    request_log_handler = RotatingFileHandler(config.REQUEST_LOG_FILE, maxBytes=10240, backupCount=10)
-    request_log_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(levelname)s: %(message)s '
-    ))
-    request_log_handler.setLevel(config.LOG_LEVEL)
-
-    request_logger = logging.getLogger('request')
-    request_logger.addHandler(request_log_handler)
-    request_logger.setLevel(config.LOG_LEVEL)
+        request_log_handler = RotatingFileHandler(settings.LOG_REQUESTS_FILE, maxBytes=10240, backupCount=10)
+        request_log_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+        ))
+        request_log_handler.setLevel(settings.LOG_LEVEL)
+        request_logger = logging.getLogger('request')
+        request_logger.addHandler(request_log_handler)
+        request_logger.setLevel(settings.LOG_LEVEL)
 
     # Log each request
     @ app.after_request
@@ -93,4 +92,4 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=config.APP_PORT)
+    app.run(host='0.0.0.0', port=settings.APP_PORT)

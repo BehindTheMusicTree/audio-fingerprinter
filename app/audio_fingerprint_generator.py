@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from config import config
+import settings
 import os
 from typing import Optional, Tuple
 import acoustid
@@ -43,7 +43,7 @@ class FileNotFoundError(AppError):
 
 
 def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optional[float], Optional[bytes]]:
-    file_path = os.path.join(config.POOL_DIR, file_name)
+    file_path = os.path.join(settings.POOL_DIR, file_name)
 
     if not os.path.exists(file_path):
         raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
@@ -56,8 +56,8 @@ def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optiona
     except Exception as error:
         if isinstance(error, pydub.exceptions.CouldntDecodeError):
             first_error = error.args[0]
-            if (config.ENV == config.ENV_NAMES.DEV and 'error code: 183' in first_error) or \
-                    (config.ENV != config.ENV_NAMES.DEV and 'error code: 1' in first_error):
+            if (settings.ENV == settings.ENV_NAMES.DEV and 'error code: 183' in first_error) or \
+                    (settings.ENV != settings.ENV_NAMES.DEV and 'error code: 1' in first_error):
                 raise WrongFileTypeError(f'Invalid file type. Only audio types are allowed.')
         else:
             raise error
