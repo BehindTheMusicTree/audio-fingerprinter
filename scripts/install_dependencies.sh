@@ -16,7 +16,9 @@ if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
     exit 1
 fi
 
+add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update
+
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
     ffmpeg=7:4.4.2-0ubuntu0.22.04.1 \
     tzdata \
@@ -31,8 +33,6 @@ curl https://bootstrap.pypa.io/get-pip.py | python3.12
 
 if [ "$APP_IS_DOCKERIZED" = "true" ]; then
     # Install gosu to run gunicorn as a non root user
-    add-apt-repository ppa:deadsnakes/ppa
-    apt-get update
     apt-get install -y wget
     wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64"
     chmod +x /usr/local/bin/gosu
