@@ -16,6 +16,9 @@ if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
     exit 1
 fi
 
+# Install software-properties-common to use add-apt-repository
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
 add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update
 
