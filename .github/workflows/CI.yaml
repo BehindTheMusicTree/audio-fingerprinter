@@ -26,7 +26,6 @@ jobs:
       APP_PORT: ${{ secrets.APP_PORT }}
       POOL_INTERNAL_DIR: ${{ vars.POOL_INTERNAL_DIR }}
       FLASK_LOGS_ARE_NEEDED: ${{ vars.FLASK_LOGS_ARE_NEEDED }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,7 +55,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: TEST
-
     steps:
       - uses: actions/checkout@v4
 

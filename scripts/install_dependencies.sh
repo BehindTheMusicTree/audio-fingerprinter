@@ -1,15 +1,18 @@
 #!/bin/bash
 
-required_vars=("APP_IS_DOCKERIZED")
-for var in "${required_vars[@]}"; do
-    if [ -z "${!var}" ]; then
-        echo "Environment variable $var is not set. Exiting."
-        exit 1
-    fi
-done
 
 # Stop on error
 set -e
+
+if [ -z $APP_IS_DOCKERIZED ]; then
+    echo "APP_IS_DOCKERIZED must be set."
+    exit 1
+fi
+
+if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
+    echo "APP_IS_DOCKERIZED must be set to true or false."
+    exit 1
+fi
 
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
