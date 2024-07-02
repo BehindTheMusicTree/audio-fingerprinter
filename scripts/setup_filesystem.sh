@@ -100,6 +100,7 @@ if [ $FLASK_LOGS_ARE_NEEDED = "true" ]; then
     else
         echo "Flask log requests file already exists."
     fi
+    chmod 775 "$FLASK_LOG_DIR"
 else
     echo "Flask logs are not needed."
 fi
@@ -147,4 +148,4 @@ if [ $APP_IS_EXPOSED = "true" ]; then
     fi
 fi
 
-chmod 775 "$POOL_DIR" "$FLASK_LOG_DIR"
+chmod 775 "$POOL_DIR"
