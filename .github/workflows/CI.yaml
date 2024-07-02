@@ -56,7 +56,7 @@ jobs:
 
   build-and-push-to-dockerhub:
     name: Build / Push to DockerHub
-    # needs: tests
+    needs: tests
     runs-on: ubuntu-latest
     environment:
       name: TEST
