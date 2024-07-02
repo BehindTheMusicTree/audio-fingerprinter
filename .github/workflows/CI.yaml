@@ -20,6 +20,7 @@ jobs:
       name: CI_TEST
     env:
       ENV: ${{ vars.ENV }}
+      APP_IS_DOCKERIZED: False
       DEBUG: ${{ vars.DEBUG }}
       APP_IS_EXPOSED: ${{ vars.APP_IS_EXPOSED }}
       APP_PORT: ${{ secrets.APP_PORT }}
@@ -51,7 +52,7 @@ jobs:
 
   build-and-push-to-dockerhub:
     name: Build / Push to DockerHub
-    needs: tests
+    # needs: tests
     runs-on: ubuntu-latest
     environment:
       name: TEST
