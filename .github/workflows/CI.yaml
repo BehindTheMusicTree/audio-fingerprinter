@@ -42,7 +42,7 @@ jobs:
         env:
           APP_IS_DOCKERIZED: ${{ env.APP_IS_DOCKERIZED }}
         run: |
-          bash scripts/install_dependencies.sh
+          sudo -E bash scripts/install_dependencies.sh
           python -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Add right fpcalc to PATH
