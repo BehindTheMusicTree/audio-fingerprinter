@@ -35,14 +35,15 @@ def create_app():
     # Log each request
     @ app.after_request
     def after_request(response):
-        request_logger.info(
-            '%s %s %s %s %s',
-            request.remote_addr,
-            request.method,
-            request.scheme,
-            request.full_path,
-            response.status
-        )
+        if settings.LOGS_ARE_NEEDED:
+            request_logger.info(
+                '%s %s %s %s %s',
+                request.remote_addr,
+                request.method,
+                request.scheme,
+                request.full_path,
+                response.status
+            )
         return response
 
     # Disable strict slashes in the URL routing rules.
