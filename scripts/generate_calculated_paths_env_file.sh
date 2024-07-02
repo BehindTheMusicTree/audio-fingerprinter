@@ -25,7 +25,7 @@ if [ $FLASK_LOGS_ARE_NEEDED != "true" ] && [ $FLASK_LOGS_ARE_NEEDED != "false" ]
     exit 1
 fi
 
-if [ $FLASK_LOGS_ARE_NEEDED = "true"]; then
+if [ $FLASK_LOGS_ARE_NEEDED = "true" ]; then
     if [ -z "$APP_IS_EXPOSED" ]; then
         echo "APP_IS_EXPOSED must be set" >&2
         exit 1
