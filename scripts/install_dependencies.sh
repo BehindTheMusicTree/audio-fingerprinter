@@ -4,6 +4,8 @@
 # Stop on error
 set -e
 
+printenv | grep "APP"
+
 echo "APP_IS_DOCKERIZED is $APP_IS_DOCKERIZED"
 if [ -z $APP_IS_DOCKERIZED ]; then
     echo "APP_IS_DOCKERIZED must be set."
