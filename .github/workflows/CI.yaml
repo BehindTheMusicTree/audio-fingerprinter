@@ -39,6 +39,8 @@ jobs:
         run: echo "APP_IS_DOCKERIZED=${{ env.APP_IS_DOCKERIZED }}"
 
       - name: Install dependencies & python requirements
+        env:
+          APP_IS_DOCKERIZED: ${{ env.APP_IS_DOCKERIZED }}
         run: |
           sudo bash scripts/install_dependencies.sh
           python -m pip install --upgrade pip && pip install -r requirements.txt
