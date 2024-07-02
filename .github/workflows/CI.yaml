@@ -26,6 +26,7 @@ jobs:
       APP_PORT: ${{ secrets.APP_PORT }}
       POOL_INTERNAL_DIR: ${{ vars.POOL_INTERNAL_DIR }}
       FLASK_LOGS_ARE_NEEDED: ${{ vars.FLASK_LOGS_ARE_NEEDED }}
+      FLASK_LOG_INTERNAL_DIR: ${{ vars.FLASK_LOG_INTERNAL_DIR }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,8 +40,6 @@ jobs:
         run: echo "APP_IS_DOCKERIZED=${{ env.APP_IS_DOCKERIZED }}"
 
       - name: Install dependencies & python requirements
-        env:
-          APP_IS_DOCKERIZED: ${{ env.APP_IS_DOCKERIZED }}
         run: |
           sudo -E bash scripts/install_dependencies.sh
           python -m pip install --upgrade pip && pip install -r requirements.txt
