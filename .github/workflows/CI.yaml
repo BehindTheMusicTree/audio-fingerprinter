@@ -64,7 +64,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         env:
-          IMAGE_TAG: "v1.0.0-${GITHUB_REF_NAME}-$(date +%Y%m%d)-$(git rev-parse --short HEAD)"
+          IMAGE_TAG: "v1.0.0"
         with:
           context: .
           push: true
