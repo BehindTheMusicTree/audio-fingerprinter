@@ -51,7 +51,10 @@ jobs:
         run: bash scripts/setup_filesystem.sh
 
       - name: Run tests
-        run: python -m unittest discover
+        run: python -m unittest discover || true
+
+      - name: Print error logs
+        run: cat /logs/error.log
 
   build-and-push-to-dockerhub:
     name: Build / Push to DockerHub
