@@ -8,6 +8,7 @@ if [ -z $APP_IS_DOCKERIZED ]; then
     echo "APP_IS_DOCKERIZED must be set."
     exit 1
 fi
+APP_IS_DOCKERIZED=$(echo "$APP_IS_DOCKERIZED" | tr '[:upper:]' '[:lower:]')
 
 if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
     echo "APP_IS_DOCKERIZED must be set to true or false."
