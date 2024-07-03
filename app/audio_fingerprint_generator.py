@@ -15,7 +15,7 @@ class ERROR_CODES_STR:
     FPCALC_STATUS_2 = AUDIO_FINGERPRINTER_ERROR_CODES_PREFIXE + '1'
     WRONG_FILE_EXTENSION = AUDIO_FINGERPRINTER_ERROR_CODES_PREFIXE + '2'
     WRONG_FILE_TYPE = AUDIO_FINGERPRINTER_ERROR_CODES_PREFIXE + '3'
-    FILE_NOT_FOUND = AUDIO_FINGERPRINTER_ERROR_CODES_PREFIXE + '4'
+    FILE_NOT_IN_POOL = AUDIO_FINGERPRINTER_ERROR_CODES_PREFIXE + '4'
 
 
 class AppError(Exception):
@@ -36,17 +36,17 @@ class WrongFileTypeError(AppError):
         super().__init__(ERROR_CODES_STR.WRONG_FILE_TYPE, message)
 
 
-class FileNotFoundError(AppError):
+class FileNotInPoolError(AppError):
 
     def __init__(self, message: str) -> None:
-        super().__init__(ERROR_CODES_STR.FILE_NOT_FOUND, message)
+        super().__init__(ERROR_CODES_STR.FILE_NOT_IN_POOL, message)
 
 
 def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optional[float], Optional[bytes]]:
     file_path = os.path.join(settings.POOL_DIR, file_name)
 
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
+        raise FileNotInPoolError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
 
     _, extension = os.path.splitext(file_path)
 

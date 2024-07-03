@@ -7,7 +7,7 @@ from flask import Flask, request
 
 import settings
 from app.audio_fingerprint_generator \
-    import FpcalcStatus2Error, WrongFileTypeError, FileNotFoundError, get_fingerprint_and_duration_from_file_name
+    import FpcalcStatus2Error, WrongFileTypeError, FileNotInPoolError, get_fingerprint_and_duration_from_file_name
 
 
 def create_app():
@@ -81,7 +81,7 @@ def create_app():
             return {RESPONSE_FIELDS.DURATION: duration, RESPONSE_FIELDS.FINGERPRINT: fingerprint_b64}
         except Exception as e:
             error_message = str(e)
-            if (isinstance(e, FileNotFoundError) or isinstance(e, WrongFileTypeError)):
+            if (isinstance(e, FileNotInPoolError) or isinstance(e, WrongFileTypeError)):
                 return error_response(error_message, 400)
             if isinstance(e, FpcalcStatus2Error):
                 return error_response(error_message, 422)

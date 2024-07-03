@@ -107,7 +107,7 @@ class TestAudioFingerprinter(unittest.TestCase):
         response = self.post_fingerprint_audio(filename='non_existent_file.mp3', testing_missing_file=True)
         self.assertEqual(type(response), BadRequestResponseObject)
         if type(response) == BadRequestResponseObject:
-            assert ERROR_CODES_STR.FILE_NOT_FOUND in response.message
+            assert ERROR_CODES_STR.FILE_NOT_IN_POOL in response.message
 
     def test_mp3_track_then_ok(self):
         response = self.post_fingerprint_audio('Bonnie Tyler - Total Eclipse of the Heart.mp3')
