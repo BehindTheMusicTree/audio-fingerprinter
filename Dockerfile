@@ -12,16 +12,22 @@ ARG FLASK_LOG_APP_FILENAME
 ARG FLASK_LOG_ERROR_FILENAME
 ARG FLASK_LOG_REQUESTS_FILENAME
 
-RUN if [ -z "$APP_IS_EXPOSED" ]; then echo "The APP_IS_EXPOSED argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$POOL_DIR_SYMLINK_TARGET" ]; then echo "The POOL_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOG_DIR_SYMLINK_TARGET" ]; then echo "The FLASK_LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$GUNICORN_LOG_DIR_SYMLINK_TARGET" ]; then echo "The GUNICORN_LOG_DIR_SYMLINK_TARGET argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$POOL_INTERNAL_DIR" ]; then echo "The POOL_INTERNAL_DIR argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOGS_ARE_NEEDED" ]; then echo "The FLASK_LOGS_ARE_NEEDED argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOG_DIR" ]; then echo "The FLASK_LOG_DIR argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOG_APP_FILENAME" ]; then echo "The FLASK_LOG_APP_FILENAME argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOG_ERROR_FILENAME" ]; then echo "The FLASK_LOG_ERROR_FILENAME argument is not provided" >&2; exit 1; fi
-RUN if [ -z "$FLASK_LOG_REQUESTS_FILENAME" ]; then echo "The FLASK_LOG_REQUESTS_FILENAME argument is not provided" >&2; exit 1; fi
+RUN for var in \
+    APP_IS_EXPOSED \
+    POOL_DIR_SYMLINK_TARGET \
+    FLASK_LOG_DIR_SYMLINK_TARGET \
+    GUNICORN_LOG_DIR_SYMLINK_TARGET \
+    POOL_INTERNAL_DIR \
+    FLASK_LOGS_ARE_NEEDED \
+    FLASK_LOG_DIR \
+    FLASK_LOG_APP_FILENAME \
+    FLASK_LOG_ERROR_FILENAME \
+    FLASK_LOG_REQUESTS_FILENAME; do \
+    if [ -z "$(eval echo \$$var)" ]; then \
+        echo "The $var argument is not provided" >&2; \
+        exit 1; \
+    fi; \
+done
 
 ENV APP_IS_DOCKERIZED=true \
     ENV=TEST \

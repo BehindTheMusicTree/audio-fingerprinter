@@ -107,13 +107,12 @@ fi
 
 if [ $APP_IS_EXPOSED = "true" ]; then
     required_vars=(
-        POOL_DIR_SYMLINK_TARGET
-        FLASK_LOG_DIR_SYMLINK_TARGET
-        GUNICORN_LOG_DIR_SYMLINK_TARGET
-
         GUNICORN_LOG_DIR
         GUNICORN_LOG_ERROR_FILENAME
         GUNICORN_LOG_ACCESS_FILENAME
+        POOL_DIR_SYMLINK_TARGET
+        FLASK_LOG_DIR_SYMLINK_TARGET
+        GUNICORN_LOG_DIR_SYMLINK_TARGET
     )
     for var_name in "${required_vars[@]}"; do
         if [ -z "${!var_name}" ]; then
