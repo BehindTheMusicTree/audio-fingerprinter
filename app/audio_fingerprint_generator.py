@@ -8,7 +8,7 @@ import pydub
 
 import pydub.exceptions
 
-AUDIO_FINGERPRINT_GENERATOR_ERROR_CODES_PREFIXE = 'Audio Fingerprint Generator Error Code'
+AUDIO_FINGERPRINT_GENERATOR_ERROR_CODES_PREFIXE = 'Audio Fingerprinter Error Code'
 
 
 class ERROR_CODES_STR:
