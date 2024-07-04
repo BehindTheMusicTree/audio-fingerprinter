@@ -2,16 +2,14 @@ name: Audio Fingerprinter CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev, improve-deployment]
   pull_request:
-    branches: [main, dev]
-
+    branches: [main, dev, improve-deployment]
 env:
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
   IMAGE_REPO: ${{ vars.AUDIO_FINGERPRINTER_IMAGE_REPO }}
   SSH_DESTINATION: ${{ secrets.TEST_SERVER_BODZIFY_USERNAME }}@${{ vars.TEST_SERVER_URL }}
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
   TEST_SERVER_URL: ${{ vars.TEST_SERVER_URL }}
-
 jobs:
   tests:
     name: Tests
@@ -65,7 +63,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         env:
-          IMAGE_TAG: "v1.0.0"
+          IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         with:
           context: .
           push: true
