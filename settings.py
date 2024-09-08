@@ -12,7 +12,7 @@ APP_ENV_FILE_RELATIVE_PATH = os.getenv('ENV_FILE', 'env/.env')
 APP_ENV_FILE = BASE_DIR / APP_ENV_FILE_RELATIVE_PATH
 
 if not APP_ENV_FILE.exists():
-    print("No env file at {APP_ENV_FILE}")
+    print(f"No env file at {APP_ENV_FILE}")
     APP_ENV_FILE = None
 else:
     print("Env file provided. Loading.")
