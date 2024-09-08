@@ -20,21 +20,21 @@ else
     done < "$APP_ENV_FILE"
 fi
 
-SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-PROJECT_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
-CALCULATED_PATHS_ENV_FILE=${PROJECT_DIR}env/calculated_paths/.env
-bash "${SCRIPTS_DIR}generate_calculated_paths_env_file.sh" "$PROJECT_DIR" "$CALCULATED_PATHS_ENV_FILE"
+scripts_dir=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
+project_dir=$(cd "$(dirname "$scripts_dir")" && pwd)/
+calculated_paths_env_file=${project_dir}env/calculated_paths/.env
+bash "${scripts_dir}generate_calculated_paths_env_file.sh" "$project_dir" "$calculated_paths_env_file"
 
 if [ $? -ne 0 ]; then
     echo "Failed to generate calculated paths env file"
     exit 1
 fi
 
-echo "Loading calculated paths from ${CALCULATED_PATHS_ENV_FILE}"
+echo "Loading calculated paths from ${calculated_paths_env_file}"
 while IFS='=' read -r key value
 do
     export "$key=$value"
-done < "$CALCULATED_PATHS_ENV_FILE"
+done < "$calculated_paths_env_file"
 
 required_vars=(
   APP_IS_EXPOSED
@@ -48,11 +48,11 @@ for var in "${required_vars[@]}"; do
   fi
 done
 
-POOL_DIR=${PROJECT_DIR}${POOL_INTERNAL_DIR}
-echo "POOL_DIR: $POOL_DIR"
-if [ ! -d "$POOL_DIR" ]; then
+pool_dir=${project_dir}${POOL_INTERNAL_DIR}
+echo "pool_dir: $pool_dir"
+if [ ! -d "$pool_dir" ]; then
     echo "Creating pool directory."
-    mkdir -p "$POOL_DIR"
+    mkdir -p "$pool_dir"
 fi
 
 if [ ! -d "$FLASK_LOG_DIR" ]; then
@@ -121,17 +121,18 @@ if [ $APP_IS_EXPOSED = "true" ]; then
         fi
     done
 
-    GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
-    echo "GUNICORN_LOG_ERROR_FILE: $GUNICORN_LOG_ERROR_FILE"
-    GUNICORN_LOG_ACCESS_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ACCESS_FILENAME}
-    echo "GUNICORN_LOG_ACCESS_FILE: $GUNICORN_LOG_ACCESS_FILE"
-    touch "$GUNICORN_LOG_ERROR_FILE" "$GUNICORN_LOG_ACCESS_FILE"
+    gunicorn_log_error_file=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
+    echo "gunicorn_log_error_file: $gunicorn_log_error_file"
+    gunicorn_log_access_file=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ACCESS_FILENAME}
+    echo "gunicorn_log_access_file: $gunicorn_log_access_file"
+
+    touch "$gunicorn_log_error_file" "$gunicorn_log_access_file"
     chmod -R 775 "$GUNICORN_LOG_DIR"
 
     echo "POOL_DIR_SYMLINK_TARGET is set to $POOL_DIR_SYMLINK_TARGET"
     if [ ! -L "$POOL_DIR_SYMLINK_TARGET" ]; then
         echo "Creating symlink for pool directory."
-        ln -s "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
+        ln -s "$pool_dir" "$POOL_DIR_SYMLINK_TARGET"
     fi
 
     echo "FLASK_LOG_DIR_SYMLINK_TARGET is set to $FLASK_LOG_DIR_SYMLINK_TARGET"
@@ -147,4 +148,4 @@ if [ $APP_IS_EXPOSED = "true" ]; then
     fi
 fi
 
-chmod 775 "$POOL_DIR"
+chmod 775 "$pool_dir"
