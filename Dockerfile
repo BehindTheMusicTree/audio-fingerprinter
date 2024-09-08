@@ -46,5 +46,6 @@ WORKDIR /app
 
 COPY . .
 RUN chmod +x scripts/setup_filesystem.sh
+RUN bash scripts/setup_filesystem.sh
 RUN bash scripts/install_dependencies.sh
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
