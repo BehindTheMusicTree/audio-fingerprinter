@@ -11,6 +11,10 @@ ARG FLASK_LOG_DIR
 ARG FLASK_LOG_APP_FILENAME
 ARG FLASK_LOG_ERROR_FILENAME
 ARG FLASK_LOG_REQUESTS_FILENAME
+ARG GUNICORN_LOG_DIR
+ARG GUNICORN_LOG_ERROR_FILENAME
+ARG GUNICORN_LOG_REQUESTS_FILENAME
+
 
 RUN for var in \
     APP_IS_EXPOSED \
@@ -49,3 +53,9 @@ RUN chmod +x scripts/setup_filesystem.sh
 RUN bash scripts/setup_filesystem.sh
 RUN bash scripts/install_dependencies.sh
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
+
+CMD ["gunicorn", "bodzify_api.wsgi:application", \
+     "--bind", "0.0.0.0:${AUDIO_FINGERPRINTER_PORT}", \
+     "--error-logfile=${GUNICORN_LOG_DIR_SYMLINK_TARGET}${GUNICORN_LOG_ERROR_FILENAME}", \
+     "--access-logfile=${GUNICORN_LOG_DIR_SYMLINK_TARGET}${GUNICORN_LOG_ACCESS_FILENAME}", \
+     "--log-level=info"]
