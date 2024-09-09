@@ -32,6 +32,7 @@ create_directory() {
     if [ ! -d "$dir" ]; then
         echo "Creating directory $dir"
         mkdir -p "$dir"
+        chmod 775 "$POOL_DIR"
     else
         echo "Directory $dir already exists."
     fi
@@ -82,9 +83,6 @@ main() {
     echo "POOL_DIR: $POOL_DIR"
     create_directory "$POOL_DIR"
 
-    echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
-    create_directory "$FLASK_LOG_DIR"
-
     echo "FLASK_LOGS_ARE_NEEDED: $FLASK_LOGS_ARE_NEEDED"
     if [ "$FLASK_LOGS_ARE_NEEDED" = "true" ]; then
         REQUIRED_VARS=(
@@ -94,6 +92,9 @@ main() {
             FLASK_LOG_REQUESTS_FILENAME
         )
         check_required_vars "${REQUIRED_VARS[@]}"
+
+        echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
+        create_directory "$FLASK_LOG_DIR"
 
         FLASK_LOG_APP_FILE=${FLASK_LOG_DIR}${FLASK_LOG_APP_FILENAME}
         echo "FLASK_LOG_APP_FILE: $FLASK_LOG_APP_FILE"
@@ -131,8 +132,6 @@ main() {
         touch "$GUNICORN_LOG_ERROR_FILE" "$GUNICORN_LOG_ACCESS_FILE"
         chmod -R 775 "$GUNICORN_LOG_DIR"
     fi
-
-    chmod 775 "$POOL_DIR"
 }
 
 main "$@"
