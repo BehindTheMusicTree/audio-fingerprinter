@@ -51,8 +51,12 @@ create_symlink() {
     local target="$1"
     local link_name="$2"
     if [ ! -L "$link_name" ]; then
-        echo "Creating symlink for $link_name."
+        echo "Creating symlink named $link_name to $target"
         ln -s "$target" "$link_name"
+        if [ $? -ne 0 ]; then
+            echo "Failed to create symbolic link $link_name" >&2
+            exit 1
+        fi
     else
         echo "Symlink $link_name already exists."
     fi
@@ -136,7 +140,6 @@ main() {
         )
         check_required_vars "${REQUIRED_VARS[@]}"
 
-        echo "Creating directory $GUNICORN_LOG_DIR"
         create_directory "$GUNICORN_LOG_DIR"
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
@@ -147,11 +150,8 @@ main() {
         touch "$GUNICORN_LOG_ERROR_FILE" "$GUNICORN_LOG_ACCESS_FILE"
         chmod -R 775 "$GUNICORN_LOG_DIR"
 
-        echo "Creating symlink for $POOL_DIR_SYMLINK_TARGET"
         create_symlink "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
-        echo "Creating symlink for $FLASK_LOG_DIR_SYMLINK_TARGET"
         create_symlink "$FLASK_LOG_DIR" "$FLASK_LOG_DIR_SYMLINK_TARGET"
-        echo "Creating symlink for $GUNICORN_LOG_DIR_SYMLINK_TARGET"
         create_symlink "$GUNICORN_LOG_DIR" "$GUNICORN_LOG_DIR_SYMLINK_TARGET"
     fi
 
