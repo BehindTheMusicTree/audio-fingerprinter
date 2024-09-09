@@ -155,7 +155,7 @@ main() {
         fi
 
         echo "List all synlinks in /app"
-        ls -l /app
+        ls /var/log
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
         echo "GUNICORN_LOG_ERROR_FILE: $GUNICORN_LOG_ERROR_FILE"
