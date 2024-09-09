@@ -19,8 +19,8 @@ jobs:
     env:
       ENV: ${{ vars.ENV }}
       APP_IS_DOCKERIZED: 'false'
-      DEBUG: ${{ vars.DEBUG }}
-      APP_IS_EXPOSED: ${{ vars.APP_IS_EXPOSED }}
+      DEBUG: 'true'
+      APP_IS_EXPOSED: 'false'
       APP_PORT: ${{ secrets.APP_PORT }}
       POOL_INTERNAL_DIR: ${{ vars.POOL_INTERNAL_DIR }}
       FLASK_LOGS_ARE_NEEDED: ${{ vars.FLASK_LOGS_ARE_NEEDED }}
@@ -69,9 +69,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
           build-args: |
-            APP_IS_EXPOSED=${{ vars.APP_IS_EXPOSED }}
             DOCKERIZED_POOL_DIR=${{ vars.AUDIO_FINGERPRINTER_DOCKERIZED_POOL_DIR }}
-            FLASK_LOGS_ARE_NEEDED=${{ vars.FLASK_LOGS_ARE_NEEDED }}
             DOCKERIZED_FLASK_LOG_DIR=${{ vars.AUDIO_FINGERPRINTER_DOCKERIZED_FLASK_LOG_DIR }}
             FLASK_LOG_APP_FILENAME=${{ vars.FLASK_LOG_APP_FILENAME }}
             FLASK_LOG_ERROR_FILENAME=${{ vars.FLASK_LOG_ERROR_FILENAME }}

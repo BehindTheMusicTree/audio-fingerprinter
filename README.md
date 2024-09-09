@@ -6,35 +6,36 @@
 
 These environment variables are needed when running the app in development:
 
-- `ENV`: 
-- `APP_IS_EXPOSED`: Whether the app is exposed (true/false)
-- `POOL_INTERNAL_DIR`: Internal directory for the pool
-- `FLASK_LOGS_ARE_NEEDED`: Whether Flask logs are needed (true/false)
-- `FLASK_LOG_DIR`: Directory for Flask logs
-- `FLASK_LOG_APP_FILENAME`: Filename for Flask app log
-- `FLASK_LOG_ERROR_FILENAME`: Filename for Flask error log
-- `FLASK_LOG_REQUESTS_FILENAME`: Filename for Flask requests log
-- `GUNICORN_LOG_DIR`: Directory for Gunicorn logs
-- `GUNICORN_LOG_ACCESS_FILENAME`: Filename for Gunicorn access log
-- `GUNICORN_LOG_ERROR_FILENAME`: Filename for Gunicorn error log
+- `ENV` (DEV/TEST/PROD)
+- `APP_IS_EXPOSED`
+- `POOL_INTERNAL_DIR`
+- `FLASK_LOGS_ARE_NEEDED`
+- `FLASK_LOG_DIR`
+- `FLASK_LOG_APP_FILENAME`
+- `FLASK_LOG_ERROR_FILENAME`
+- `FLASK_LOG_REQUESTS_FILENAME`
 
 ### Build
 
 These environment variables are needed when building the container:
 
-- `APP_IS_EXPOSED`: Whether the app is exposed (true/false)
-- `POOL_DIR_SYMLINK_TARGET`: Target directory for pool symlink
-- `FLASK_LOG_DIR_SYMLINK_TARGET`: Target directory for Flask log symlink
-- `GUNICORN_LOG_DIR_SYMLINK_TARGET`: Target directory for Gunicorn log symlink
+- `DOCKERIZED_POOL_DIR`
+- `DOCKERIZED_FLASK_LOG_DIR`
+- `FLASK_LOG_APP_FILENAME`
+- `FLASK_LOG_ERROR_FILENAME`
+- `FLASK_LOG_REQUESTS_FILENAME`
+- `GUNICORN_LOG_DIR`
+- `GUNICORN_LOG_ERROR_FILENAME`
+- `GUNICORN_LOG_ACCESS_FILENAME`
 
 ### Runtime
 
 These environment variables are needed when running the container:
 
-- `AUDIO_FINGERPRINTER_PORT`: Port on which the audio fingerprinter service runs
+- `APP_PORT`
 
 ## Volumes
 
-- `/app/pool`: Directory for pool data
-- `/var/log/flask`: Directory for Flask logs
-- `/var/log/gunicorn`: Directory for Gunicorn logs
+- `/app/pool`
+- `/var/log/audio-fingerprinter-flask`
+- `/var/log/audio-fingerprinter-gunicorn`
