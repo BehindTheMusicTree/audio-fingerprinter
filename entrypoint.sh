@@ -12,7 +12,7 @@ echo "GUNICORN_LOG_DIR: $GUNICORN_LOG_DIR"
 echo "GUNICORN_LOG_ERROR_FILENAME: $GUNICORN_LOG_ERROR_FILENAME"
 echo "GUNICORN_LOG_ACCESS_FILENAME: $GUNICORN_LOG_ACCESS_FILENAME"
 
-exec gunicorn audio_fingerprinter.wsgi:application \
+exec gunicorn wsgi:application \
     --bind 0.0.0.0:${APP_PORT} \
     --error-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME} \
     --access-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ACCESS_FILENAME} \
