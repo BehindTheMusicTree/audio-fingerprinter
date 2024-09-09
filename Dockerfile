@@ -48,4 +48,4 @@ RUN chmod +x scripts/setup_filesystem.sh && \
     python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \
     chmod +x entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
