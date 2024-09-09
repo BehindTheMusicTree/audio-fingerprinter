@@ -145,12 +145,13 @@ main() {
             echo "Failed to create gunicorn log directory" >&2
             exit 1
         fi
-        # Check dir existence
-        if [ ! -d "$GUNICORN_LOG_DIR" ]; then
-            echo "Failed to create gunicorn log directory" >&2
+
+        # Check app dir existence
+        if [ ! -d /app ]; then
+            echo "/app dir does not exist" >&2
             exit 1
         else
-            echo "Gunicorn log directory exists."
+            echo "/app dior exists."
         fi
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
