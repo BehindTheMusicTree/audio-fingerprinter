@@ -62,5 +62,6 @@ RUN chmod +x scripts/setup_filesystem.sh && \
     chmod +x entrypoint.sh
 
 RUN ls -la $GUNICORN_LOG_DIR
+RUN ls -la $GUNICORN_LOG_DIR_SYMLINK_TARGET
 
 ENTRYPOINT ["/entrypoint.sh"]
