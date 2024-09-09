@@ -141,6 +141,17 @@ main() {
         check_required_vars "${REQUIRED_VARS[@]}"
 
         create_directory "$GUNICORN_LOG_DIR"
+        if [ $? -ne 0 ]; then
+            echo "Failed to create gunicorn log directory" >&2
+            exit 1
+        fi
+        # Check dir existence
+        if [ ! -d "$GUNICORN_LOG_DIR" ]; then
+            echo "Failed to create gunicorn log directory" >&2
+            exit 1
+        else
+            echo "Gunicorn log directory exists."
+        fi
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
         echo "GUNICORN_LOG_ERROR_FILE: $GUNICORN_LOG_ERROR_FILE"
