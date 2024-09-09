@@ -6,12 +6,14 @@ if [ -z "$1" ]; then
     exit 1
 fi
 BASE_DIR=$1
+echo "BASE_DIR: $BASE_DIR"
 
 if [ -z "$2" ]; then
     echo "Error: no calculated paths env file path provided." >&2
     exit 1
 fi
 GENERATED_PATHS_ENV_FILE=$2
+echo "GENERATED_PATHS_ENV_FILE: $GENERATED_PATHS_ENV_FILE"
 
 required_vars=("FLASK_LOGS_ARE_NEEDED")
 if [ -z "$FLASK_LOGS_ARE_NEEDED" ]; then
