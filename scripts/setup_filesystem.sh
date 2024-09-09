@@ -51,13 +51,16 @@ done
 pool_dir=${project_dir}${POOL_INTERNAL_DIR}
 echo "pool_dir: $pool_dir"
 if [ ! -d "$pool_dir" ]; then
-    echo "Creating pool directory."
+    echo "Creating pool directory $pool_dir"
     mkdir -p "$pool_dir"
-fi
+else
 
+echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
 if [ ! -d "$FLASK_LOG_DIR" ]; then
     echo "Creating flask log directory."
     mkdir -p "$FLASK_LOG_DIR"
+else
+    echo "Flask log directory already exists."
 fi
 
 if [ $FLASK_LOGS_ARE_NEEDED = "true" ]; then
