@@ -70,12 +70,13 @@ SAMPLE_DIR = BASE_DIR / 'test/samples'
 if not os.path.isdir(SAMPLE_DIR):
     print(f"The dir {SAMPLE_DIR} must be created.")
 
-POOL_DIR = os.getenv('POOL_DIR')
-if not POOL_DIR:
+POOL_DIR_STR = os.getenv('POOL_DIR')
+if not POOL_DIR_STR:
     raise EnvironmentError('POOL_DIR must be set')
-if not os.path.isdir(POOL_DIR):
-    raise EnvironmentError(f"The dir {POOL_DIR} must be created.")
-print("Setting pool dir to: " + str(POOL_DIR))
+if not os.path.isdir(POOL_DIR_STR):
+    raise EnvironmentError(f"The dir {POOL_DIR_STR} must be created.")
+print("Setting pool dir to: " + str(POOL_DIR_STR))
+POOL_DIR = Path(POOL_DIR_STR)
 
 LOGS_ARE_NEEDED = os.getenv('FLASK_LOGS_ARE_NEEDED')
 if not LOGS_ARE_NEEDED:
