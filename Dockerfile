@@ -1,5 +1,5 @@
-# Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
-FROM ubuntu:22.04
+# Image ubuntu:22.04-minimal used for all fingerprinters env (except dev) for consistent fingerprint generation
+FROM ubuntu:22.04-minimal
 
 ARG FPCALC_INTERNAL_PATH
 ARG DOCKERIZED_POOL_DIR
