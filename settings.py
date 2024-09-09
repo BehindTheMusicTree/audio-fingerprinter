@@ -74,7 +74,7 @@ POOL_DIR = os.getenv('POOL_DIR')
 if not POOL_DIR:
     raise EnvironmentError('POOL_DIR must be set')
 if not os.path.isdir(POOL_DIR):
-    print(f"The dir {POOL_DIR} must be created.")
+    raise EnvironmentError(f"The dir {POOL_DIR} must be created.")
 print("Setting pool dir to: " + str(POOL_DIR))
 
 LOGS_ARE_NEEDED = os.getenv('FLASK_LOGS_ARE_NEEDED')
