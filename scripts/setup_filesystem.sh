@@ -162,8 +162,8 @@ main() {
         chmod -R 775 "$GUNICORN_LOG_DIR"
 
         create_symlink "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
-        create_symlink "$FLASK_LOG_DIR" "$FLASK_LOG_DIR_SYMLINK_TARGET"
         create_symlink "$GUNICORN_LOG_DIR" "$GUNICORN_LOG_DIR_SYMLINK_TARGET"
+        create_symlink "$FLASK_LOG_DIR" "$FLASK_LOG_DIR_SYMLINK_TARGET"
     fi
 
     chmod 775 "$POOL_DIR"
