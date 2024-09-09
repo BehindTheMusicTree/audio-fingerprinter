@@ -47,21 +47,6 @@ create_log_file() {
     fi
 }
 
-create_symlink() {
-    local target="$1"
-    local link_name="$2"
-    if [ ! -L "$link_name" ]; then
-        echo "Creating symlink named $link_name to $target"
-        ln -s "$target" "$link_name"
-        if [ $? -ne 0 ]; then
-            echo "Failed to create symbolic link $link_name" >&2
-            exit 1
-        fi
-    else
-        echo "Symlink $link_name already exists."
-    fi
-}
-
 main() {
     if [ -z "$1" ]; then
         echo "No env file specified"
@@ -89,12 +74,11 @@ main() {
 
     REQUIRED_VARS=(
         APP_IS_EXPOSED
-        POOL_INTERNAL_DIR
+        POOL_DIR
         FLASK_LOGS_ARE_NEEDED
     )
     check_required_vars "${REQUIRED_VARS[@]}"
 
-    POOL_DIR=${PROJECT_DIR}${POOL_INTERNAL_DIR}
     echo "POOL_DIR: $POOL_DIR"
     create_directory "$POOL_DIR"
 
@@ -134,28 +118,10 @@ main() {
             GUNICORN_LOG_DIR
             GUNICORN_LOG_ERROR_FILENAME
             GUNICORN_LOG_ACCESS_FILENAME
-            POOL_DIR_SYMLINK_TARGET
-            FLASK_LOG_DIR_SYMLINK_TARGET
-            GUNICORN_LOG_DIR_SYMLINK_TARGET
         )
         check_required_vars "${REQUIRED_VARS[@]}"
 
         create_directory "$GUNICORN_LOG_DIR"
-        if [ $? -ne 0 ]; then
-            echo "Failed to create gunicorn log directory" >&2
-            exit 1
-        fi
-
-        # Check app dir existence
-        if [ ! -d /app ]; then
-            echo "/app dir does not exist" >&2
-            exit 1
-        else
-            echo "/app dior exists."
-        fi
-
-        echo "List all synlinks in /app"
-        ls /var/log
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
         echo "GUNICORN_LOG_ERROR_FILE: $GUNICORN_LOG_ERROR_FILE"
@@ -164,10 +130,6 @@ main() {
 
         touch "$GUNICORN_LOG_ERROR_FILE" "$GUNICORN_LOG_ACCESS_FILE"
         chmod -R 775 "$GUNICORN_LOG_DIR"
-
-        create_symlink "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
-        create_symlink "$GUNICORN_LOG_DIR" "$GUNICORN_LOG_DIR_SYMLINK_TARGET"
-        create_symlink "$FLASK_LOG_DIR" "$FLASK_LOG_DIR_SYMLINK_TARGET"
     fi
 
     chmod 775 "$POOL_DIR"
