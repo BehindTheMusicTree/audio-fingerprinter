@@ -70,10 +70,9 @@ SAMPLE_DIR = BASE_DIR / 'test/samples'
 if not os.path.isdir(SAMPLE_DIR):
     print(f"The dir {SAMPLE_DIR} must be created.")
 
-POOL_INTERNAL_DIR = os.getenv('POOL_INTERNAL_DIR')
-if not POOL_INTERNAL_DIR:
-    raise EnvironmentError('POOL_INTERNAL_DIR must be set')
-POOL_DIR = BASE_DIR / POOL_INTERNAL_DIR
+POOL_DIR = os.getenv('POOL_DIR')
+if not POOL_DIR:
+    raise EnvironmentError('POOL_DIR must be set')
 if not os.path.isdir(POOL_DIR):
     print(f"The dir {POOL_DIR} must be created.")
 print("Setting pool dir to: " + str(POOL_DIR))
