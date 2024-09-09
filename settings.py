@@ -8,7 +8,7 @@ import dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 
-APP_ENV_FILE_RELATIVE_PATH = os.getenv('ENV_FILE', 'env/.env')
+APP_ENV_FILE_RELATIVE_PATH = os.getenv('ENV_FILE', BASE_DIR / 'env/.env')
 APP_ENV_FILE = BASE_DIR / APP_ENV_FILE_RELATIVE_PATH
 
 if not APP_ENV_FILE.exists():
@@ -57,11 +57,12 @@ except subprocess.CalledProcessError as e:
 
 dotenv.load_dotenv(CALCULATED_PATHS_ENV_FILE)
 
-APP_PORT = os.getenv('APP_PORT')
-if not APP_PORT:
+APP_PORT_STR = os.getenv('APP_PORT')
+if not APP_PORT_STR:
     raise EnvironmentError('APP_PORT must be set')
-if not APP_PORT.isdigit():
+if not APP_PORT_STR.isdigit():
     raise EnvironmentError('APP_PORT must be a number')
+APP_PORT = int(APP_PORT_STR)
 
 BASE_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,3 +126,9 @@ else:
     LOG_REQUESTS_FILE = None
     LOG_LEVEL = None
     print("Logs are not needed.")
+
+FPCALC = os.getenv('FPCALC')
+if not FPCALC:
+    raise EnvironmentError('FPCALC must be set')
+if not os.path.isfile(FPCALC):
+    raise EnvironmentError(f"{FPCALC} is not a valid path for fpcalc.")
