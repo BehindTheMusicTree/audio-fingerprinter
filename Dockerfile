@@ -31,7 +31,8 @@ done
 ENV APP_IS_DOCKERIZED=true \
     APP_IS_EXPOSED=true \
     ENV=TEST \
-    FPCALC_INTERNAL_PATH=$FPCALC_INTERNAL_PATH \
+    # The acoustid module requires the FPCALC environment variable to be named that way
+    FPCALC=$FPCALC_INTERNAL_PATH \ 
     DOCKERIZED_POOL_DIR=$DOCKERIZED_POOL_DIR \
     FLASK_LOGS_ARE_NEEDED=true \
     DOCKERIZED_FLASK_LOG_DIR=$DOCKERIZED_FLASK_LOG_DIR \
