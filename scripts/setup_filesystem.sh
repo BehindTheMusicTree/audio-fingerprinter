@@ -66,15 +66,20 @@ main() {
 
     scripts_dir=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
     project_dir=$(cd "$(dirname "$scripts_dir")" && pwd)/
-    calculated_paths_env_file=${project_dir}env/calculated_paths/.env
-    bash "${scripts_dir}generate_calculated_paths_env_file.sh" "$project_dir" "$calculated_paths_env_file"
+    CALCULATED_ENV_FILE_PATH=${project_dir}env/calculated_paths/.env
+    bash "${scripts_dir}generate_calculated_paths_env_file.sh" "$project_dir" "$CALCULATED_ENV_FILE_PATH"
 
     if [ $? -ne 0 ]; then
         echo "Failed to generate calculated paths env file"
         exit 1
     fi
 
-    load_env_file "$calculated_paths_env_file"
+    if [ -f "$CALCULATED_ENV_FILE_PATH" ]; then
+        echo "Calculated paths env file exists. Loading."
+        load_env_file "$CALCULATED_ENV_FILE_PATH"
+    else
+        echo "Calculated paths env file does not exist"
+    fi
 
     required_vars=(
         APP_IS_EXPOSED
