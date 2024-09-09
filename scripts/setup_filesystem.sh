@@ -53,6 +53,8 @@ create_symlink() {
     if [ ! -L "$link_name" ]; then
         echo "Creating symlink for $link_name."
         ln -s "$target" "$link_name"
+    else
+        echo "Symlink $link_name already exists."
     fi
 }
 
@@ -64,10 +66,10 @@ main() {
         load_env_file "$APP_ENV_FILE"
     fi
 
-    scripts_dir=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-    project_dir=$(cd "$(dirname "$scripts_dir")" && pwd)/
-    CALCULATED_ENV_FILE_PATH=${project_dir}env/calculated_paths/.env
-    bash "${scripts_dir}generate_calculated_paths_env_file.sh" "$project_dir" "$CALCULATED_ENV_FILE_PATH"
+    SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
+    PROJECT_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
+    CALCULATED_ENV_FILE_PATH=${PROJECT_DIR}env/calculated_paths/.env
+    bash "${SCRIPTS_DIR}generate_calculated_paths_env_file.sh" "$PROJECT_DIR" "$CALCULATED_ENV_FILE_PATH"
 
     if [ $? -ne 0 ]; then
         echo "Failed to generate calculated paths env file"
@@ -81,29 +83,29 @@ main() {
         echo "Calculated paths env file does not exist"
     fi
 
-    required_vars=(
+    REQUIRED_VARS=(
         APP_IS_EXPOSED
         POOL_INTERNAL_DIR
         FLASK_LOGS_ARE_NEEDED
     )
-    check_required_vars "${required_vars[@]}"
+    check_required_vars "${REQUIRED_VARS[@]}"
 
-    pool_dir=${project_dir}${POOL_INTERNAL_DIR}
-    echo "pool_dir: $pool_dir"
-    create_directory "$pool_dir"
+    POOL_DIR=${PROJECT_DIR}${POOL_INTERNAL_DIR}
+    echo "POOL_DIR: $POOL_DIR"
+    create_directory "$POOL_DIR"
 
     echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
     create_directory "$FLASK_LOG_DIR"
 
     echo "FLASK_LOGS_ARE_NEEDED: $FLASK_LOGS_ARE_NEEDED"
     if [ "$FLASK_LOGS_ARE_NEEDED" = "true" ]; then
-        required_vars=(
+        REQUIRED_VARS=(
             FLASK_LOG_DIR
             FLASK_LOG_APP_FILENAME
             FLASK_LOG_ERROR_FILENAME
             FLASK_LOG_REQUESTS_FILENAME
         )
-        check_required_vars "${required_vars[@]}"
+        check_required_vars "${REQUIRED_VARS[@]}"
 
         FLASK_LOG_APP_FILE=${FLASK_LOG_DIR}${FLASK_LOG_APP_FILENAME}
         echo "FLASK_LOG_APP_FILE: $FLASK_LOG_APP_FILE"
@@ -124,7 +126,7 @@ main() {
 
     echo "APP_IS_EXPOSED: $APP_IS_EXPOSED"
     if [ "$APP_IS_EXPOSED" = "true" ]; then
-        required_vars=(
+        REQUIRED_VARS=(
             GUNICORN_LOG_DIR
             GUNICORN_LOG_ERROR_FILENAME
             GUNICORN_LOG_ACCESS_FILENAME
@@ -132,8 +134,9 @@ main() {
             FLASK_LOG_DIR_SYMLINK_TARGET
             GUNICORN_LOG_DIR_SYMLINK_TARGET
         )
-        check_required_vars "${required_vars[@]}"
+        check_required_vars "${REQUIRED_VARS[@]}"
 
+        echo "Creating directory $GUNICORN_LOG_DIR"
         create_directory "$GUNICORN_LOG_DIR"
 
         GUNICORN_LOG_ERROR_FILE=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}
@@ -144,12 +147,15 @@ main() {
         touch "$GUNICORN_LOG_ERROR_FILE" "$GUNICORN_LOG_ACCESS_FILE"
         chmod -R 775 "$GUNICORN_LOG_DIR"
 
-        create_symlink "$pool_dir" "$POOL_DIR_SYMLINK_TARGET"
+        echo "Creating symlink for $POOL_DIR_SYMLINK_TARGET"
+        create_symlink "$POOL_DIR" "$POOL_DIR_SYMLINK_TARGET"
+        echo "Creating symlink for $FLASK_LOG_DIR_SYMLINK_TARGET"
         create_symlink "$FLASK_LOG_DIR" "$FLASK_LOG_DIR_SYMLINK_TARGET"
+        echo "Creating symlink for $GUNICORN_LOG_DIR_SYMLINK_TARGET"
         create_symlink "$GUNICORN_LOG_DIR" "$GUNICORN_LOG_DIR_SYMLINK_TARGET"
     fi
 
-    chmod 775 "$pool_dir"
+    chmod 775 "$POOL_DIR"
 }
 
 main "$@"
