@@ -17,4 +17,4 @@ exec gunicorn bodzify_api.wsgi:application \
     --bind 0.0.0.0:${APP_PORT} \
     --error-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME} \
     --access-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ACCESS_FILENAME} \
-    --log-level=info
+    --log-level=debug
