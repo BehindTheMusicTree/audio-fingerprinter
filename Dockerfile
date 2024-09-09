@@ -54,8 +54,7 @@ RUN bash scripts/setup_filesystem.sh
 RUN bash scripts/install_dependencies.sh
 RUN python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt
 
-CMD ["gunicorn", "bodzify_api.wsgi:application", \
-     "--bind", "0.0.0.0:${AUDIO_FINGERPRINTER_PORT}", \
-     "--error-logfile=${GUNICORN_LOG_DIR_SYMLINK_TARGET}${GUNICORN_LOG_ERROR_FILENAME}", \
-     "--access-logfile=${GUNICORN_LOG_DIR_SYMLINK_TARGET}${GUNICORN_LOG_ACCESS_FILENAME}", \
-     "--log-level=info"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
