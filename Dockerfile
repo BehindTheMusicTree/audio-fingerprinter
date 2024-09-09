@@ -59,9 +59,7 @@ RUN chmod +x scripts/setup_filesystem.sh && \
     bash scripts/setup_filesystem.sh && \
     bash scripts/install_dependencies.sh && \
     python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \
-    chmod +x /entrypoint.sh
-
-COPY entrypoint.sh /entrypoint.sh
+    chmod +x entrypoint.sh
 
 RUN ls -la $GUNICORN_LOG_DIR
 
