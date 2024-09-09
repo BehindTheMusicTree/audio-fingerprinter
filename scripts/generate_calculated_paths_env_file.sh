@@ -66,8 +66,8 @@ main() {
 
         if [ "$APP_IS_EXPOSED" = "true" ]; then
             echo "APP_IS_EXPOSED is set to true"
-            check_var "DOCKERRIZED_FLASK_LOG_DIR" "$DOCKERRIZED_FLASK_LOG_DIR"
-            FLASK_LOG_DIR=${DOCKERRIZED_FLASK_LOG_DIR}
+            check_var "DOCKERIZED_FLASK_LOG_DIR" "$DOCKERIZED_FLASK_LOG_DIR"
+            FLASK_LOG_DIR=${DOCKERIZED_FLASK_LOG_DIR}
         else
             echo "APP_IS_EXPOSED is set to false"
             check_var "FLASK_LOG_INTERNAL_DIR" "$FLASK_LOG_INTERNAL_DIR"
