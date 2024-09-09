@@ -53,7 +53,7 @@ echo "pool_dir: $pool_dir"
 if [ ! -d "$pool_dir" ]; then
     echo "Creating pool directory $pool_dir"
     mkdir -p "$pool_dir"
-else
+fi
 
 echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
 if [ ! -d "$FLASK_LOG_DIR" ]; then
