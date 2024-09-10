@@ -5,11 +5,6 @@ on:
     branches: [main, dev, improve-deployment]
   pull_request:
     branches: [main, dev, improve-deployment]
-env:
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-  IMAGE_REPO: ${{ vars.AUDIO_FINGERPRINTER_IMAGE_REPO }}
-  SSH_DESTINATION: ${{ secrets.TEST_SERVER_BODZIFY_USERNAME }}@${{ vars.TEST_SERVER_URL }}
-  TEST_SERVER_URL: ${{ vars.TEST_SERVER_URL }}
 jobs:
   tests:
     name: Tests
@@ -19,12 +14,12 @@ jobs:
     env:
       FPCALC: ${{ vars.FPCALC_INTERNAL_PATH }}
       ENV: ${{ vars.ENV }}
-      APP_IS_DOCKERIZED: 'false'
-      DEBUG: 'true'
-      APP_IS_EXPOSED: 'false'
+      APP_IS_DOCKERIZED: false
+      DEBUG: true
+      APP_IS_EXPOSED: false
       APP_PORT: ${{ secrets.APP_PORT }}
       POOL_INTERNAL_DIR: ${{ vars.POOL_INTERNAL_DIR }}
-      FLASK_LOGS_ARE_NEEDED: ${{ vars.FLASK_LOGS_ARE_NEEDED }}
+      FLASK_LOGS_ARE_NEEDED: false
       FLASK_LOG_INTERNAL_DIR: ${{ vars.FLASK_LOG_INTERNAL_DIR }}
     steps:
       - name: Checkout code
@@ -60,12 +55,10 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
-        env:
-          IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         with:
           context: .
           push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AUDIO_FINGERPRINTER_IMAGE_REPO }}:${{ vars.APP_VERSION }}
           build-args: |
             FPCALC_INTERNAL_PATH=${{ vars.FPCALC_INTERNAL_PATH }}
             DOCKERIZED_POOL_DIR=${{ vars.AUDIO_FINGERPRINTER_DOCKERIZED_POOL_DIR }}
