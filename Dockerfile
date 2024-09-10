@@ -1,5 +1,5 @@
-# Image ubuntu:22.04-minimal used for all fingerprinters env (except dev) for consistent fingerprint generation
-FROM ubuntu:22.04-minimal
+# Image python:3.9-sliml used for all fingerprinters env (except dev) for consistent fingerprint generation
+FROM python:3.9-slim
 
 ARG FPCALC_INTERNAL_PATH
 ARG DOCKERIZED_POOL_DIR
