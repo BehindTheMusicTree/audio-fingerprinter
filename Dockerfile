@@ -1,5 +1,5 @@
-# Image python:3.9-sliml used for all fingerprinters env (except dev) for consistent fingerprint generation
-FROM python:3.9-slim
+# Image ubuntu:22.04 used for all fingerprinters env (except dev) for consistent fingerprint generation
+FROM ubuntu:22.04
 
 ARG FPCALC_INTERNAL_PATH
 ARG DOCKERIZED_POOL_DIR
@@ -42,12 +42,6 @@ ENV APP_IS_DOCKERIZED=true \
     GUNICORN_LOG_DIR=$GUNICORN_LOG_DIR \
     GUNICORN_LOG_ERROR_FILENAME=$GUNICORN_LOG_ERROR_FILENAME \
     GUNICORN_LOG_ACCESS_FILENAME=$GUNICORN_LOG_ACCESS_FILENAME
-
-# Install necessary packages
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
