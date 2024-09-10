@@ -43,6 +43,12 @@ ENV APP_IS_DOCKERIZED=true \
     GUNICORN_LOG_ERROR_FILENAME=$GUNICORN_LOG_ERROR_FILENAME \
     GUNICORN_LOG_ACCESS_FILENAME=$GUNICORN_LOG_ACCESS_FILENAME
 
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY . .
