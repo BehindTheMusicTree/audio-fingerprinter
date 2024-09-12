@@ -21,10 +21,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+           python-version: 3.12
 
       - name: Cache apt packages
         uses: actions/cache@v2
@@ -55,7 +55,7 @@ jobs:
           FPCALC: ${{ vars.FPCALC_INTERNAL_PATH }}
           ENV: ${{ vars.ENV }}
           DEBUG: true
-          APP_PORT: ${{ secrets.APP_PORT }}
+          APP_PORT: ${{ vars.APP_PORT }}
         run: python -m unittest discover
 
   build-and-push-to-dockerhub:
