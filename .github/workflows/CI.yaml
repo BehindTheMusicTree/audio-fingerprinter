@@ -15,7 +15,6 @@ jobs:
       APP_IS_DOCKERIZED: false
       APP_IS_EXPOSED: false
       POOL_DIR_INTERNAL: ${{ vars.POOL_DIR_INTERNAL }}
-      FLASK_LOG_DIR_INTERNAL: ${{ vars.FLASK_LOG_DIR_INTERNAL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
