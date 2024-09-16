@@ -8,9 +8,8 @@ These environment variables are needed when running the app in development:
 
 - `ENV` (DEV/TEST/PROD)
 - `APP_IS_EXPOSED`
-- `POOL_INTERNAL_DIR`
-- `FLASK_LOGS_ARE_NEEDED`
-- `FLASK_LOG_DIR`
+- `POOL_DIR_INTERNAL`
+- `FLASK_LOG_DIR_INTERNAL` or `FLASK_LOG_DIR_EXTERNAL`
 - `FLASK_LOG_APP_FILENAME`
 - `FLASK_LOG_ERROR_FILENAME`
 - `FLASK_LOG_REQUESTS_FILENAME`
@@ -19,8 +18,8 @@ These environment variables are needed when running the app in development:
 
 These environment variables are needed when building the container:
 
-- `DOCKERIZED_POOL_DIR`
-- `DOCKERIZED_FLASK_LOG_DIR`
+- `POOL_DIR_EXTERNAL`
+- `FLASK_LOG_DIR_EXTERNAL`
 - `FLASK_LOG_APP_FILENAME`
 - `FLASK_LOG_ERROR_FILENAME`
 - `FLASK_LOG_REQUESTS_FILENAME`

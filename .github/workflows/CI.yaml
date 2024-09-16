@@ -14,9 +14,8 @@ jobs:
     env:
       APP_IS_DOCKERIZED: false
       APP_IS_EXPOSED: false
-      POOL_INTERNAL_DIR: ${{ vars.POOL_INTERNAL_DIR }}
-      FLASK_LOGS_ARE_NEEDED: false
-      FLASK_LOG_INTERNAL_DIR: ${{ vars.FLASK_LOG_INTERNAL_DIR }}
+      POOL_DIR_INTERNAL: ${{ vars.POOL_DIR_INTERNAL }}
+      FLASK_LOG_DIR_INTERNAL: ${{ vars.FLASK_LOG_DIR_INTERNAL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,12 +77,12 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AFP_IMAGE_REPO }}:${{ vars.APP_VERSION }}
           build-args: |
             FPCALC_INTERNAL_PATH=${{ vars.FPCALC_INTERNAL_PATH }}
-            DOCKERIZED_POOL_DIR=${{ vars.AFP_DOCKERIZED_POOL_DIR }}
-            DOCKERIZED_FLASK_LOG_DIR=${{ vars.AFP_DOCKERIZED_FLASK_LOG_DIR }}
+            POOL_DIR_EXTERNAL=${{ vars.AFP_POOL_DIR_EXTERNAL }}
+            FLASK_LOG_DIR_EXTERNAL=${{ vars.AFP_DOCKERIZED_FLASK_LOG_DIR }}
             FLASK_LOG_APP_FILENAME=${{ vars.FLASK_LOG_APP_FILENAME }}
             FLASK_LOG_ERROR_FILENAME=${{ vars.FLASK_LOG_ERROR_FILENAME }}
             FLASK_LOG_REQUESTS_FILENAME=${{ vars.FLASK_LOG_REQUESTS_FILENAME }}
-            GUNICORN_LOG_DIR=${{ vars.AFP_DOCKERIZED_GUNICORN_LOG_DIR }}
+            GUNICORN_LOG_DIR=${{ vars.AFP_GUNICORN_LOG_DIR_EXTERNAL }}
             GUNICORN_LOG_ACCESS_FILENAME=${{ vars.GUNICORN_LOG_ACCESS_FILENAME }}
             GUNICORN_LOG_ERROR_FILENAME=${{ vars.GUNICORN_LOG_ERROR_FILENAME }}
 

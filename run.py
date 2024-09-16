@@ -14,7 +14,7 @@ from audio_fingerprinter.audio_fingerprinter \
 def create_app():
     app = Flask(__name__)
 
-    if settings.LOGS_ARE_NEEDED:
+    if settings.LOG_DIR:
         if not isinstance(settings.LOG_APP_FILE, (str, Path)):
             raise TypeError("LOG_APP_FILE must be a string or Path")
         if not isinstance(settings.LOG_REQUESTS_FILE, (str, Path)):
@@ -43,7 +43,7 @@ def create_app():
     # Log each request
     @ app.after_request
     def after_request(response):
-        if settings.LOGS_ARE_NEEDED:
+        if settings.LOG_DIR:
             request_logger.info(
                 '%s %s %s %s %s',
                 request.remote_addr,
