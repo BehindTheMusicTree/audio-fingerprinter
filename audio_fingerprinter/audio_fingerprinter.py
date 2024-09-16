@@ -43,7 +43,7 @@ class FileNotInPoolError(AppError):
 
 
 def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optional[float], Optional[bytes]]:
-    file_path = os.path.join(settings.POOL_DIR_EXTERNAL, file_name)
+    file_path = os.path.join(settings.POOL_DIR, file_name)
 
     if not os.path.exists(file_path):
         raise FileNotInPoolError(f'The file {file_name} is not located in the Audio Fingerprint pool directory.')
