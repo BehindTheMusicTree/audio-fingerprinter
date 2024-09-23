@@ -42,7 +42,7 @@ set_read_write_permissions_and_owner_or_exit() {
     fi
 }
 
-check_vars_are_set() {
+check_required_vars_are_set() {
     local missing_vars=()
     for var_name in "$@"; do
         if [ -z "${!var_name}" ]; then

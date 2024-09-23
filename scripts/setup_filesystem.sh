@@ -106,7 +106,7 @@ main() {
     load_app_env_file_if_exists
     load_app_calculated_paths_env_vars
 
-    check_vars_are_set POOL_DIR
+    check_required_vars_are_set POOL_DIR
     check_bool_vars_are_set APP_IS_EXPOSED
 
     create_directory_if_not_exists_or_exit "$POOL_DIR"
@@ -120,7 +120,7 @@ main() {
             FLASK_LOG_ERROR_FILENAME
             FLASK_LOG_REQUESTS_FILENAME
         )
-        check_vars_are_set "${REQUIRED_VARS[@]}"
+        check_required_vars_are_set "${REQUIRED_VARS[@]}"
 
         create_directory_if_not_exists_or_exit "$FLASK_LOG_DIR"
         touch_file_or_exit "${FLASK_LOG_DIR}${FLASK_LOG_APP_FILENAME}"
@@ -140,7 +140,7 @@ main() {
             GUNICORN_LOG_ERROR_FILENAME
             GUNICORN_LOG_ACCESS_FILENAME
         )
-        check_vars_are_set "${REQUIRED_VARS[@]}"
+        check_required_vars_are_set "${REQUIRED_VARS[@]}"
 
         create_directory_if_not_exists_or_exit "$GUNICORN_LOG_DIR"
         touch_file_or_exit "${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME}"
