@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 
+from run import app
+from marshmallow import Schema, fields
+import marshmallow
+from marshmallow_dataclass import class_schema
+import json
+import unittest
+import settings
+from audio_fingerprinter.audio_fingerprinter import ERROR_CODES_STR
 import base64
 import os
+from dotenv import load_dotenv
 
-
-from app.audio_fingerprint_generator import ERROR_CODES_STR
-import settings
-import unittest
-import json
-from marshmallow_dataclass import class_schema
-import marshmallow
-from marshmallow import Schema, fields
-
-from run import app
+load_dotenv()
+for key, value in os.environ.items():
+    print(f"{key}: {value}")
 
 
 class ResponseObject:

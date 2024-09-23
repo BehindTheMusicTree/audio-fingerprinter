@@ -3,17 +3,25 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import base64
+from pathlib import Path
 from flask import Flask, request
 
 import settings
-from app.audio_fingerprint_generator \
+from audio_fingerprinter.audio_fingerprinter \
     import FpcalcStatus2Error, WrongFileTypeError, FileNotInPoolError, get_fingerprint_and_duration_from_file_name
 
 
 def create_app():
     app = Flask(__name__)
 
-    if settings.LOGS_ARE_NEEDED:
+    if settings.LOG_DIR:
+        if not isinstance(settings.LOG_APP_FILE, (str, Path)):
+            raise TypeError("LOG_APP_FILE must be a string or Path")
+        if not isinstance(settings.LOG_REQUESTS_FILE, (str, Path)):
+            raise TypeError("LOG_REQUESTS_FILE must be a string or Path")
+        if not isinstance(settings.LOG_LEVEL, int):
+            raise TypeError("LOG_LEVEL must be an int")
+
         app_log_handler = RotatingFileHandler(settings.LOG_APP_FILE, maxBytes=10240, backupCount=10)
         app_log_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s '
@@ -35,7 +43,7 @@ def create_app():
     # Log each request
     @ app.after_request
     def after_request(response):
-        if settings.LOGS_ARE_NEEDED:
+        if settings.LOG_DIR:
             request_logger.info(
                 '%s %s %s %s %s',
                 request.remote_addr,
@@ -63,7 +71,7 @@ def create_app():
         FINGERPRINT: str = 'fingerprint'
 
     @ app.route('/fingerprint-audio', methods=['POST'])
-    def generate_audio_fingerprint():
+    def fingerprint_audio():
         if POST_FIELDS.FILE_NAME not in request.json:  # type: ignore
             return error_response('No filename in the request', 400)
 
@@ -93,4 +101,6 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
+    if not isinstance(settings.APP_PORT, int):
+        raise TypeError("APP_PORT must be an int")
     app.run(host='0.0.0.0', port=settings.APP_PORT)

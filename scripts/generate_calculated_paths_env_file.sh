@@ -1,62 +1,95 @@
 #!/bin/bash
 
 echo "Generating calculated paths env file"
-if [ -z "$1" ]; then
-    echo "Error: no base dir provided." >&2
-    exit 1
-fi
-BASE_DIR=$1
 
-if [ -z "$2" ]; then
-    echo "Error: no calculated paths env file path provided." >&2
-    exit 1
-fi
-GENERATED_PATHS_ENV_FILE=$2
-
-required_vars=("FLASK_LOGS_ARE_NEEDED")
-if [ -z "$FLASK_LOGS_ARE_NEEDED" ]; then
-    echo "FLASK_LOGS_ARE_NEEDED must be set" >&2
-    exit 1
-fi
-FLASK_LOGS_ARE_NEEDED=$(echo "$FLASK_LOGS_ARE_NEEDED" | tr '[:upper:]' '[:lower:]')
-
-if [ $FLASK_LOGS_ARE_NEEDED != "true" ] && [ $FLASK_LOGS_ARE_NEEDED != "false" ]; then
-    echo "FLASK_LOGS_ARE_NEEDED must be set to true or false."
-    exit 1
-fi
-
-if [ $FLASK_LOGS_ARE_NEEDED = "true" ]; then
-    if [ -z "$APP_IS_EXPOSED" ]; then
-        echo "APP_IS_EXPOSED must be set" >&2
+check_var() {
+    local var_name="$1"
+    local var_value="$2"
+    if [ -z "$var_value" ]; then
+        echo "Error: $var_name must be set" >&2
         exit 1
     fi
-    APP_IS_EXPOSED=$(echo "$APP_IS_EXPOSED" | tr '[:upper:]' '[:lower:]')
+}
 
-    if [ $APP_IS_EXPOSED != "true" ] && [ $APP_IS_EXPOSED != "false" ]; then
-        echo "APP_IS_EXPOSED must be set to true or false" >&2
+to_lowercase() {
+    echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+validate_boolean() {
+    local var_name="$1"
+    local var_value="$2"
+    if [ "$var_value" != "true" ] && [ "$var_value" != "false" ]; then
+        echo "Error: $var_name must be set to true or false" >&2
         exit 1
     fi
+}
 
-    if [ $APP_IS_EXPOSED = "true" ]; then
-        echo "APP_IS_EXPOSED is set to true"
-        if [ -z "$FLASK_LOG_DIR" ]; then
-            echo "FLASK_LOG_DIR must be set" >&2
+create_env_file() {
+    local file_path="$1"
+    if [ -f "$file_path" ]; then
+        rm -f "$file_path"
+    fi
+    touch "$file_path"
+}
+
+calculate_flask_log_dir(){
+    if [ -n "$FLASK_LOG_DIR_EXTERNAL" ]; then
+        if [ -n "$FLASK_LOG_DIR_INTERNAL" ]; then
+            echo "FLASK_LOG_DIR_INTERNAL and FLASK_LOG_DIR_EXTERNAL must not be set at the same time." >&2
             exit 1
         fi
+        echo "FLASK_LOG_DIR_EXTERNAL is set. Setting the Flask logs to external."
+        FLASK_LOG_DIR="${FLASK_LOG_DIR_EXTERNAL}"
     else
-        echo "APP_IS_EXPOSED is set to false"
-        if [ -z "$FLASK_LOG_INTERNAL_DIR" ]; then
-            echo "FLASK_LOG_INTERNAL_DIR must be set" >&2
+        if [ -n "$FLASK_LOG_DIR_INTERNAL" ]; then
+            echo "FLASK_LOG_DIR_INTERNAL is set. Setting the Flask logs to internal."
+            FLASK_LOG_DIR="${APP_DIR}${FLASK_LOG_DIR_INTERNAL}"
+        else
+            echo "Neither FLASK_LOG_DIR_EXTERNAL nor FLASK_LOG_DIR_INTERNAL is set. Flask logs are not needed."
+        fi
+    fi
+
+    if [ -n "$FLASK_LOG_DIR" ]; then
+        echo "FLASK_LOG_DIR is set to $FLASK_LOG_DIR"
+        echo "FLASK_LOG_DIR=$FLASK_LOG_DIR" >> "$CALCULATED_PATHS_ENV_FILE"
+    fi
+}
+
+calculate_pool_dir(){
+    if [ -n "$POOL_DIR_EXTERNAL" ]; then
+        echo "POOL_DIR_EXTERNAL is set. Setting to POOL_DIR."
+        if [ -n "$POOL_DIR_INTERNAL" ]; then
+            echo "POOL_DIR_INTERNAL and POOL_DIR_EXTERNAL can not be set at the same time." >&2
             exit 1
         fi
-        FLASK_LOG_DIR=${BASE_DIR}${FLASK_LOG_INTERNAL_DIR}
+        POOL_DIR=${POOL_DIR_EXTERNAL}
+    else
+        if [ -n "$POOL_DIR_INTERNAL" ]; then
+            echo "POOL_DIR_INTERNAL is set. Setting to POOL_DIR."
+            POOL_DIR=${PROJECT_DIR}${POOL_DIR_INTERNAL}
+        else 
+            echo "Neither POOL_DIR_EXTERNAL nor POOL_DIR_INTERNAL is set. Abort." >&2
+            exit 1
+        fi
     fi
 
-    if [ -f $GENERATED_PATHS_ENV_FILE ]; then
-        rm -f $GENERATED_PATHS_ENV_FILE
-    fi
-    touch $GENERATED_PATHS_ENV_FILE
+    echo "POOL_DIR: $POOL_DIR"
+    echo "POOL_DIR=$POOL_DIR" >> "$CALCULATED_PATHS_ENV_FILE"
+}
 
-    echo "FLASK_LOG_DIR: $FLASK_LOG_DIR"
-    echo "FLASK_LOG_DIR=$FLASK_LOG_DIR" >> "$GENERATED_PATHS_ENV_FILE"
-fi
+main() {
+    echo "Generating the env file for calculated paths..."
+
+    SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
+    PROJECT_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
+    CALCULATED_PATHS_ENV_FILE="${PROJECT_DIR}env/calculated_paths/.env"
+
+    touch_file_or_exit "$CALCULATED_PATHS_ENV_FILE"
+
+    calculate_flask_log_dir
+    calculate_pool_dir
+
+    echo "Calculated paths env file generated successfully."
+}
+
+main "$@"

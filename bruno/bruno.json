@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Audio Fingerprinter",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
