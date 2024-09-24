@@ -99,8 +99,8 @@ touch_file_or_exit() {
 
 main() {
     SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-    PROJECT_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
-    APP_ENV_FILE="${PROJECT_DIR}env/.env"
+    BASE_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
+    APP_ENV_FILE="${BASE_DIR}env/.env"
     source "${SCRIPTS_DIR}utils.sh"
     
     load_app_env_file_if_exists
