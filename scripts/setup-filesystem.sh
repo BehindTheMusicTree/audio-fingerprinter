@@ -30,7 +30,7 @@ load_app_calculated_paths_env_vars() {
     fi
 
     local CALCULATED_PATHS_ENV_FILE="${CALTULATED_PATHS_DIR}.env"
-    bash "${SCRIPTS_DIR}generate_calculated_paths_env_file.sh"
+    bash "${SCRIPTS_DIR}generate-calculated-paths-env-file.sh"
     if [ $? -ne 0 ]; then
         echo "Failed to generate calculated paths env file: $output" >&2
         exit 1
