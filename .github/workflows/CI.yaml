@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, dev, setup-error-logs]
   pull_request:
-    branches: [main, dev, improve-deployment]
+    branches: [main, dev]
 jobs:
   tests:
     name: Tests
