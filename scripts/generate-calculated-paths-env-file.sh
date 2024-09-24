@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "Generating calculated paths env file"
+log_with_script_prefixe () {
+    echo "[Paths Calculator] $1"
+}
 
 check_var() {
     local var_name="$1"
@@ -66,9 +68,9 @@ calculate_pool_dir(){
     else
         if [ -n "$POOL_DIR_INTERNAL" ]; then
             echo "POOL_DIR_INTERNAL is set. Setting to POOL_DIR."
-            POOL_DIR=${PROJECT_DIR}${POOL_DIR_INTERNAL}
+            POOL_DIR=${BASE_DIR}${POOL_DIR_INTERNAL}
         else 
-            echo "Neither POOL_DIR_EXTERNAL nor POOL_DIR_INTERNAL is set. Abort." >&2
+            echo "Neither POOL_DIR_EXTERNAL nor POOL_DIR_INTERNAL is set." >&2
             exit 1
         fi
     fi
@@ -81,10 +83,27 @@ main() {
     echo "Generating the env file for calculated paths..."
 
     SCRIPTS_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)/
-    PROJECT_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
-    CALCULATED_PATHS_ENV_FILE="${PROJECT_DIR}env/calculated_paths/.env"
+    BASE_DIR=$(cd "$(dirname "$SCRIPTS_DIR")" && pwd)/
+    CALCULATED_PATHS_ENV_FILE="${BASE_DIR}env/calculated_paths/.env"
 
-    touch_file_or_exit "$CALCULATED_PATHS_ENV_FILE"
+    if [ -f "$CALCULATED_PATHS_ENV_FILE" ]; then
+        log_with_script_prefixe "Removing the existing calculated paths env file..."
+        rm -f "$CALCULATED_PATHS_ENV_FILE"
+        if [ $? -ne 0 ]; then
+            log_with_script_prefixe "ERROR: Failed to remove the existing calculated paths env file." >&2
+            exit 1
+        fi
+    else
+        log_with_script_prefixe "No previous calculated paths env file was found."
+    fi
+
+    output=$(touch "$CALCULATED_PATHS_ENV_FILE")
+    if [ $? -ne 0 ]; then
+        log_with_script_prefixe "ERROR: Failed to create the generated paths env file: $output" >&2
+        exit 1
+    fi
+    log_with_script_prefixe "Generated paths env file created successfully."
+
 
     calculate_flask_log_dir
     calculate_pool_dir

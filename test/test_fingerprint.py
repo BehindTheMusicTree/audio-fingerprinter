@@ -128,25 +128,25 @@ class TestAudioFingerprinter(unittest.TestCase):
 
     def test_short_mp3_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.mp3')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_flac_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.flac')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.wav')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 

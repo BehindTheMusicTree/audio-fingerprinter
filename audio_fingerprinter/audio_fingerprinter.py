@@ -56,8 +56,8 @@ def get_fingerprint_and_duration_from_file_name(file_name: str) -> Tuple[Optiona
     except Exception as error:
         if isinstance(error, pydub.exceptions.CouldntDecodeError):
             first_error = error.args[0]
-            if (settings.ENV == settings.ENV_NAMES.DEV and 'error code: 183' in first_error) or \
-                    (settings.ENV != settings.ENV_NAMES.DEV and 'error code: 1' in first_error):
+            if (settings.ENV == settings.EnvValues.DEV and 'error code: 183' in first_error) or \
+                    (settings.ENV != settings.EnvValues.DEV and 'error code: 1' in first_error):
                 raise WrongFileTypeError(f'Invalid file type. Only audio types are allowed.')
         else:
             raise error
