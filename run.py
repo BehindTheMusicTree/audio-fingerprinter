@@ -3,16 +3,16 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import base64
-from os import error
+import os
 from pathlib import Path
 from flask import Flask, request
 
+from audio_fingerprinter.audio_fingerprinter import get_fingerprint_and_duration_from_filename
+from audio_fingerprinter.errors import FileNotInPoolError, FpcalcStatus2Error, WrongFileTypeError
 import settings
-from audio_fingerprinter.audio_fingerprinter \
-    import FpcalcStatus2Error, WrongFileTypeError, FileNotInPoolError, get_fingerprint_and_duration_from_file_name
 
 
-def log_fingerprinting_error(user_id, filename, title, message):
+def log_fingerprinting_error(filename, file_bytes_num, message, user_id=None, title=None):
     if not user_id:
         user_id = 'unknown'
         message = f'{message} (User ID not provided)'
@@ -22,11 +22,12 @@ def log_fingerprinting_error(user_id, filename, title, message):
         message = f'{message} (Title not provided)'
 
     app.logger.error(
-        '%s: %s. User ID: %s, Filename: %s, Request data: %s',
+        '%s: %s. User ID: %s, Filename: %s (Number of bytes: %s), Request data: %s',
         title,
         message,
         user_id,
         filename,
+        file_bytes_num,
         request.json
     )
 
@@ -99,6 +100,7 @@ def create_app():
     class ResponseFields:
         DURATION: str = 'duration'
         FINGERPRINT: str = 'fingerprint'
+        FILE_BYTES_NUM: str = 'fileBytesNum'
 
     @ app.route('/fingerprint-audio', methods=['POST'])
     def fingerprint_audio():
@@ -111,20 +113,33 @@ def create_app():
         filename = request.json[PostFields.FILENAME]
         title = request.json.get(PostFields.TITLE)
         user_id = request.json.get(PostFields.USER_ID)
+
+        file_path = os.path.join(settings.POOL_DIR, filename)
+
         try:
-            duration, fingerprint = get_fingerprint_and_duration_from_file_name(filename)
+            if not os.path.exists(file_path):
+                raise FileNotInPoolError(f'The file {filename} is not located in the Audio Fingerprint pool directory.')
+
+            file_bytes_num = os.path.getsize(file_path)
+
+            duration, fingerprint = get_fingerprint_and_duration_from_filename(file_path=file_path)
 
             if not isinstance(fingerprint, bytes):
-                app.logger.error(
-                    'Error fingerprinting: fingerprint is not bytes. Found type: %s. Filename: %s, Request data: %s',
-                    type(fingerprint).__name__,
-                    filename,
-                    request.json
-                )
+                errorMessage = 'Error fingerprinting: fingerprint is not bytes. Found type: %s' % type(
+                    fingerprint).__name__
+                log_fingerprinting_error(filename=filename,
+                                         file_bytes_num=file_bytes_num,
+                                         message=errorMessage,
+                                         user_id=user_id,
+                                         title=title)
                 return error_response('Error fingerprinting: fingerprint is not bytes', 500)
 
             fingerprint_b64 = base64.b64encode(fingerprint).decode()
-            return {ResponseFields.DURATION: duration, ResponseFields.FINGERPRINT: fingerprint_b64}
+            return {
+                ResponseFields.DURATION: duration,
+                ResponseFields.FINGERPRINT: fingerprint_b64,
+                ResponseFields.FILE_BYTES_NUM: file_bytes_num
+            }
         except Exception as e:
 
             if (isinstance(e, FileNotInPoolError) or isinstance(e, WrongFileTypeError)):
@@ -132,11 +147,19 @@ def create_app():
 
             if isinstance(e, FpcalcStatus2Error):
                 error_message = f"Fpcalc returned status 2. {e}"
-                log_fingerprinting_error(user_id=user_id, filename=filename, title=title, message=error_message)
+                log_fingerprinting_error(filename=filename,
+                                         file_bytes_num=file_bytes_num,
+                                         message=error_message,
+                                         user_id=user_id,
+                                         title=title)
                 return error_response(str(e), 422)
 
             error_message = f"Unhandled exception: {e}"
-            log_fingerprinting_error(user_id=user_id, filename=filename, title=title, message=error_message)
+            log_fingerprinting_error(filename=filename,
+                                     file_bytes_num=file_bytes_num,
+                                     message=error_message,
+                                     user_id=user_id,
+                                     title=title)
             return error_response(error_message, 500)
 
     @app.route('/trigger-error', methods=['GET'])
