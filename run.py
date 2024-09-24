@@ -3,6 +3,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import base64
+from os import error
 from pathlib import Path
 from flask import Flask, request
 
@@ -30,6 +31,14 @@ def create_app():
         app_log_handler.setLevel(settings.LOG_LEVEL)
         app.logger.addHandler(app_log_handler)
         app.logger.setLevel(settings.LOG_LEVEL)
+
+        error_log_handler = RotatingFileHandler(settings.LOG_ERROR_FILE, maxBytes=10240, backupCount=10)
+        error_log_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'
+        ))
+        error_log_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(error_log_handler)
 
         request_log_handler = RotatingFileHandler(settings.LOG_REQUESTS_FILE, maxBytes=10240, backupCount=10)
         request_log_handler.setFormatter(logging.Formatter(
@@ -94,6 +103,11 @@ def create_app():
             if isinstance(e, FpcalcStatus2Error):
                 return error_response(error_message, 422)
             return error_response(error_message, 500)
+
+    @app.route('/trigger-error', methods=['GET'])
+    def trigger_error():
+        app.logger.error('This is a test error for logging purposes')
+        raise Exception('This is a test exception to trigger error logging')
 
     return app
 
