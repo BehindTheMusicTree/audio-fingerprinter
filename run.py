@@ -92,6 +92,12 @@ def create_app():
             duration, fingerprint = get_fingerprint_and_duration_from_file_name(filename)
 
             if not isinstance(fingerprint, bytes):
+                app.logger.error(
+                    'Error fingerprinting: fingerprint is not bytes. Found type: %s. Filename: %s, Request data: %s',
+                    type(fingerprint).__name__,
+                    filename,
+                    request.json
+                )
                 return error_response('Error fingerprinting: fingerprint is not bytes', 500)
 
             fingerprint_b64 = base64.b64encode(fingerprint).decode()
@@ -101,7 +107,20 @@ def create_app():
             if (isinstance(e, FileNotInPoolError) or isinstance(e, WrongFileTypeError)):
                 return error_response(error_message, 400)
             if isinstance(e, FpcalcStatus2Error):
+                app.logger.error(
+                    'FpcalcStatus2Error occurred: %s. Filename: %s, Request data: %s',
+                    error_message,
+                    filename,
+                    request.json
+                )
                 return error_response(error_message, 422)
+
+            app.logger.error(
+                'Unhandled exception occurred: %s. Filename: %s, Request data: %s',
+                error_message,
+                filename,
+                request.json
+            )
             return error_response(error_message, 500)
 
     @app.route('/trigger-error', methods=['GET'])
