@@ -2,9 +2,9 @@ name: Audio Fingerprinter CI
 
 on:
   push:
-    branches: [main, dev, improve-deployment]
+    branches: [main, dev, setup-error-logs]
   pull_request:
-    branches: [main, dev, improve-deployment]
+    branches: [main, dev]
 jobs:
   tests:
     name: Tests
@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /var/cache/apt
-          key: ${{ runner.os }}-apt-${{ hashFiles('scripts/install_dependencies.sh') }}
+          key: ${{ runner.os }}-apt-${{ hashFiles('scripts/install-dependencies.sh') }}
           restore-keys: |
             ${{ runner.os }}-apt-
   
@@ -42,11 +42,11 @@ jobs:
 
       - name: Install dependencies & python requirements
         run: |
-          sudo -E bash scripts/install_dependencies.sh
+          sudo -E bash scripts/install-dependencies.sh
           python -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Set up filesystem
-        run: bash scripts/setup_filesystem.sh
+        run: bash scripts/setup-filesystem.sh
 
       - name: Run tests
         env:

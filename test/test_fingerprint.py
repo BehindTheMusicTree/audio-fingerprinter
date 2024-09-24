@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from audio_fingerprinter.errors import ErrorCodesStr
 from run import app
 from marshmallow import Schema, fields
 import marshmallow
@@ -7,7 +8,6 @@ from marshmallow_dataclass import class_schema
 import json
 import unittest
 import settings
-from audio_fingerprinter.audio_fingerprinter import ERROR_CODES_STR
 import base64
 import os
 from dotenv import load_dotenv
@@ -25,16 +25,19 @@ class OkResponseObjectSchema(Schema):
     duration = fields.Float(required=True)
     fingerprint_str = fields.Str(required=False)
     fingerprint = fields.String(required=True, base64=True)
+    fileBytesNum = fields.Number(required=True)
 
 
 class OkResponseObject(ResponseObject):
     def __init__(self, data: dict):
+        print(f"Data: {data}")
         self.duration = data.get('duration')
         self.fingerprint_str = data.get('fingerprint_str')
         data_fingerprint = data.get('fingerprint')
         if not data_fingerprint:
             raise ValueError('No fingerprint in the data')
         self.fingerprint = base64.b64decode(data_fingerprint)
+        self.fileBytesNum = data.get('fileBytesNum')
 
 
 class BadRequestResponseObject(ResponseObject):
@@ -109,7 +112,7 @@ class TestAudioFingerprinter(unittest.TestCase):
         response = self.post_fingerprint_audio(filename='non_existent_file.mp3', testing_missing_file=True)
         self.assertEqual(type(response), BadRequestResponseObject)
         if type(response) == BadRequestResponseObject:
-            assert ERROR_CODES_STR.FILE_NOT_IN_POOL in response.message
+            assert ErrorCodesStr.FILE_NOT_IN_POOL in response.message
 
     def test_mp3_track_then_ok(self):
         response = self.post_fingerprint_audio('Bonnie Tyler - Total Eclipse of the Heart.mp3')
@@ -128,25 +131,25 @@ class TestAudioFingerprinter(unittest.TestCase):
 
     def test_short_mp3_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.mp3')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_flac_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.flac')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
     def test_short_wav_then_depends_on_os(self):
         response = self.post_fingerprint_audio('short.wav')
-        if settings.ENV == settings.ENV_NAMES.DEV:
+        if settings.ENV == settings.EnvValues.DEV:
             assert type(response) is UnprocessableEntityResponseObject
-        if settings.ENV == settings.ENV_NAMES.CI_TEST:
+        if settings.ENV == settings.EnvValues.CI_TEST:
             assert type(response) is OkResponseObject
             assert response.fingerprint == b'AQAAAA'
 
@@ -158,7 +161,7 @@ class TestAudioFingerprinter(unittest.TestCase):
     def test_not_audio_file_then_error(self):
         response = self.post_fingerprint_audio('json_file_type.mp3')
         assert type(response) is BadRequestResponseObject
-        assert ERROR_CODES_STR.WRONG_FILE_TYPE in response.message
+        assert ErrorCodesStr.WRONG_FILE_TYPE in response.message
 
     # The file is too big to be uploaded on GitHub (100Mo limit)
     # def test_huge_flac_then_ok(self):

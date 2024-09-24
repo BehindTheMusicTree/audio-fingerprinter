@@ -44,9 +44,9 @@ ENV APP_IS_DOCKERIZED=true \
 WORKDIR /app
 
 COPY . .
-RUN chmod +x scripts/setup_filesystem.sh && \
-    bash scripts/setup_filesystem.sh && \
-    bash scripts/install_dependencies.sh && \
+RUN chmod +x scripts/setup-filesystem.sh && \
+    bash scripts/setup-filesystem.sh && \
+    bash scripts/install-dependencies.sh && \
     python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \
     chmod +x entrypoint.sh
 

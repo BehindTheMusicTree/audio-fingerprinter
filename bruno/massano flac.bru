@@ -1,0 +1,17 @@
+meta {
+  name: massano flac
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BASE_URL}}fingerprint-audio
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "filename": "Y do i - Carmina Burana Remix - 7m53.wav"
+  }
+}
