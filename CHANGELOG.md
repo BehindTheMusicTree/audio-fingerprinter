@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Documentation
+
+- **README**: Added comprehensive README with features, table of contents, API documentation, installation, Docker deployment, and usage examples
+
 ### Fixed
 
 - **CI**: Updated `actions/cache` from deprecated v2 to v4
