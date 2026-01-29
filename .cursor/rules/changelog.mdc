@@ -1,3 +1,8 @@
+---
+description: Changelog format and practices - categories, Unreleased section, no Test category
+globs: CHANGELOG.md
+---
+
 # Changelog Practices
 
 Follow practices defined in [CHANGELOG.md](../CHANGELOG.md).
