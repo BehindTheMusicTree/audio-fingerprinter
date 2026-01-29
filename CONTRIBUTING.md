@@ -53,9 +53,10 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 ### Infrastructure & Automation
 
-**CI workflow (`.github/workflows/CI.yaml`):**
+**Workflows:**
 
-- Runs on push and pull requests to `main`
+- **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
+- **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image, redeploy webhook)
 - **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
 - **Build / Push to DockerHub**: After tests pass, builds the Docker image and pushes it; then calls the redeployment webhook
 
