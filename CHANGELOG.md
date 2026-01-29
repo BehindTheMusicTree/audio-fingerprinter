@@ -45,6 +45,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Fixed
 
 - **CI**: Updated `actions/cache` from deprecated v2 to v4
+- **Dependencies**: Removed `python3.12-distutils` from install script (not available in deadsnakes PPA for Ubuntu 22.04; distutils removed in Python 3.12)
 
 ## [1.1.0] - 2025-01-29
 
