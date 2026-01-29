@@ -1,0 +1,14 @@
+.git
+.gitignore
+.github
+.vscode
+__pycache__
+*.pyc
+.pytest_cache
+.env
+.env.*
+!env/.env_template
+test
+*.md
+env/fpcalc/fpcalc-macos
+.DS_Store
