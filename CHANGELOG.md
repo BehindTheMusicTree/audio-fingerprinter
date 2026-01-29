@@ -42,10 +42,13 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-01-29
+
 ### Documentation
 
 - **README**: Added comprehensive README with features, table of contents, API documentation, installation, Docker deployment, and usage examples
 - **PR template**: Added pull request description template with pre-PR checklist and review guidelines
+- **CONTRIBUTING**: Updated to reference PR template in pull request process section
 
 ### Fixed
 
