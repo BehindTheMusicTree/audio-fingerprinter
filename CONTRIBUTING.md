@@ -238,7 +238,13 @@ Before submitting a Pull Request:
 
 - **Target branch:** `main`.
 - **Title:** Short, imperative summary (e.g. "Add .dockerignore to reduce image size", "Fix fpcalc path in Docker").
-- **Description:** What changed, why, and how to test. Reference any related issues.
+- **Description:** A PR template will be automatically provided when opening a PR. Fill it out with:
+  - Clear description of what changed and why
+  - Related issues (if any)
+  - Type of change
+  - Complete the Pre-PR Checklist
+  - Testing instructions
+  - Any additional context
 - **CI:** Ensure the CI workflow (tests + Docker build) passes. Fix any failures before requesting review.
 
 ### 7. Releasing _(For Maintainers)_
