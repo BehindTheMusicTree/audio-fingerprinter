@@ -45,6 +45,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Documentation
 
 - **README**: Added comprehensive README with features, table of contents, API documentation, installation, Docker deployment, and usage examples
+- **PR template**: Added pull request description template with pre-PR checklist and review guidelines
 
 ### Fixed
 
