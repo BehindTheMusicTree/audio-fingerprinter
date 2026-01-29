@@ -1,0 +1,10 @@
+# Contributing Practices
+
+Follow practices defined in [CONTRIBUTING.md](../CONTRIBUTING.md).
+
+## Key Points
+
+- **GitHub Flow**: Single long-lived branch `main`, short-lived feature branches (`feature/<name>`, `hotfix/<name>`, `chore/<name>`)
+- **Committing**: Concise messages, small focused commits, update `CHANGELOG.md` under `[Unreleased]` for user-facing changes
+- **Testing**: Run `python -m unittest discover` before committing
+- **Code**: Python 3.12, follow existing style, use type hints where appropriate
