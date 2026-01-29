@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-01-29
+
 ### Improved
 
 - **Docker image size**: Added `.dockerignore` to exclude `.git`, `test/` (including audio samples), `env/fpcalc/fpcalc-macos`, and dev artifacts from the build context
