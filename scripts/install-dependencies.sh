@@ -31,8 +31,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     jq \
     python3.12 \
-    libchromaprint-tools \
-    python3.12-distutils
+    libchromaprint-tools
 
 curl https://bootstrap.pypa.io/get-pip.py | python3.12
 
