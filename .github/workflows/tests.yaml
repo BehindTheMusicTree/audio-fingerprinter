@@ -1,0 +1,58 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, setup-error-logs]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-22.04
+    environment:
+      name: CI_TEST
+    env:
+      APP_IS_DOCKERIZED: false
+      APP_IS_EXPOSED: false
+      POOL_DIR_INTERNAL: ${{ vars.POOL_DIR_INTERNAL }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+           python-version: 3.12
+
+      - name: Cache apt packages
+        uses: actions/cache@v2
+        with:
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-${{ hashFiles('scripts/install-dependencies.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies & python requirements
+        run: |
+          sudo -E bash scripts/install-dependencies.sh
+          python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Set up filesystem
+        run: bash scripts/setup-filesystem.sh
+
+      - name: Run tests
+        env:
+          FPCALC: ${{ vars.FPCALC_INTERNAL_PATH }}
+          ENV: ${{ vars.ENV }}
+          DEBUG: true
+          APP_PORT: ${{ vars.APP_PORT }}
+        run: python -m unittest discover

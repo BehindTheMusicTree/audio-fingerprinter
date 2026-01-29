@@ -1,10 +1,10 @@
-name: Audio Fingerprinter CI
+name: Publish
 
 on:
   push:
-    branches: [main, setup-error-logs]
-  pull_request:
-    branches: [main]
+    tags:
+      - 'v*'
+
 jobs:
   tests:
     name: Tests
@@ -19,10 +19,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python ${{ matrix.python-version }}
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-           python-version: 3.12
+          python-version: 3.12
 
       - name: Cache apt packages
         uses: actions/cache@v2
@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-apt-${{ hashFiles('scripts/install-dependencies.sh') }}
           restore-keys: |
             ${{ runner.os }}-apt-
-  
+
       - name: Cache pip
         uses: actions/cache@v2
         with:
@@ -73,7 +73,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AFP_IMAGE_REPO }}:${{ vars.APP_VERSION }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AFP_IMAGE_REPO }}:${{ github.ref_name }}
           build-args: |
             FPCALC_INTERNAL_PATH=${{ vars.FPCALC_INTERNAL_PATH }}
             POOL_DIR_EXTERNAL=${{ vars.AFP_POOL_DIR_EXTERNAL }}
@@ -88,7 +88,7 @@ jobs:
   redeploy-webhook-call:
     name: Redeploy webhook call
     needs: [build-and-push-to-dockerhub]
-    uses: Bodzify/bodzify-server-management/.github/workflows/call-redeployment-webhook.yml@main
+    uses: BehindTheMusicTree/bodzify-server-management/.github/workflows/call-redeployment-webhook.yml@main
     with:
       env: TEST
     secrets: inherit
