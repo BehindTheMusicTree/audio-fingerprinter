@@ -50,7 +50,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 - **CHANGELOG**: Added CHANGELOG.md with Keep a Changelog format and contributor guidelines
 - **CONTRIBUTING**: Added CONTRIBUTING.md with GitHub Flow, environment setup, branching, testing, and PR process
-- **Cursor rules**: Added .cursorrules with CONTRIBUTING and CHANGELOG practices for AI assistant guidance
+- **Cursor rules**: Added `.cursor/rules/` with focused contributing and changelog practice files
 
 ### CI
 
