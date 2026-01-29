@@ -2,9 +2,9 @@ name: Audio Fingerprinter CI
 
 on:
   push:
-    branches: [main, dev, setup-error-logs]
+    branches: [main, setup-error-logs]
   pull_request:
-    branches: [main, dev]
+    branches: [main]
 jobs:
   tests:
     name: Tests

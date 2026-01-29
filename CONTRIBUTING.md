@@ -1,0 +1,272 @@
+# Contributing Guidelines
+
+Thank you for your interest in contributing!
+This project is currently maintained by a solo developer, but contributions, suggestions, and improvements are welcome.
+
+## Table of Contents
+
+- [Contributors vs Maintainers](#contributors-vs-maintainers)
+  - [Roles Overview](#roles-overview)
+  - [Infrastructure & Automation](#infrastructure--automation)
+- [Development Workflow](#development-workflow)
+  - [0. Fork & Clone](#0-fork--clone)
+  - [1. Environment Setup](#1-environment-setup)
+  - [2. Branching](#2-branching)
+  - [3. Developing](#3-developing)
+  - [4. Testing](#4-testing)
+  - [5. Committing](#5-committing)
+  - [6. Pull Request Process](#6-pull-request-process)
+    - [6.1. Pre-PR Checklist](#61-pre-pr-checklist)
+    - [6.2. Opening a Pull Request](#62-opening-a-pull-request)
+  - [7. Releasing _(For Maintainers)_](#7-releasing-for-maintainers)
+- [License & Attribution](#license--attribution)
+- [Contact](#contact)
+
+## Contributors vs Maintainers
+
+### Roles Overview
+
+**Contributors**
+
+Anyone can be a contributor by:
+
+- Submitting bug reports or feature requests via GitHub Issues
+- Proposing code changes through Pull Requests
+- Improving documentation
+- Participating in discussions
+- Testing and providing feedback
+
+**Maintainers**
+
+The maintainer(s) are responsible for:
+
+- Reviewing and merging Pull Requests
+- Managing releases and versioning
+- Ensuring code quality and project direction
+- Responding to critical issues
+- Maintaining the project's infrastructure
+- Moving "Unreleased" changelog entries to versioned sections during releases
+
+**Important:** Even maintainers must go through Pull Requests. No direct commits to `main` (or protected branches) are allowed — all changes must be submitted via Pull Requests and go through the standard review process.
+
+_Note: Contributors can submit fixes for critical issues via feature branches. Maintainers may promote these to hotfix branches when urgent production fixes are needed._
+
+### Infrastructure & Automation
+
+**CI workflow (`.github/workflows/CI.yaml`):**
+
+- Runs on push and pull requests to `main`
+- **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
+- **Build / Push to DockerHub**: After tests pass, builds the Docker image and pushes it; then calls the redeployment webhook
+
+**Repository automation (maintainer-only):**
+
+- CI uses repository/environment variables and secrets (e.g. `POOL_DIR_INTERNAL`, `FPCALC_INTERNAL_PATH`, `DOCKERHUB_ACCESS_TOKEN`). Changing workflow behavior or adding secrets is a maintainer responsibility.
+
+**What contributors can do:**
+
+- Open issues and pull requests
+- Run tests and CI locally before opening a PR
+- Suggest workflow or documentation improvements via PRs or issues
+
+## Development Workflow
+
+We follow [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow): a single long-lived branch (`main`), with short-lived feature branches merged via Pull Requests.
+
+**Workflow steps:** Fork & Clone → Environment Setup → Branching → Developing → Testing → Committing → Pull Request Process → Releasing _(For Maintainers)_
+
+### 0. Fork & Clone
+
+**For contributors:**
+
+1. Fork the repository on GitHub
+2. Clone your fork:
+
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/bodzify-audio-fingerprinter-flask.git
+   cd bodzify-audio-fingerprinter-flask
+   ```
+
+**For maintainers:**
+
+Clone the main repository directly (replace with the actual repo URL if different):
+
+```bash
+git clone https://github.com/Bodzify/bodzify-audio-fingerprinter-flask.git
+cd bodzify-audio-fingerprinter-flask
+```
+
+### 1. Environment Setup
+
+Ensure you have:
+
+- **Python 3.12** (matches CI and runtime)
+
+- **Virtual environment and Python dependencies:**
+
+  ```bash
+  python3.12 -m venv .venv
+  source .venv/bin/activate   # Linux/macOS
+  # .venv\Scripts\activate   # Windows
+  pip install -r requirements.txt
+  ```
+
+- **System dependencies** (required for fingerprinting and tests):
+
+  - **ffmpeg** — audio decoding (used by pydub)
+  - **fpcalc** (Chromaprint) — audio fingerprinting
+
+  **On Ubuntu (CI-like):** Use the project script (requires `sudo`):
+
+  ```bash
+  export APP_IS_DOCKERIZED=false
+  sudo -E bash scripts/install-dependencies.sh
+  ```
+
+  **On macOS:** Install via Homebrew, then use the project’s macOS fpcalc binary:
+
+  ```bash
+  brew install ffmpeg chromaprint
+  cp env/fpcalc/fpcalc-macos bin/fpcalc
+  chmod +x bin/fpcalc
+  ```
+
+  Ensure `bin/fpcalc` is on your `PATH` or that the app is configured to use it (see `FPCALC` / config).
+
+- **Environment variables:** Copy `env/.env.dev_template` to `env/.env` and set variables as needed. See [README.md](README.md) for required variables (e.g. `ENV`, `APP_IS_EXPOSED`, `POOL_DIR_INTERNAL`, Flask log settings).
+
+- **Filesystem setup (for tests / local run):** After env is set, run:
+
+  ```bash
+  bash scripts/setup-filesystem.sh
+  ```
+
+  This creates the pool directory and log paths. It requires `env/calculated_paths/` and `scripts/generate-calculated-paths-env-file.sh` to be run first if your setup uses calculated paths.
+
+### 2. Branching
+
+#### Main branch (`main`)
+
+- The only long-lived branch; always deployable
+- All tests must pass before merging
+- **No direct commits** — all changes go through Pull Requests
+- Releases are tagged from `main`
+
+#### Feature branches (`feature/<name>`)
+
+- One branch per feature or bug fix; branch from `main`
+- Include issue numbers when applicable: `feature/123-add-format-support`
+- Examples:
+
+  ```bash
+  git checkout main && git pull origin main
+  git checkout -b feature/improve-error-messages
+  git checkout -b feature/45-fix-fpcalc-path
+  ```
+
+- Merge into `main` via Pull Request when complete and tested
+
+#### Hotfix branches (`hotfix/<name>`) _(For Maintainers)_
+
+- For urgent production fixes; branch from `main`
+- Merge into `main` via Pull Request after review
+
+#### Chore branches (`chore/<name>`)
+
+- For maintenance, CI, docs, or dependency updates; branch from `main`
+- Examples: `chore/update-deps`, `chore/ci-python-312`
+- Merge into `main` via Pull Request when complete
+
+### 3. Developing
+
+- Follow existing code style (e.g. type hints where used, consistent naming).
+- Use the project’s Python and dependency versions; avoid introducing new runtime dependencies without discussion.
+- For API or config changes, update [README.md](README.md) and env templates if needed.
+
+### 4. Testing
+
+Tests are run with Python’s built-in **unittest** (same as CI).
+
+**Quick reference:**
+
+```bash
+# Activate your venv first
+source .venv/bin/activate
+
+# Run all tests (requires FPCALC and env set; see CI or scripts)
+python -m unittest discover
+```
+
+- Ensure `FPCALC` points to `bin/fpcalc` (or your system fpcalc).
+- CI sets `ENV`, `FPCALC`, `POOL_DIR_INTERNAL`, etc.; replicate those locally if you want CI-like results.
+- Test assets live in `test/samples/`; do not commit large or unrelated media files.
+
+### 5. Committing
+
+- Use **concise, clear commit messages** that describe what changed and why.
+- Prefer small, focused commits (one logical change per commit).
+- **Update [CHANGELOG.md](CHANGELOG.md)** for user-facing changes: add an entry under the `[Unreleased]` section under the appropriate category (Added, Changed, Improved, Fixed, Documentation, etc.). See [CHANGELOG.md](CHANGELOG.md) for format and categories.
+
+### 6. Pull Request Process
+
+#### 6.1. Pre-PR Checklist
+
+Before submitting a Pull Request:
+
+**1. Code & style**
+
+- Code follows existing project style and structure.
+- No unnecessary dependencies or debug code left in.
+
+**2. Tests**
+
+- All tests pass locally: `python -m unittest discover`.
+- New features or bug fixes include or update tests where appropriate.
+
+**3. Documentation**
+
+- [CHANGELOG.md](CHANGELOG.md) updated in the `[Unreleased]` section for any notable change.
+- [README.md](README.md) or env templates updated if you changed config, API, or run instructions.
+
+**4. Git**
+
+- Branch is up to date with `main`.
+- No secrets, large binaries, or personal config committed.
+
+#### 6.2. Opening a Pull Request
+
+- **Target branch:** `main`.
+- **Title:** Short, imperative summary (e.g. "Add .dockerignore to reduce image size", "Fix fpcalc path in Docker").
+- **Description:** What changed, why, and how to test. Reference any related issues.
+- **CI:** Ensure the CI workflow (tests + Docker build) passes. Fix any failures before requesting review.
+
+### 7. Releasing _(For Maintainers)_
+
+Releases are prepared from the appropriate branch (e.g. `main`).
+
+1. **Update [CHANGELOG.md](CHANGELOG.md):**
+   - Move entries from `[Unreleased]` into a new versioned section (e.g. `## [1.1.0] - 2025-XX-XX`).
+   - Use [Semantic Versioning](https://semver.org/) and ISO date (YYYY-MM-DD).
+   - Leave `[Unreleased]` at the top for future changes.
+
+2. **Version and tag:**
+   - Update version in `setup.py` (and anywhere else the project records version, e.g. env or CI).
+   - Commit the version bump and changelog update.
+   - Create a tag (e.g. `v1.1.0`) and push:
+     ```bash
+     git tag v1.1.0
+     git push origin v1.1.0
+     ```
+   - CI will build and push the Docker image; ensure `APP_VERSION` (or equivalent) used by the workflow matches the release.
+
+3. **Post-release:** Push `main`; no other long-lived branches to sync.
+
+## License & Attribution
+
+Contributions are made under the project’s open-source license. You retain authorship of your code; the project retains redistribution rights under the same license.
+
+## Contact
+
+- **Issues** — bug reports, feature requests, or questions: open a [GitHub Issue](https://github.com/Bodzify/bodzify-audio-fingerprinter-flask/issues) (replace with the actual repo URL if different).
+
+Thank you for contributing.
