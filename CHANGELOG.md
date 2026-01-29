@@ -48,7 +48,13 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### Documentation
 
-- **CHANGELOG**: Added CHANGELOG.md with Keep a Changelog format and contributor guidelines.
+- **CHANGELOG**: Added CHANGELOG.md with Keep a Changelog format and contributor guidelines
+- **CONTRIBUTING**: Added CONTRIBUTING.md with GitHub Flow, environment setup, branching, testing, and PR process
+
+### CI
+
+- **GitHub Flow**: CI runs on `main` only; removed `dev` branch from workflow triggers
+- **Workflows**: Renamed CI workflow to `tests.yaml`; added `publish.yaml` (publish runs only on tag push `v*`); tests workflow runs on push/PR to `main`
 
 ## [1.0.0] - 2024-09-06
 
