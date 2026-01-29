@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Fixed
+
+- **CI**: Updated `actions/cache` from deprecated v2 to v4
+
 ## [1.1.0] - 2025-01-29
 
 ### Improved
