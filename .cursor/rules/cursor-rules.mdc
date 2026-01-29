@@ -1,0 +1,30 @@
+---
+description: Cursor rules location and format standards
+globs: .cursor/rules/**/*
+---
+
+# Cursor Rules Standards
+
+## Location
+
+- Cursor rules must be stored in `.cursor/rules/` directory
+- Do not use `.cursorrules` file in root (legacy format)
+
+## File Format
+
+- Use `.mdc` (Markdown Domain Configuration) file extension
+- Include frontmatter with `description` and `globs` fields
+- Frontmatter format:
+  ```yaml
+  ---
+  description: Brief summary of rule purpose
+  globs: file patterns (e.g., **/*, *.py, CHANGELOG.md)
+  ---
+  ```
+
+## Organization
+
+- Create focused, single-purpose rule files
+- Name files descriptively (e.g., `contributing.mdc`, `changelog.mdc`)
+- Reference main documentation files rather than duplicating content
+- Keep rules concise and actionable
