@@ -55,6 +55,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 - **GitHub Flow**: CI runs on `main` only; removed `dev` branch from workflow triggers
 - **Workflows**: Renamed CI workflow to `tests.yaml`; added `publish.yaml` (publish runs only on tag push `v*`); tests workflow runs on push/PR to `main`
+- **Workflow reuse**: Made tests workflow reusable via `workflow_call`; publish workflow now calls tests workflow instead of duplicating test steps
 
 ## [1.0.0] - 2024-09-06
 
