@@ -41,7 +41,7 @@ jobs:
   redeploy-webhook-call:
     name: Redeploy webhook call
     needs: [build-and-push-to-dockerhub]
-    uses: BehindTheMusicTree/bodzify-server-management/.github/workflows/call-redeployment-webhook.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/call-redeployment-webhook.yml@main
     with:
       env: TEST
     secrets: inherit
