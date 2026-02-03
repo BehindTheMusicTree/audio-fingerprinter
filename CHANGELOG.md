@@ -45,6 +45,11 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Fixed
 
 - **Docker**: Entrypoint now creates log files at runtime for volume-mounted directories, fixing startup errors when log directories are mounted as volumes
+- **Docker**: Added `--chdir /app` to gunicorn command to ensure correct working directory
+
+### Changed
+
+- **Docker**: Removed `setup-filesystem.sh` execution from Dockerfile build step; now runs at runtime in entrypoint after volumes are mounted
 
 ## [1.2.0] - 2025-01-29
 
