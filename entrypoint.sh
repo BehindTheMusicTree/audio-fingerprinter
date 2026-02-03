@@ -12,8 +12,14 @@ echo "GUNICORN_LOG_DIR: $GUNICORN_LOG_DIR"
 echo "GUNICORN_LOG_ERROR_FILENAME: $GUNICORN_LOG_ERROR_FILENAME"
 echo "GUNICORN_LOG_ACCESS_FILENAME: $GUNICORN_LOG_ACCESS_FILENAME"
 
+cd /app
+
+echo "Setting up filesystem (creating log files in mounted volumes)..."
+bash scripts/setup-filesystem.sh
+
 exec gunicorn wsgi:application \
     --bind 0.0.0.0:${APP_PORT} \
+    --chdir /app \
     --error-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ERROR_FILENAME} \
     --access-logfile=${GUNICORN_LOG_DIR}${GUNICORN_LOG_ACCESS_FILENAME} \
     --log-level=debug \
