@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-02-03
+
 ### Added
 
 - **CI**: Added manual trigger (`workflow_dispatch`) to publish workflow for on-demand releases
