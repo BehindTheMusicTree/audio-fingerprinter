@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Added
+
+- **CI**: Added manual trigger (`workflow_dispatch`) to publish workflow for on-demand releases
+
 ### Fixed
 
 - **Docker**: Entrypoint now creates log files at runtime for volume-mounted directories, fixing startup errors when log directories are mounted as volumes
