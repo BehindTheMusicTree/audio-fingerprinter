@@ -45,6 +45,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Fixed
 
 - **Docker**: Entrypoint now creates log files at runtime for volume-mounted directories, fixing startup errors when log directories are mounted as volumes
+- **CI**: Fixed YAML syntax error in tests workflow (`branches: *` → removed branches filter to run on all branches)
 
 ## [1.2.0] - 2025-01-29
 
