@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-02-03
+
 ### Fixed
 
 - **Docker**: Added explicit `apt-get update` before install script to improve network reliability during builds
