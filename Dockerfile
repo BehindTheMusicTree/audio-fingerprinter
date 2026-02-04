@@ -44,7 +44,8 @@ ENV APP_IS_DOCKERIZED=true \
 WORKDIR /app
 
 COPY . .
-RUN bash scripts/install-dependencies.sh && \
+RUN apt-get update && \
+    bash scripts/install-dependencies.sh && \
     python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \
     chmod +x entrypoint.sh
 
