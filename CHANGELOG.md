@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Added
+
+- **API**: GET `/health` endpoint for liveness checks (load balancers, monitoring)
+
 ## [1.2.3] - 2026-02-03
 
 ### Fixed

@@ -89,6 +89,10 @@ def create_app():
     # If this was set to True (the default), Flask would strictly differentiate between the two URLs.
     app.url_map.strict_slashes = False
 
+    @app.route('/health', methods=['GET'])
+    def health():
+        return {'status': 'ok'}, 200
+
     def error_response(message, status):
         return {'status': status, 'message': message}, status
 

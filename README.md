@@ -81,6 +81,17 @@ Copy `env/.env.dev_template` to `env/.env` and configure the required environmen
 
 ### API Endpoints
 
+#### GET `/health`
+
+Liveness check for load balancers and monitoring. Returns 200 when the service is up.
+
+**Response (200):**
+```json
+{
+  "status": "ok"
+}
+```
+
 #### POST `/fingerprint-audio`
 
 Generates an audio fingerprint for a file in the pool directory.
