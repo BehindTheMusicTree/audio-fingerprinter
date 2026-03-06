@@ -42,6 +42,12 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Changed
+
+- **Docker**: `POOL_DIR_EXTERNAL` is now a runtime environment variable instead of a build arg, so the same image can be used with different pool paths
+
+## [1.2.4] - 2026-02-21
+
 ### Added
 
 - **API**: GET `/health` endpoint for liveness checks (load balancers, monitoring)

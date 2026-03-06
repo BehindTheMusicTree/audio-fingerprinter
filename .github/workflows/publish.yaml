@@ -29,7 +29,6 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AFP_IMAGE_REPO }}:${{ github.ref_name }}
           build-args: |
             FPCALC_INTERNAL_PATH=${{ vars.FPCALC_INTERNAL_PATH }}
-            POOL_DIR_EXTERNAL=${{ vars.AFP_POOL_DIR_EXTERNAL }}
             FLASK_LOG_DIR_EXTERNAL=${{ vars.AFP_FLASK_LOG_DIR_EXTERNAL }}
             FLASK_LOG_APP_FILENAME=${{ vars.FLASK_LOG_APP_FILENAME }}
             FLASK_LOG_ERROR_FILENAME=${{ vars.FLASK_LOG_ERROR_FILENAME }}

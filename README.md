@@ -160,7 +160,6 @@ Build the Docker image with required build arguments:
 ```bash
 docker build \
   --build-arg FPCALC_INTERNAL_PATH=/app/bin/fpcalc \
-  --build-arg POOL_DIR_EXTERNAL=/app/pool \
   --build-arg FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask \
   --build-arg FLASK_LOG_APP_FILENAME=app.log \
   --build-arg FLASK_LOG_ERROR_FILENAME=error.log \
@@ -179,6 +178,7 @@ docker run -d \
   -v /path/to/pool:/app/pool \
   -v /path/to/logs:/var/log/audio-fingerprinter-flask \
   -v /path/to/gunicorn-logs:/var/log/audio-fingerprinter-gunicorn \
+  -e POOL_DIR_EXTERNAL=/app/pool \
   -e APP_PORT=5000 \
   audio-fingerprinter:latest
 ```
@@ -201,7 +201,6 @@ These environment variables are needed when running the app in development:
 
 These environment variables are needed when building the container:
 
-- `POOL_DIR_EXTERNAL`
 - `FLASK_LOG_DIR_EXTERNAL`
 - `FLASK_LOG_APP_FILENAME`
 - `FLASK_LOG_ERROR_FILENAME`
@@ -214,6 +213,7 @@ These environment variables are needed when building the container:
 
 These environment variables are needed when running the container:
 
+- `POOL_DIR_EXTERNAL` – path to the pool directory inside the container (e.g. `/app/pool` when using the volume mount above)
 - `APP_PORT`
 
 ## Volumes
