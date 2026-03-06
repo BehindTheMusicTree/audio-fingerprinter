@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-06
+
 ### Changed
 
 - **Docker**: `POOL_DIR_EXTERNAL` is now a runtime environment variable instead of a build arg, so the same image can be used with different pool paths
