@@ -29,6 +29,10 @@ touch_file_or_exit() {
 
 set_read_write_permissions_and_owner_or_exit() {
     local path=$1
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "Running as non-root (uid=$(id -u)); skipping chown/chmod."
+        return 0
+    fi
     local user=$(whoami)
     output=$(chmod -R 740 "$path")
     if [ $? -ne 0 ]; then

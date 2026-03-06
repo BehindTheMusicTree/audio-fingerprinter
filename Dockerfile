@@ -41,6 +41,10 @@ ENV APP_IS_DOCKERIZED=true \
 WORKDIR /app
 
 COPY . .
+
+# Writable dirs for non-root runs (--user). Use -e GUNICORN_LOG_DIR=/app/log/gunicorn/ -e FLASK_LOG_DIR_EXTERNAL=/app/log/flask when using --user.
+RUN mkdir -p /app/log/gunicorn /app/log/flask /app/env/calculated_paths && chmod -R 777 /app/log /app/env/calculated_paths
+
 RUN apt-get update && \
     bash scripts/install-dependencies.sh && \
     python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \

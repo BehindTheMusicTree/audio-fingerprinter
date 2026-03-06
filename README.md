@@ -46,8 +46,8 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/BehindTheMusicTree/bodzify-audio-fingerprinter-flask.git
-   cd bodzify-audio-fingerprinter-flask
+   git clone https://github.com/BehindTheMusicTree/audio-fingerprinter.git
+   cd audio-fingerprinter
    ```
 
 2. Create a virtual environment:
@@ -183,6 +183,24 @@ docker run -d \
   audio-fingerprinter:latest
 ```
 
+### Run as non-root (e.g. CI with shared pool volume)
+
+To avoid permission issues when the host and container share the pool directory (e.g. no `chmod -R` on the host), run the container with `--user "$(id -u):$(id -g)"`. You must point log dirs to the image’s writable `/app/log` and use a non-privileged port (e.g. 3002):
+
+```bash
+docker run -d \
+  --user "$(id -u):$(id -g)" \
+  -v /path/to/pool:$AFP_POOL_DIR_EXTERNAL \
+  -p 3002:3002 \
+  -e POOL_DIR_EXTERNAL=$AFP_POOL_DIR_EXTERNAL \
+  -e APP_PORT=3002 \
+  -e GUNICORN_LOG_DIR=/app/log/gunicorn/ \
+  -e FLASK_LOG_DIR_EXTERNAL=/app/log/flask \
+  audio-fingerprinter:latest
+```
+
+Logs will be under `/app/log` inside the container (gunicorn and flask subdirs). Omit `-v` for log dirs; the image provides writable `/app/log` for the process user.
+
 ## Environment Variables
 
 ### Development
@@ -216,11 +234,13 @@ These environment variables are needed when running the container:
 - `POOL_DIR_EXTERNAL` – path to the pool directory inside the container (e.g. `/app/pool` when using the volume mount above)
 - `APP_PORT`
 
+When running with `--user` (non-root), override log dirs so the process can write: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask`.
+
 ## Volumes
 
 - `/app/pool` - Audio files pool directory
-- `/var/log/audio-fingerprinter-flask` - Flask application logs
-- `/var/log/audio-fingerprinter-gunicorn` - Gunicorn server logs
+- `/var/log/audio-fingerprinter-flask` - Flask application logs (default; use `/app/log/flask` when running as non-root)
+- `/var/log/audio-fingerprinter-gunicorn` - Gunicorn server logs (default; use `/app/log/gunicorn` when running as non-root)
 
 ## Testing
 

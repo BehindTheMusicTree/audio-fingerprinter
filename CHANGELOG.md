@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Fixed
+
+- **Docker**: Image now supports running as arbitrary non-root UID/GID (`--user $(id -u):$(id -g)`). `setup-filesystem.sh` no longer runs `chown`/`chmod` when not root; log dirs can be pointed to `/app/log` (writable by any user). See README for required env overrides (`GUNICORN_LOG_DIR`, `FLASK_LOG_DIR_EXTERNAL`).
+
 ## [1.3.0] - 2026-03-06
 
 ### Changed
