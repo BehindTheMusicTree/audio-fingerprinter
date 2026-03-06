@@ -32,11 +32,3 @@ jobs:
             GUNICORN_LOG_DIR=${{ vars.AFP_GUNICORN_LOG_DIR_EXTERNAL }}
             GUNICORN_LOG_ACCESS_FILENAME=${{ vars.GUNICORN_LOG_ACCESS_FILENAME }}
             GUNICORN_LOG_ERROR_FILENAME=${{ vars.GUNICORN_LOG_ERROR_FILENAME }}
-
-  redeploy-webhook-call:
-    name: Redeploy webhook call
-    needs: [build-and-push-to-dockerhub]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/call-redeployment-webhook.yml@main
-    with:
-      env: TEST
-    secrets: inherit
