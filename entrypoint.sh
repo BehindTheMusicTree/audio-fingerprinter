@@ -22,27 +22,6 @@ if [ "$APP_IS_EXPOSED" = "true" ] && [ -z "$GUNICORN_LOG_DIR" ]; then
     exit 1
 fi
 
-if [ -n "$POOL_DIR_EXTERNAL" ] && [ "${POOL_DIR_EXTERNAL: -1}" != "/" ]; then
-    echo "POOL_DIR_EXTERNAL must end with /" >&2
-    exit 1
-fi
-if [ -n "$POOL_DIR_INTERNAL" ] && [ "${POOL_DIR_INTERNAL: -1}" != "/" ]; then
-    echo "POOL_DIR_INTERNAL must end with /" >&2
-    exit 1
-fi
-if [ -n "$FLASK_LOG_DIR_EXTERNAL" ] && [ "${FLASK_LOG_DIR_EXTERNAL: -1}" != "/" ]; then
-    echo "FLASK_LOG_DIR_EXTERNAL must end with /" >&2
-    exit 1
-fi
-if [ -n "$FLASK_LOG_DIR_INTERNAL" ] && [ "${FLASK_LOG_DIR_INTERNAL: -1}" != "/" ]; then
-    echo "FLASK_LOG_DIR_INTERNAL must end with /" >&2
-    exit 1
-fi
-if [ -n "$GUNICORN_LOG_DIR" ] && [ "${GUNICORN_LOG_DIR: -1}" != "/" ]; then
-    echo "GUNICORN_LOG_DIR must end with /" >&2
-    exit 1
-fi
-
 echo "APP_PORT: $APP_PORT"
 echo "GUNICORN_LOG_DIR: $GUNICORN_LOG_DIR"
 echo "GUNICORN_LOG_ERROR_FILENAME: $GUNICORN_LOG_ERROR_FILENAME"
