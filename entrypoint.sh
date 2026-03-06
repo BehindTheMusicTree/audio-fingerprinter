@@ -15,7 +15,7 @@ echo "GUNICORN_LOG_ACCESS_FILENAME: $GUNICORN_LOG_ACCESS_FILENAME"
 cd /app
 
 echo "Setting up filesystem (creating log files in mounted volumes)..."
-bash scripts/setup-filesystem.sh
+bash scripts/setup-filesystem.sh || { echo "setup-filesystem.sh failed" >&2; exit 1; }
 
 exec gunicorn wsgi:application \
     --bind 0.0.0.0:${APP_PORT} \
