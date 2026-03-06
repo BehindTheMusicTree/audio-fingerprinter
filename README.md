@@ -181,7 +181,7 @@ docker run -d \
   -e POOL_DIR_EXTERNAL=/app/pool \
   -e APP_PORT=5000 \
   -e GUNICORN_LOG_DIR=/var/log/audio-fingerprinter-gunicorn \
-  -e FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask \
+  -e FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask/ \
   audio-fingerprinter:latest
 ```
 
@@ -197,7 +197,7 @@ docker run -d \
   -e POOL_DIR_EXTERNAL=$AFP_POOL_DIR_EXTERNAL \
   -e APP_PORT=3002 \
   -e GUNICORN_LOG_DIR=/app/log/gunicorn/ \
-  -e FLASK_LOG_DIR_EXTERNAL=/app/log/flask \
+  -e FLASK_LOG_DIR_EXTERNAL=/app/log/flask/ \
   audio-fingerprinter:latest
 ```
 
@@ -230,21 +230,21 @@ These environment variables are needed when building the container (path dirs ar
 
 ### Runtime (required)
 
-These must be set when running the container (fail fast if missing):
+These must be set when running the container (fail fast if missing). Directory paths must end with `/`:
 
 - `POOL_DIR_EXTERNAL` or `POOL_DIR_INTERNAL` – pool directory path inside the container
 - `APP_PORT` – port the app binds to
 - `GUNICORN_LOG_DIR` – when `APP_IS_EXPOSED=true` (default in image)
 - `FLASK_LOG_DIR_EXTERNAL` or `FLASK_LOG_DIR_INTERNAL` – Flask log directory
 
-When running with `--user` (non-root), use writable paths: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask`.
+When running with `--user` (non-root), use writable paths: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask/`.
 
 ## Volumes
 
 Mount paths are defined by runtime env; the image does not bake in default log or pool paths.
 
-- Pool: mount where `POOL_DIR_EXTERNAL` points (e.g. `/app/pool`)
-- Flask logs: mount where `FLASK_LOG_DIR_EXTERNAL` points (e.g. `/var/log/...` or `/app/log/flask` for non-root)
+- Pool: mount where `POOL_DIR_EXTERNAL` points (e.g. `/app/pool/`)
+- Flask logs: mount where `FLASK_LOG_DIR_EXTERNAL` points (e.g. `/var/log/.../` or `/app/log/flask/` for non-root)
 - Gunicorn logs: mount where `GUNICORN_LOG_DIR` points (e.g. `/var/log/...` or `/app/log/gunicorn/` for non-root)
 
 ## Testing
