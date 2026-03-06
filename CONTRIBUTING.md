@@ -84,8 +84,8 @@ We follow [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github
 2. Clone your fork:
 
    ```bash
-   git clone https://github.com/YOUR-USERNAME/bodzify-audio-fingerprinter-flask.git
-   cd bodzify-audio-fingerprinter-flask
+   git clone https://github.com/YOUR-USERNAME/audio-fingerprinter.git
+   cd audio-fingerprinter
    ```
 
 **For maintainers:**
@@ -93,8 +93,8 @@ We follow [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github
 Clone the main repository directly (replace with the actual repo URL if different):
 
 ```bash
-git clone https://github.com/Bodzify/bodzify-audio-fingerprinter-flask.git
-cd bodzify-audio-fingerprinter-flask
+git clone https://github.com/BehindTheMusicTree/audio-fingerprinter.git
+cd audio-fingerprinter
 ```
 
 ### 1. Environment Setup
@@ -274,6 +274,6 @@ Contributions are made under the project’s open-source license. You retain aut
 
 ## Contact
 
-- **Issues** — bug reports, feature requests, or questions: open a [GitHub Issue](https://github.com/Bodzify/bodzify-audio-fingerprinter-flask/issues) (replace with the actual repo URL if different).
+- **Issues** — bug reports, feature requests, or questions: open a [GitHub Issue](https://github.com/BehindTheMusicTree/audio-fingerprinter/issues) (replace with the actual repo URL if different).
 
 Thank you for contributing.
