@@ -30,19 +30,18 @@ load_app_calculated_paths_env_vars() {
     fi
 
     local CALCULATED_PATHS_ENV_FILE="${CALTULATED_PATHS_DIR}.env"
-    bash "${SCRIPTS_DIR}generate-calculated-paths-env-file.sh"
-    if [ $? -ne 0 ]; then
-        echo "Failed to generate calculated paths env file: $output" >&2
-        exit 1
+    if bash "${SCRIPTS_DIR}generate-calculated-paths-env-file.sh"; then
+        echo "Loading calculated paths from ${CALCULATED_PATHS_ENV_FILE}"
+        while IFS='=' read -r key value; do
+            if [ -z "$key" ]; then continue; fi
+            export "$key=$value"
+        done < "$CALCULATED_PATHS_ENV_FILE"
+        echo "Calculated paths loaded successfully."
+        return 0
     fi
-    
-    echo "Loading calculated paths from ${CALCULATED_PATHS_ENV_FILE}"
-    while IFS='=' read -r key value; do
-        # Skip comments and empty lines
-        if [ -z "$key" ]; then continue; fi
-        export "$key=$value"
-    done < "$CALCULATED_PATHS_ENV_FILE"
-    echo "Calculated paths loaded successfully."
+    echo "Failed to generate calculated paths env file." >&2
+    echo "Ensure the image was built with writable /app/env/calculated_paths and /app/log for non-root runs." >&2
+    exit 1
 }
 
 check_required_vars() {

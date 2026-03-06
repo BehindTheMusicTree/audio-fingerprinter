@@ -155,22 +155,22 @@ The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment 
 
 ### Build
 
-Build the Docker image with required build arguments:
+Build the Docker image with required build arguments (path vars are not build args; they are required at runtime):
 
 ```bash
 docker build \
   --build-arg FPCALC_INTERNAL_PATH=/app/bin/fpcalc \
-  --build-arg FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask \
   --build-arg FLASK_LOG_APP_FILENAME=app.log \
   --build-arg FLASK_LOG_ERROR_FILENAME=error.log \
   --build-arg FLASK_LOG_REQUESTS_FILENAME=requests.log \
-  --build-arg GUNICORN_LOG_DIR=/var/log/audio-fingerprinter-gunicorn \
   --build-arg GUNICORN_LOG_ERROR_FILENAME=error.log \
   --build-arg GUNICORN_LOG_ACCESS_FILENAME=access.log \
   -t audio-fingerprinter:latest .
 ```
 
 ### Run
+
+Path variables are **required at runtime** (not baked into the image). Pass them with `-e` in every environment:
 
 ```bash
 docker run -d \
@@ -180,12 +180,14 @@ docker run -d \
   -v /path/to/gunicorn-logs:/var/log/audio-fingerprinter-gunicorn \
   -e POOL_DIR_EXTERNAL=/app/pool \
   -e APP_PORT=5000 \
+  -e GUNICORN_LOG_DIR=/var/log/audio-fingerprinter-gunicorn \
+  -e FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask \
   audio-fingerprinter:latest
 ```
 
 ### Run as non-root (e.g. CI with shared pool volume)
 
-To avoid permission issues when the host and container share the pool directory (e.g. no `chmod -R` on the host), run the container with `--user "$(id -u):$(id -g)"`. You must point log dirs to the image’s writable `/app/log` and use a non-privileged port (e.g. 3002):
+To avoid permission issues when the host and container share the pool directory, run with `--user "$(id -u):$(id -g)"`. Point log dirs to the image’s writable `/app/log` and use a non-privileged port (e.g. 3002). All path vars are required at runtime:
 
 ```bash
 docker run -d \
@@ -217,30 +219,33 @@ These environment variables are needed when running the app in development:
 
 ### Build
 
-These environment variables are needed when building the container:
+These environment variables are needed when building the container (path dirs are not build args):
 
-- `FLASK_LOG_DIR_EXTERNAL`
+- `FPCALC_INTERNAL_PATH`
 - `FLASK_LOG_APP_FILENAME`
 - `FLASK_LOG_ERROR_FILENAME`
 - `FLASK_LOG_REQUESTS_FILENAME`
-- `GUNICORN_LOG_DIR`
 - `GUNICORN_LOG_ERROR_FILENAME`
 - `GUNICORN_LOG_ACCESS_FILENAME`
 
-### Runtime
+### Runtime (required)
 
-These environment variables are needed when running the container:
+These must be set when running the container (fail fast if missing):
 
-- `POOL_DIR_EXTERNAL` – path to the pool directory inside the container (e.g. `/app/pool` when using the volume mount above)
-- `APP_PORT`
+- `POOL_DIR_EXTERNAL` or `POOL_DIR_INTERNAL` – pool directory path inside the container
+- `APP_PORT` – port the app binds to
+- `GUNICORN_LOG_DIR` – when `APP_IS_EXPOSED=true` (default in image)
+- `FLASK_LOG_DIR_EXTERNAL` or `FLASK_LOG_DIR_INTERNAL` – Flask log directory
 
-When running with `--user` (non-root), override log dirs so the process can write: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask`.
+When running with `--user` (non-root), use writable paths: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask`.
 
 ## Volumes
 
-- `/app/pool` - Audio files pool directory
-- `/var/log/audio-fingerprinter-flask` - Flask application logs (default; use `/app/log/flask` when running as non-root)
-- `/var/log/audio-fingerprinter-gunicorn` - Gunicorn server logs (default; use `/app/log/gunicorn` when running as non-root)
+Mount paths are defined by runtime env; the image does not bake in default log or pool paths.
+
+- Pool: mount where `POOL_DIR_EXTERNAL` points (e.g. `/app/pool`)
+- Flask logs: mount where `FLASK_LOG_DIR_EXTERNAL` points (e.g. `/var/log/...` or `/app/log/flask` for non-root)
+- Gunicorn logs: mount where `GUNICORN_LOG_DIR` points (e.g. `/var/log/...` or `/app/log/gunicorn/` for non-root)
 
 ## Testing
 

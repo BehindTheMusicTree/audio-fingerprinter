@@ -42,6 +42,12 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-06
+
+### Changed
+
+- **Docker**: Path variables `FLASK_LOG_DIR_EXTERNAL`, `GUNICORN_LOG_DIR`, and pool path are now **runtime-only** (removed from build). The image no longer bakes in default log/pool paths. Operators must pass `-e POOL_DIR_EXTERNAL`, `-e GUNICORN_LOG_DIR`, and `-e FLASK_LOG_DIR_EXTERNAL` (or `*_INTERNAL`) when running the container; entrypoint fails fast with a clear message if any required var is missing. See README.
+
 ## [1.3.1] - 2026-03-06
 
 ### Fixed

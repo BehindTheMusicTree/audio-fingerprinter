@@ -3,7 +3,22 @@
 echo "Starting entrypoint script"
 
 if [ -z "$APP_PORT" ]; then
-    echo "APP_PORT is not set" >&2
+    echo "APP_PORT must be set at runtime" >&2
+    exit 1
+fi
+
+if [ -z "$POOL_DIR_EXTERNAL" ] && [ -z "$POOL_DIR_INTERNAL" ]; then
+    echo "POOL_DIR_EXTERNAL or POOL_DIR_INTERNAL must be set at runtime" >&2
+    exit 1
+fi
+
+if [ -z "$FLASK_LOG_DIR_EXTERNAL" ] && [ -z "$FLASK_LOG_DIR_INTERNAL" ]; then
+    echo "FLASK_LOG_DIR_EXTERNAL or FLASK_LOG_DIR_INTERNAL must be set at runtime" >&2
+    exit 1
+fi
+
+if [ "$APP_IS_EXPOSED" = "true" ] && [ -z "$GUNICORN_LOG_DIR" ]; then
+    echo "GUNICORN_LOG_DIR must be set at runtime when APP_IS_EXPOSED=true" >&2
     exit 1
 fi
 
