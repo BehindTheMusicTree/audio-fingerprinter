@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='AudioFingerprinter',
-    version='1.2.0',
+    version='1.4.1',
     packages=find_packages(),
     install_requires=['pyacoustid==1.3.0',
                       'setuptools==70.0.0',

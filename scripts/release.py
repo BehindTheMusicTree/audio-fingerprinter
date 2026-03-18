@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CHANGELOG = REPO_ROOT / "CHANGELOG.md"
+BUMP2VERSION = REPO_ROOT / ".venv-release" / "bin" / "bump2version"
 
 
 def current_version_from_changelog() -> str | None:
@@ -70,7 +71,8 @@ def main() -> None:
     today = date.today().isoformat()
 
     update_changelog(new_version, today)
-    run("bump2version", "--new-version", new_version, part)
+    bump_cmd = str(BUMP2VERSION) if BUMP2VERSION.exists() else "bump2version"
+    run(bump_cmd, "--allow-dirty", "--new-version", new_version, part)
     run("git", "add", "CHANGELOG.md", "setup.py", ".bumpversion.cfg")
     run("git", "commit", "-m", f"Release {new_version}")
     run("git", "tag", f"v{new_version}")

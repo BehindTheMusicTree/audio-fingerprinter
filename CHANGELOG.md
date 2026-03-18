@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-03-18
+
 ### Improved
 
 - **Settings**: Remove directory existence check for SAMPLE_DIR
