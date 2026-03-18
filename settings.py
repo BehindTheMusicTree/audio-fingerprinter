@@ -31,8 +31,6 @@ APP_PORT = load_required_int_env_var('APP_PORT')
 load_calculated_env_paths(BASE_DIR)
 
 SAMPLE_DIR = BASE_DIR / 'test/samples'
-if not os.path.isdir(SAMPLE_DIR):
-    print(f"The dir {SAMPLE_DIR} must be created.")
 
 POOL_DIR = load_required_path_env_var('POOL_DIR')
 
