@@ -249,24 +249,19 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Releases are prepared from the appropriate branch (e.g. `main`).
+Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump2version`; install with `pip install -r requirements-dev.txt`):
 
-1. **Update [CHANGELOG.md](CHANGELOG.md):**
-   - Move entries from `[Unreleased]` into a new versioned section (e.g. `## [1.1.0] - 2025-XX-XX`).
-   - Use [Semantic Versioning](https://semver.org/) and ISO date (YYYY-MM-DD).
-   - Leave `[Unreleased]` at the top for future changes.
+```bash
+python scripts/release.py [patch|minor|major]
+```
 
-2. **Version and tag:**
-   - Update version in `setup.py` (and anywhere else the project records version, e.g. env or CI).
-   - Commit the version bump and changelog update.
-   - Create a tag (e.g. `v1.1.0`) and push:
-     ```bash
-     git tag v1.1.0
-     git push origin v1.1.0
-     ```
-   - CI will build and push the Docker image; ensure `APP_VERSION` (or equivalent) used by the workflow matches the release.
+Default is `patch`. The script will:
 
-3. **Post-release:** Push `main`; no other long-lived branches to sync.
+1. Move `[Unreleased]` changelog entries into a new versioned section with the current date (ISO).
+2. Bump version in `setup.py` and `.bumpversion.cfg` via bump2version.
+3. Commit the changelog and version changes, create tag `vX.Y.Z`, and push branch and tag.
+
+CI will build and push the Docker image on tag push; ensure `APP_VERSION` (or equivalent) in the workflow matches the release.
 
 ## License & Attribution
 

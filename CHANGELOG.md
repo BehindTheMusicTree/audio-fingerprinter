@@ -45,6 +45,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Improved
 
 - **Settings**: Remove directory existence check for SAMPLE_DIR
+- **Releases**: Add a `bump2version`-based release wrapper (`scripts/release.py`) that updates `setup.py`/`.bumpversion.cfg`, moves `[Unreleased]` into a dated section, and creates/pushes version tags
 
 ## [1.4.0] - 2026-03-06
 
