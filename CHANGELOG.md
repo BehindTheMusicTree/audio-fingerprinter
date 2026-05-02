@@ -42,9 +42,13 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.4.3] - 2026-05-02
+
 ### Changed
 
 - **Python**: Minimum **3.14** (`requires-python`), **`.python-version`** `3.14.0`, CI **`setup-python`** on **3.14**, Docker and **`install-dependencies.sh`** use **`python3.14`** / deadsnakes on Ubuntu 22.04 when **`python3.14`** is not already on **`PATH`**.
+- **Dev / pytest**: **`pytest`** added to **`[dev]`** extras; **`[tool.pytest.ini_options]`** sets **`testpaths`** and **`pythonpath`** for **`python -m pytest`** from the repo root.
+- **Tests**: **`test/conftest.py`** exits with a clear message when **Flask** is missing (wrong interpreter or forgot **`pip install -e .`**), e.g. bare **`pytest`** using **pyenv** instead of **`.venv`**.
 
 ## [1.4.2] - 2026-05-02
 
