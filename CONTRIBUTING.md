@@ -109,7 +109,7 @@ Ensure you have:
   python3.12 -m venv .venv
   source .venv/bin/activate   # Linux/macOS
   # .venv\Scripts\activate   # Windows
-  pip install -r requirements.txt
+  pip install -e .
   ```
 
 - **System dependencies** (required for fingerprinting and tests):
@@ -249,7 +249,7 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump2version`; install with `pip install -r requirements-dev.txt`):
+Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
 
 ```bash
 python scripts/release.py [patch|minor|major]
@@ -258,7 +258,7 @@ python scripts/release.py [patch|minor|major]
 Default is `patch`. The script will:
 
 1. Move `[Unreleased]` changelog entries into a new versioned section with the current date (ISO).
-2. Bump version in `setup.py` and `.bumpversion.cfg` via bump2version.
+2. Bump version in `pyproject.toml` via `bump-my-version` (`[tool.bumpversion]` and `[project]` version).
 3. Commit the changelog and version changes, create tag `vX.Y.Z`, and push branch and tag.
 
 CI will build and push the Docker image on tag push; ensure `APP_VERSION` (or equivalent) in the workflow matches the release.

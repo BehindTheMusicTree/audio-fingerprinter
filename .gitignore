@@ -1,3 +1,4 @@
+*.egg-info/
 
 *.pyc
 
@@ -10,4 +11,6 @@ log/
 pool/
 
 .venv-release/
+
+!.github/pr-descriptions/.gitkeep
 .github/pr-descriptions/*

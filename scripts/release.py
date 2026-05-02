@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release wrapper: bump version with bump2version, update CHANGELOG with current date, commit, tag, push."""
+"""Release wrapper: bump version with bump-my-version, update CHANGELOG, commit, tag, push."""
 
 import re
 import subprocess
@@ -9,7 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CHANGELOG = REPO_ROOT / "CHANGELOG.md"
-BUMP2VERSION = REPO_ROOT / ".venv-release" / "bin" / "bump2version"
+BUMP_MY_VERSION = REPO_ROOT / ".venv-release" / "bin" / "bump-my-version"
 
 
 def current_version_from_changelog() -> str | None:
@@ -71,9 +71,9 @@ def main() -> None:
     today = date.today().isoformat()
 
     update_changelog(new_version, today)
-    bump_cmd = str(BUMP2VERSION) if BUMP2VERSION.exists() else "bump2version"
-    run(bump_cmd, "--allow-dirty", "--new-version", new_version, part)
-    run("git", "add", "CHANGELOG.md", "setup.py", ".bumpversion.cfg")
+    bump_cmd = str(BUMP_MY_VERSION) if BUMP_MY_VERSION.exists() else "bump-my-version"
+    run(bump_cmd, "bump", part, "--new-version", new_version, "--allow-dirty")
+    run("git", "add", "CHANGELOG.md", "pyproject.toml")
     run("git", "commit", "-m", f"Release {new_version}")
     run("git", "tag", f"v{new_version}")
     run("git", "push", "origin", "HEAD")
