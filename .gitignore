@@ -10,3 +10,4 @@ log/
 pool/
 
 .venv-release/
+.github/pr-descriptions/*
