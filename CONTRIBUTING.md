@@ -56,7 +56,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 **Workflows:**
 
 - **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
-- **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image, redeploy webhook)
+- **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image)
 - **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
 - **Build / Push to GHCR**: On version tag push, builds the Docker image and pushes it to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** using **`GITHUB_TOKEN`**
 
