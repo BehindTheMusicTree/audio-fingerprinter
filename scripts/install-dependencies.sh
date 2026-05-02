@@ -18,16 +18,16 @@ if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
     exit 1
 fi
 
-# Use existing Python 3.12 (e.g. actions/setup-python) when on PATH so CI does not
+# Use existing Python 3.14 (e.g. actions/setup-python) when on PATH so CI does not
 # depend on ppa.launchpadcontent.net, which runners sometimes cannot reach.
-need_deb_python312=true
-if command -v python3.12 >/dev/null 2>&1 \
-    && python3.12 -c 'import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)' 2>/dev/null; then
-    need_deb_python312=false
+need_deb_python314=true
+if command -v python3.14 >/dev/null 2>&1 \
+    && python3.14 -c 'import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 14) else 1)' 2>/dev/null; then
+    need_deb_python314=false
 fi
 
 apt-get update
-if [ "$need_deb_python312" = true ]; then
+if [ "$need_deb_python314" = true ]; then
     DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
     add-apt-repository ppa:deadsnakes/ppa -y
     apt-get update
@@ -40,9 +40,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     jq \
     libchromaprint-tools \
-    $([ "$need_deb_python312" = true ] && echo python3.12)
+    $([ "$need_deb_python314" = true ] && echo python3.14)
 
-curl https://bootstrap.pypa.io/get-pip.py | python3.12
+curl https://bootstrap.pypa.io/get-pip.py | python3.14
 
 if [ "$APP_IS_DOCKERIZED" = "true" ]; then
     # Install gosu to run gunicorn as a non root user

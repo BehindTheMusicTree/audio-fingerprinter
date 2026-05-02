@@ -1,5 +1,7 @@
 *.egg-info/
 
+.venv/
+
 *.pyc
 
 .DS_Store
@@ -9,8 +11,6 @@
 log/
 
 pool/
-
-.venv-release/
 
 !.github/pr-descriptions/.gitkeep
 .github/pr-descriptions/*

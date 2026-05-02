@@ -35,7 +35,7 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
 
 ## Requirements
 
-- Python 3.12
+- Python 3.14
 - ffmpeg (for audio decoding via pydub)
 - fpcalc (Chromaprint) - included in `bin/` directory
 - System dependencies: `libchromaprint-tools`, `ffmpeg`
@@ -50,9 +50,9 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
    cd audio-fingerprinter
    ```
 
-2. Create a virtual environment:
+2. Create a virtual environment (Python **3.14**; **pyenv:** **`pyenv install 3.14.0`** per **`.python-version`**, then **`python -m venv .venv`**):
    ```bash
-   python3.12 -m venv .venv
+   python -m venv .venv
    source .venv/bin/activate  # Linux/macOS
    # .venv\Scripts\activate   # Windows
    ```

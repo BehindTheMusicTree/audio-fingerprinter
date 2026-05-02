@@ -44,12 +44,24 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### Changed
 
+- **Python**: Minimum **3.14** (`requires-python`), **`.python-version`** `3.14.0`, CI **`setup-python`** on **3.14**, Docker and **`install-dependencies.sh`** use **`python3.14`** / deadsnakes on Ubuntu 22.04 when **`python3.14`** is not already on **`PATH`**.
+
+## [1.4.2] - 2026-05-02
+
+### Changed
+
 - **Packaging**: Runtime and dev dependencies are declared in **`pyproject.toml`** (PEP 621); install with **`pip install .`** or **`pip install -e ".[dev]"`** for release tooling. Removed **`requirements.txt`**, **`requirements-dev.txt`**, and **`setup.py`**. Distribution name is **`audio-fingerprinter`**. Releases use **`bump-my-version`** (`[tool.bumpversion]` in **`pyproject.toml`**); removed **`.bumpversion.cfg`** / **`bump2version`**.
 - **CI (Publish)**: Push tag builds to **GitHub Container Registry** — **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<ref>`** via **`docker/login-action`** and **`GITHUB_TOKEN`** (`packages: write`). Removes Docker Hub login and **`DOCKERHUB_ACCESS_TOKEN`**; add GitHub variable **`GHCR_IMAGE_NAMESPACE`** (lowercase, same as **BehindTheMusicTree/infrastructure**).
 
 ### Fixed
 
 - **CI (Tests)**: `install-dependencies.sh` skips the deadsnakes PPA when `python3.12` is already on `PATH` (from `actions/setup-python`), and the test workflow runs `sudo` with `PATH` preserved so Launchpad connectivity is no longer required for Python on runners.
+- **Releases**: `scripts/release.py` resolves **`bump-my-version`** from **`.venv`**, **`PATH`**, or **`python -m bumpversion`** when the **`bump-my-version`** package is installed for the same interpreter (avoids **`FileNotFoundError`** when the console script is not on **`PATH`**).
+
+### Documentation
+
+- **Releases**: Added executable **`scripts/release`** shim (calls **`python3 scripts/release.py`**) and CONTRIBUTING note not to run **`bash scripts/release.py`**.
+- **Setup**: Added **`.python-version`** (`3.12.12`) for **pyenv** and aligned README/CONTRIBUTING venv steps with **`pyenv install 3.12.12`** and **`python -m venv .venv`**.
 
 ## [1.4.1] - 2026-03-18
 

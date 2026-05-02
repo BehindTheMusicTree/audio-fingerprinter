@@ -13,5 +13,5 @@ Follow practices defined in [CONTRIBUTING.md](../CONTRIBUTING.md).
 - **Branch names**: Include issue numbers when applicable (e.g. `feature/123-add-format-support`).
 - **Committing**: Concise messages, small focused commits, update `CHANGELOG.md` under `[Unreleased]` for user-facing changes.
 - **Testing**: Run `python -m unittest discover` before committing.
-- **Code**: Python 3.12, follow existing style, use type hints where appropriate. For API or config changes, update README and env templates as needed.
+- **Code**: Python 3.14, follow existing style, use type hints where appropriate. For API or config changes, update README and env templates as needed.
 - **Pre-PR**: Branch up to date with `main`, tests pass, CHANGELOG/README updated, no secrets or large binaries committed.

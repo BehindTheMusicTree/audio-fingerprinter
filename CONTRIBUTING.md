@@ -57,7 +57,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 - **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
 - **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image)
-- **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
+- **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
 - **Build / Push to GHCR**: On version tag push, builds the Docker image and pushes it to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** using **`GITHUB_TOKEN`**
 
 **Repository automation (maintainer-only):**
@@ -101,12 +101,12 @@ cd audio-fingerprinter
 
 Ensure you have:
 
-- **Python 3.12** (matches CI and runtime)
+- **Python 3.14** (matches CI and runtime). **pyenv:** the repo has **`.python-version`** (`3.14.0`). From the project root run **`pyenv install 3.14.0`** (or **`pyenv install -s 3.14.0`** to skip if already present), then **`python --version`** should show 3.14.x when pyenv’s shims are on your `PATH`. Without pyenv, use **`python3.14`** or another way to get 3.14.
 
 - **Virtual environment and Python dependencies:**
 
   ```bash
-  python3.12 -m venv .venv
+  python -m venv .venv
   source .venv/bin/activate   # Linux/macOS
   # .venv\Scripts\activate   # Windows
   pip install -e .
@@ -175,7 +175,7 @@ Ensure you have:
 #### Chore branches (`chore/<name>`)
 
 - For maintenance, CI, docs, or dependency updates; branch from `main`
-- Examples: `chore/update-deps`, `chore/ci-python-312`
+- Examples: `chore/update-deps`, `chore/ci-python-314`
 - Merge into `main` via Pull Request when complete
 
 ### 3. Developing
@@ -252,8 +252,11 @@ Before submitting a Pull Request:
 Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
 
 ```bash
-python scripts/release.py [patch|minor|major]
+python3 scripts/release.py [patch|minor|major]
+# or: ./scripts/release [patch|minor|major]
 ```
+
+`release.py` is Python — do not run `bash scripts/release.py` (the shell will mis-parse it). Use `python3` or the `scripts/release` shim above.
 
 Default is `patch`. The script will:
 

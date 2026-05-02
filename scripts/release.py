@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Release wrapper: bump version with bump-my-version, update CHANGELOG, commit, tag, push."""
 
+import importlib.metadata
 import re
+import shutil
 import subprocess
 import sys
 from datetime import date
@@ -9,7 +11,29 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CHANGELOG = REPO_ROOT / "CHANGELOG.md"
-BUMP_MY_VERSION = REPO_ROOT / ".venv-release" / "bin" / "bump-my-version"
+
+
+def bump_my_version_cmd() -> list[str]:
+    """Resolve bump-my-version: venv script, PATH, or same-interpreter ``python -m bumpversion``."""
+    for rel in (
+        ".venv/bin/bump-my-version",
+        ".venv/Scripts/bump-my-version.exe",
+    ):
+        path = REPO_ROOT / rel
+        if path.is_file():
+            return [str(path)]
+    found = shutil.which("bump-my-version")
+    if found:
+        return [found]
+    try:
+        importlib.metadata.version("bump-my-version")
+    except importlib.metadata.PackageNotFoundError:
+        sys.exit(
+            "bump-my-version is not installed for this Python.\n"
+            f"  Install dev deps: {sys.executable} -m pip install -e '.[dev]'\n"
+            "Or activate a .venv where you ran pip install -e '.[dev]'."
+        )
+    return [sys.executable, "-m", "bumpversion"]
 
 
 def current_version_from_changelog() -> str | None:
@@ -60,7 +84,7 @@ def run(*args: str, check: bool = True) -> subprocess.CompletedProcess:
 
 
 def main() -> None:
-    part = (sys.argv[1] or "patch").lower()
+    part = (sys.argv[1] if len(sys.argv) > 1 else "patch").lower()
     if part not in ("major", "minor", "patch"):
         sys.exit("Usage: release.py [patch|minor|major]  (default: patch)")
 
@@ -71,8 +95,7 @@ def main() -> None:
     today = date.today().isoformat()
 
     update_changelog(new_version, today)
-    bump_cmd = str(BUMP_MY_VERSION) if BUMP_MY_VERSION.exists() else "bump-my-version"
-    run(bump_cmd, "bump", part, "--new-version", new_version, "--allow-dirty")
+    run(*bump_my_version_cmd(), "bump", part, "--new-version", new_version, "--allow-dirty")
     run("git", "add", "CHANGELOG.md", "pyproject.toml")
     run("git", "commit", "-m", f"Release {new_version}")
     run("git", "tag", f"v{new_version}")
