@@ -42,6 +42,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.4.4] - 2026-05-02
+
 ## [1.4.3] - 2026-05-02
 
 ### Changed

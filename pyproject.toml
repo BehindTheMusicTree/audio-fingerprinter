@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "audio-fingerprinter"
-version = "1.4.3"
+version = "1.4.4"
 description = "Flask REST API for Chromaprint-based audio fingerprints"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -30,7 +30,7 @@ testpaths = ["test"]
 pythonpath = ["."]
 
 [tool.bumpversion]
-current_version = "1.4.3"
+current_version = "1.4.4"
 commit = false
 tag = false
 
