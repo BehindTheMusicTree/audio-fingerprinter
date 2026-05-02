@@ -58,11 +58,11 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 - **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
 - **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image, redeploy webhook)
 - **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
-- **Build / Push to DockerHub**: After tests pass, builds the Docker image and pushes it; then calls the redeployment webhook
+- **Build / Push to GHCR**: On version tag push, builds the Docker image and pushes it to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** using **`GITHUB_TOKEN`**
 
 **Repository automation (maintainer-only):**
 
-- CI uses repository/environment variables and secrets (e.g. `POOL_DIR_INTERNAL`, `FPCALC_INTERNAL_PATH`, `DOCKERHUB_ACCESS_TOKEN`). Changing workflow behavior or adding secrets is a maintainer responsibility.
+- CI uses repository/environment variables and secrets (e.g. `POOL_DIR_INTERNAL`, `FPCALC_INTERNAL_PATH`, `GHCR_IMAGE_NAMESPACE`). Publish uses **`GITHUB_TOKEN`** for **`ghcr.io`** (`packages: write`). Changing workflow behavior or adding secrets is a maintainer responsibility.
 
 **What contributors can do:**
 

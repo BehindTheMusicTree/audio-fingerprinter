@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Changed
+
+- **CI (Publish)**: Push tag builds to **GitHub Container Registry** — **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<ref>`** via **`docker/login-action`** and **`GITHUB_TOKEN`** (`packages: write`). Removes Docker Hub login and **`DOCKERHUB_ACCESS_TOKEN`**; add GitHub variable **`GHCR_IMAGE_NAMESPACE`** (lowercase, same as **BehindTheMusicTree/infrastructure**).
+
 ## [1.4.1] - 2026-03-18
 
 ### Improved

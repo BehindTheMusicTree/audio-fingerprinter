@@ -153,6 +153,8 @@ The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment 
 
 ## Docker Deployment
 
+**CI:** Pushing a **`v*`** tag runs **Publish** (`.github/workflows/publish.yaml`): the image is pushed to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** (GitHub Actions **`GITHUB_TOKEN`**). Set repository variable **`GHCR_IMAGE_NAMESPACE`** to the same lowercase value as **infrastructure** (e.g. org name). **`DOCKERHUB_*`** credentials are no longer used for publish.
+
 ### Build
 
 Build the Docker image with required build arguments (path vars are not build args; they are required at runtime):
