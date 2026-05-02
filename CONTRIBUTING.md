@@ -56,13 +56,13 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 **Workflows:**
 
 - **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
-- **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image, redeploy webhook)
+- **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image)
 - **Tests**: Setup Python 3.12, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
-- **Build / Push to DockerHub**: After tests pass, builds the Docker image and pushes it; then calls the redeployment webhook
+- **Build / Push to GHCR**: On version tag push, builds the Docker image and pushes it to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** using **`GITHUB_TOKEN`**
 
 **Repository automation (maintainer-only):**
 
-- CI uses repository/environment variables and secrets (e.g. `POOL_DIR_INTERNAL`, `FPCALC_INTERNAL_PATH`, `DOCKERHUB_ACCESS_TOKEN`). Changing workflow behavior or adding secrets is a maintainer responsibility.
+- CI uses repository/environment variables and secrets (e.g. `POOL_DIR_INTERNAL`, `FPCALC_INTERNAL_PATH`, `GHCR_IMAGE_NAMESPACE`). Publish uses **`GITHUB_TOKEN`** for **`ghcr.io`** (`packages: write`). Changing workflow behavior or adding secrets is a maintainer responsibility.
 
 **What contributors can do:**
 
@@ -109,7 +109,7 @@ Ensure you have:
   python3.12 -m venv .venv
   source .venv/bin/activate   # Linux/macOS
   # .venv\Scripts\activate   # Windows
-  pip install -r requirements.txt
+  pip install -e .
   ```
 
 - **System dependencies** (required for fingerprinting and tests):
@@ -249,7 +249,7 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump2version`; install with `pip install -r requirements-dev.txt`):
+Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
 
 ```bash
 python scripts/release.py [patch|minor|major]
@@ -258,7 +258,7 @@ python scripts/release.py [patch|minor|major]
 Default is `patch`. The script will:
 
 1. Move `[Unreleased]` changelog entries into a new versioned section with the current date (ISO).
-2. Bump version in `setup.py` and `.bumpversion.cfg` via bump2version.
+2. Bump version in `pyproject.toml` via `bump-my-version` (`[tool.bumpversion]` and `[project]` version).
 3. Commit the changelog and version changes, create tag `vX.Y.Z`, and push branch and tag.
 
 CI will build and push the Docker image on tag push; ensure `APP_VERSION` (or equivalent) in the workflow matches the release.

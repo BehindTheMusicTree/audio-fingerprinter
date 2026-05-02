@@ -18,11 +18,20 @@ if [ $APP_IS_DOCKERIZED != "true" ] && [ $APP_IS_DOCKERIZED != "false" ]; then
     exit 1
 fi
 
-# Install software-properties-common to use add-apt-repository
+# Use existing Python 3.12 (e.g. actions/setup-python) when on PATH so CI does not
+# depend on ppa.launchpadcontent.net, which runners sometimes cannot reach.
+need_deb_python312=true
+if command -v python3.12 >/dev/null 2>&1 \
+    && python3.12 -c 'import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)' 2>/dev/null; then
+    need_deb_python312=false
+fi
+
 apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
-add-apt-repository ppa:deadsnakes/ppa -y
-apt-get update
+if [ "$need_deb_python312" = true ]; then
+    DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
+    add-apt-repository ppa:deadsnakes/ppa -y
+    apt-get update
+fi
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
     ffmpeg=7:4.4.2-0ubuntu0.22.04.1 \
@@ -30,8 +39,8 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     software-properties-common \
     curl \
     jq \
-    python3.12 \
-    libchromaprint-tools
+    libchromaprint-tools \
+    $([ "$need_deb_python312" = true ] && echo python3.12)
 
 curl https://bootstrap.pypa.io/get-pip.py | python3.12
 

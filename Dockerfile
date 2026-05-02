@@ -40,7 +40,7 @@ RUN mkdir -p /app/log/gunicorn /app/log/flask /app/env/calculated_paths && chmod
 
 RUN apt-get update && \
     bash scripts/install-dependencies.sh && \
-    python3.12 -m pip install --no-cache-dir --ignore-installed -r requirements.txt && \
+    python3.12 -m pip install --no-cache-dir --ignore-installed . && \
     chmod +x entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]

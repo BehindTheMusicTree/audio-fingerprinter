@@ -59,8 +59,9 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
 
 3. Install Python dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install .
    ```
+   Editable install and maintainer extras (e.g. `bump-my-version`): `pip install -e ".[dev]"`.
 
 4. Install system dependencies:
    - **Ubuntu/Linux**: Run `sudo -E bash scripts/install-dependencies.sh` (set `APP_IS_DOCKERIZED=false`)
@@ -152,6 +153,8 @@ python run.py
 The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment variable).
 
 ## Docker Deployment
+
+**CI:** Pushing a **`v*`** tag runs **Publish** (`.github/workflows/publish.yaml`): the image is pushed to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** (GitHub Actions **`GITHUB_TOKEN`**). Set repository variable **`GHCR_IMAGE_NAMESPACE`** to the same lowercase value as **infrastructure** (e.g. org name). **`DOCKERHUB_*`** credentials are no longer used for publish.
 
 ### Build
 

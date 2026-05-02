@@ -5,9 +5,13 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  build-and-push-to-dockerhub:
-    name: Build / Push to DockerHub
+  build-and-push-to-ghcr:
+    name: Build / Push to GHCR
     runs-on: ubuntu-latest
     environment:
       name: TEST
@@ -22,19 +26,23 @@ jobs:
           FLASK_LOG_REQUESTS_FILENAME: ${{ vars.FLASK_LOG_REQUESTS_FILENAME }}
           GUNICORN_LOG_ACCESS_FILENAME: ${{ vars.GUNICORN_LOG_ACCESS_FILENAME }}
           GUNICORN_LOG_ERROR_FILENAME: ${{ vars.GUNICORN_LOG_ERROR_FILENAME }}
-          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          GHCR_IMAGE_NAMESPACE: ${{ vars.GHCR_IMAGE_NAMESPACE }}
           AFP_IMAGE_REPO: ${{ vars.AFP_IMAGE_REPO }}
-        run: bash scripts/check-publish-env.sh FPCALC_INTERNAL_PATH FLASK_LOG_APP_FILENAME FLASK_LOG_ERROR_FILENAME FLASK_LOG_REQUESTS_FILENAME GUNICORN_LOG_ACCESS_FILENAME GUNICORN_LOG_ERROR_FILENAME DOCKERHUB_USERNAME AFP_IMAGE_REPO
+        run: bash scripts/check-publish-env.sh FPCALC_INTERNAL_PATH FLASK_LOG_APP_FILENAME FLASK_LOG_ERROR_FILENAME FLASK_LOG_REQUESTS_FILENAME GUNICORN_LOG_ACCESS_FILENAME GUNICORN_LOG_ERROR_FILENAME GHCR_IMAGE_NAMESPACE AFP_IMAGE_REPO
 
-      - name: Login to Dockerhub
-        run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ vars.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.AFP_IMAGE_REPO }}:${{ github.ref_name }}
+          tags: ghcr.io/${{ vars.GHCR_IMAGE_NAMESPACE }}/${{ vars.AFP_IMAGE_REPO }}:${{ github.ref_name }}
           build-args: |
             FPCALC_INTERNAL_PATH=${{ vars.FPCALC_INTERNAL_PATH }}
             FLASK_LOG_APP_FILENAME=${{ vars.FLASK_LOG_APP_FILENAME }}

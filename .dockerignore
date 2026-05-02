@@ -3,6 +3,7 @@
 .github
 .vscode
 __pycache__
+*.egg-info
 *.pyc
 .pytest_cache
 .env

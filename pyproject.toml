@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "audio-fingerprinter"
+version = "1.4.1"
+description = "Flask REST API for Chromaprint-based audio fingerprints"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pyacoustid==1.3.0",
+    "setuptools==70.0.0",
+    "pydub==0.25.1",
+    "flask==3.0.3",
+    "marshmallow==3.21.2",
+    "marshmallow_dataclass==8.6.1",
+    "python-dotenv==1.0.1",
+    "gunicorn==22.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "bump-my-version>=0.24.0",
+]
+
+[tool.bumpversion]
+current_version = "1.4.1"
+commit = false
+tag = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["audio_fingerprinter*"]
+
+[tool.setuptools]
+py-modules = ["run", "settings", "wsgi"]

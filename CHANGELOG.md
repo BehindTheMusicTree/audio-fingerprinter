@@ -42,6 +42,15 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Changed
+
+- **Packaging**: Runtime and dev dependencies are declared in **`pyproject.toml`** (PEP 621); install with **`pip install .`** or **`pip install -e ".[dev]"`** for release tooling. Removed **`requirements.txt`**, **`requirements-dev.txt`**, and **`setup.py`**. Distribution name is **`audio-fingerprinter`**. Releases use **`bump-my-version`** (`[tool.bumpversion]` in **`pyproject.toml`**); removed **`.bumpversion.cfg`** / **`bump2version`**.
+- **CI (Publish)**: Push tag builds to **GitHub Container Registry** — **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<ref>`** via **`docker/login-action`** and **`GITHUB_TOKEN`** (`packages: write`). Removes Docker Hub login and **`DOCKERHUB_ACCESS_TOKEN`**; add GitHub variable **`GHCR_IMAGE_NAMESPACE`** (lowercase, same as **BehindTheMusicTree/infrastructure**).
+
+### Fixed
+
+- **CI (Tests)**: `install-dependencies.sh` skips the deadsnakes PPA when `python3.12` is already on `PATH` (from `actions/setup-python`), and the test workflow runs `sudo` with `PATH` preserved so Launchpad connectivity is no longer required for Python on runners.
+
 ## [1.4.1] - 2026-03-18
 
 ### Improved
