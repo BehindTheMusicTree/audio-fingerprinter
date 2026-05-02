@@ -109,8 +109,10 @@ Ensure you have:
   python -m venv .venv
   source .venv/bin/activate   # Linux/macOS
   # .venv\Scripts\activate   # Windows
-  pip install -e .
+  pip install -e ".[dev]"
   ```
+
+  **`[dev]`** includes **`bump-my-version`** and **`pytest`**. Prefer **`python -m pytest`** from the repo root (same interpreter as the venv) so **`pyproject.toml`** pytest options apply.
 
 - **System dependencies** (required for fingerprinting and tests):
 
@@ -134,7 +136,7 @@ Ensure you have:
 
   Ensure `bin/fpcalc` is on your `PATH` or that the app is configured to use it (see `FPCALC` / config).
 
-- **Environment variables:** Copy `env/.env.dev_template` to `env/.env` and set variables as needed. See [README.md](README.md) for required variables (e.g. `ENV`, `APP_IS_EXPOSED`, `POOL_DIR_INTERNAL`, Flask log settings).
+- **Environment variables:** Copy `env/.env.example` to `env/.env` and set variables as needed. See [README.md](README.md) for required variables (e.g. `ENV`, `APP_IS_EXPOSED`, `POOL_DIR_INTERNAL`, Flask log settings).
 
 - **Filesystem setup (for tests / local run):** After env is set, run:
 
@@ -196,7 +198,11 @@ source .venv/bin/activate
 
 # Run all tests (requires FPCALC and env set; see CI or scripts)
 python -m unittest discover
+# Optional: pytest (after pip install -e ".[dev]" — always use the venv’s Python)
+# python -m pytest
 ```
+
+Do **not** rely on a bare **`pytest`** on `PATH` while `(.venv)` is active: many setups still run **pyenv/Homebrew** `pytest`, so you get **`ModuleNotFoundError: flask`**. Use **`python -m pytest`** (or **`.venv/bin/pytest`**) after **`pip install -e .`**.
 
 - Ensure `FPCALC` points to `bin/fpcalc` (or your system fpcalc).
 - CI sets `ENV`, `FPCALC`, `POOL_DIR_INTERNAL`, etc.; replicate those locally if you want CI-like results.

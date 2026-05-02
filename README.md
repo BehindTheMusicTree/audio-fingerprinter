@@ -59,9 +59,9 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
 
 3. Install Python dependencies:
    ```bash
-   pip install .
+   pip install -e ".[dev]"
    ```
-   Editable install and maintainer extras (e.g. `bump-my-version`): `pip install -e ".[dev]"`.
+   **`[dev]`** adds **`bump-my-version`** and **`pytest`**. If you use **pytest**, run **`python -m pytest`** from the repo root so **`pyproject.toml`** (`testpaths`, `pythonpath`) applies. Runtime-only install: **`pip install .`**
 
 4. Install system dependencies:
    - **Ubuntu/Linux**: Run `sudo -E bash scripts/install-dependencies.sh` (set `APP_IS_DOCKERIZED=false`)
@@ -76,7 +76,7 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
 
 ## Configuration
 
-Copy `env/.env.dev_template` to `env/.env` and configure the required environment variables. See [Environment Variables](#environment-variables) section for details.
+Copy `env/.env.example` to `env/.env` and configure the required environment variables. See [Environment Variables](#environment-variables) section for details.
 
 ## Usage
 

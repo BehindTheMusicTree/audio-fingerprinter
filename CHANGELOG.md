@@ -46,7 +46,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### Changed
 
-- **Python**: Minimum **3.14** (`requires-python`), **`.python-version`** `3.14.0`, CI **`setup-python`** on **3.14**, Docker and **`install-dependencies.sh`** use **`python3.14`** / deadsnakes on Ubuntu 22.04 when **`python3.14`** is not already on **`PATH`**.
+- **Python**: Minimum **3.14** (`requires-python`), **`.python-version`** `3.14.0`, CI **`setup-python`** on **3.14**. **`install-dependencies.sh`** still targets Ubuntu 22.04 + deadsnakes **`python3.14`** when **`python3.14`** is not on **`PATH`**. **Docker** uses **`python:3.14-slim-bookworm`** (no PPA) so builds do not depend on **Launchpad** for Python.
 - **Dev / pytest**: **`pytest`** added to **`[dev]`** extras; **`[tool.pytest.ini_options]`** sets **`testpaths`** and **`pythonpath`** for **`python -m pytest`** from the repo root.
 - **Tests**: **`test/conftest.py`** exits with a clear message when **Flask** is missing (wrong interpreter or forgot **`pip install -e .`**), e.g. bare **`pytest`** using **pyenv** instead of **`.venv`**.
 
