@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### CI
+
+- **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** — Coolify now builds and deploys the image directly from this git repository instead of the legacy GHCR tag-push flow. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
+
 ## [1.4.4] - 2026-05-02
 
 ## [1.4.3] - 2026-05-02
