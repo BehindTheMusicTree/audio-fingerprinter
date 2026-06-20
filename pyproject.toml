@@ -31,11 +31,11 @@ testpaths = ["test"]
 pythonpath = ["."]
 
 [tool.coverage.run]
-source = ["audio_fingerprinter", "run", "settings"]
+source = ["audio_fingerprinter"]
 branch = true
 
 [tool.coverage.report]
-fail_under = 80
+fail_under = 100
 show_missing = true
 exclude_lines = ["if __name__ == .__main__.:"]
 
