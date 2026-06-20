@@ -265,7 +265,7 @@ Tests require:
 ## Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Development workflow (GitHub Flow)
+- Development workflow (Gitflow)
 - Branching strategy
 - Testing requirements
 - Commit message guidelines

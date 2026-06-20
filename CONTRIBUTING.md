@@ -47,7 +47,7 @@ The maintainer(s) are responsible for:
 - Maintaining the project's infrastructure
 - Moving "Unreleased" changelog entries to versioned sections during releases
 
-**Important:** Even maintainers must go through Pull Requests. No direct commits to `main` (or protected branches) are allowed — all changes must be submitted via Pull Requests and go through the standard review process.
+**Important:** Even maintainers must go through Pull Requests. No direct commits to `main` or `develop` are allowed — all changes must be submitted via Pull Requests and go through the standard review process.
 
 _Note: Contributors can submit fixes for critical issues via feature branches. Maintainers may promote these to hotfix branches when urgent production fixes are needed._
 
@@ -55,7 +55,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 **Workflows:**
 
-- **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
+- **Tests** (`.github/workflows/tests.yaml`): Runs on pull requests and pushes targeting `main` or `develop`
 - **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m pytest --cov` (enforces the minimum coverage threshold in `pyproject.toml`)
 - **Deploy**: Coolify builds and deploys the image directly from this git repository — there is no GitHub Actions publish workflow or GHCR image.
 
@@ -71,7 +71,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 ## Development Workflow
 
-We follow [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow): a single long-lived branch (`main`), with short-lived feature branches merged via Pull Requests.
+We follow [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow): two long-lived branches, `develop` (integration) and `main` (production/releases), with short-lived feature/hotfix/chore branches merged into `develop` via Pull Requests. `develop` is merged into `main` only at release time.
 
 **Workflow steps:** Fork & Clone → Environment Setup → Branching → Developing → Testing → Committing → Pull Request Process → Releasing _(For Maintainers)_
 
@@ -149,35 +149,42 @@ Ensure you have:
 
 #### Main branch (`main`)
 
-- The only long-lived branch; always deployable
-- All tests must pass before merging
+- Production/release branch; always deployable
+- Receives merges only from `develop` (releases) or `hotfix/<name>` (urgent production fixes)
 - **No direct commits** — all changes go through Pull Requests
 - Releases are tagged from `main`
 
+#### Develop branch (`develop`)
+
+- Integration branch; default target for Pull Requests
+- All tests must pass before merging
+- **No direct commits** — all changes go through Pull Requests
+- Periodically merged into `main` to cut a release
+
 #### Feature branches (`feature/<name>`)
 
-- One branch per feature or bug fix; branch from `main`
+- One branch per feature or bug fix; branch from `develop`
 - Include issue numbers when applicable: `feature/123-add-format-support`
 - Examples:
 
   ```bash
-  git checkout main && git pull origin main
+  git checkout develop && git pull origin develop
   git checkout -b feature/improve-error-messages
   git checkout -b feature/45-fix-fpcalc-path
   ```
 
-- Merge into `main` via Pull Request when complete and tested
+- Merge into `develop` via Pull Request when complete and tested
 
 #### Hotfix branches (`hotfix/<name>`) _(For Maintainers)_
 
 - For urgent production fixes; branch from `main`
-- Merge into `main` via Pull Request after review
+- Merge into `main` via Pull Request after review, then merge (or cherry-pick) into `develop` so the fix isn't lost on the next release
 
 #### Chore branches (`chore/<name>`)
 
-- For maintenance, CI, docs, or dependency updates; branch from `main`
+- For maintenance, CI, docs, or dependency updates; branch from `develop`
 - Examples: `chore/update-deps`, `chore/ci-python-314`
-- Merge into `main` via Pull Request when complete
+- Merge into `develop` via Pull Request when complete
 
 ### 3. Developing
 
@@ -237,12 +244,12 @@ Before submitting a Pull Request:
 
 **4. Git**
 
-- Branch is up to date with `main`.
+- Branch is up to date with `develop`.
 - No secrets, large binaries, or personal config committed.
 
 #### 6.2. Opening a Pull Request
 
-- **Target branch:** `main`.
+- **Target branch:** `develop` (or `main` for `hotfix/<name>` branches).
 - **Title:** Short, imperative summary (e.g. "Add .dockerignore to reduce image size", "Fix fpcalc path in Docker").
 - **Description:** A PR template will be automatically provided when opening a PR. Fill it out with:
   - Clear description of what changed and why
@@ -255,7 +262,7 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Releases are prepared from the appropriate branch (e.g. `main`). Use the release script (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
+Releases are cut by merging `develop` into `main` via Pull Request, then running the release script from `main` (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
 
 ```bash
 python3 scripts/release.py [patch|minor|major]
