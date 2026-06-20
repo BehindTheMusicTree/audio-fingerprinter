@@ -45,6 +45,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### CI
 
 - **Tests**: CI now runs `pytest` with coverage instead of `python -m unittest discover`, matching the pytest config already in `pyproject.toml`. Added unit tests for `audio_fingerprinter.py`, `env_var_loader.py`, `errors.py`, and `utils.py`, plus a minimum coverage threshold so future PRs must include tests for new code.
+- **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** — Coolify now builds and deploys the image directly from this git repository instead of the legacy GHCR tag-push flow. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
 
 ## [1.4.4] - 2026-05-02
 
