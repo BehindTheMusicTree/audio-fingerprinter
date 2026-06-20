@@ -12,5 +12,8 @@ log/
 
 pool/
 
+.coverage
+htmlcov/
+
 !.github/pr-descriptions/.gitkeep
 .github/pr-descriptions/*

@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies & python requirements
         run: |
           sudo -E env "PATH=$PATH" bash scripts/install-dependencies.sh
-          python -m pip install --upgrade pip && pip install .
+          python -m pip install --upgrade pip && pip install ".[dev]"
 
       - name: Set up filesystem
         run: bash scripts/setup-filesystem.sh
@@ -52,4 +52,4 @@ jobs:
           ENV: ${{ vars.ENV }}
           DEBUG: true
           APP_PORT: ${{ vars.APP_PORT }}
-        run: python -m unittest discover
+        run: python -m pytest --cov --cov-report=term-missing

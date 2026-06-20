@@ -57,7 +57,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 - **Tests** (`.github/workflows/tests.yaml`): Runs on push and pull requests to `main`
 - **Publish** (`.github/workflows/publish.yaml`): Runs only when a tag `v*` is pushed (build/push Docker image)
-- **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m unittest discover`
+- **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m pytest --cov` (enforces the minimum coverage threshold in `pyproject.toml`)
 - **Build / Push to GHCR**: On version tag push, builds the Docker image and pushes it to **`ghcr.io/<GHCR_IMAGE_NAMESPACE>/<AFP_IMAGE_REPO>:<tag>`** using **`GITHUB_TOKEN`**
 
 **Repository automation (maintainer-only):**
@@ -188,7 +188,7 @@ Ensure you have:
 
 ### 4. Testing
 
-Tests are run with Python’s built-in **unittest** (same as CI).
+Tests are run with **pytest** (same as CI), which also collects the existing `unittest.TestCase`-based tests with no changes needed.
 
 **Quick reference:**
 
@@ -196,17 +196,18 @@ Tests are run with Python’s built-in **unittest** (same as CI).
 # Activate your venv first
 source .venv/bin/activate
 
-# Run all tests (requires FPCALC and env set; see CI or scripts)
-python -m unittest discover
-# Optional: pytest (after pip install -e ".[dev]" — always use the venv’s Python)
-# python -m pytest
+# Run all tests with coverage (requires FPCALC and env set; see CI or scripts)
+python -m pytest --cov --cov-report=term-missing
+# Optional: plain unittest runner (no coverage enforcement)
+# python -m unittest discover
 ```
 
-Do **not** rely on a bare **`pytest`** on `PATH` while `(.venv)` is active: many setups still run **pyenv/Homebrew** `pytest`, so you get **`ModuleNotFoundError: flask`**. Use **`python -m pytest`** (or **`.venv/bin/pytest`**) after **`pip install -e .`**.
+Do **not** rely on a bare **`pytest`** on `PATH` while `(.venv)` is active: many setups still run **pyenv/Homebrew** `pytest`, so you get **`ModuleNotFoundError: flask`**. Use **`python -m pytest`** (or **`.venv/bin/pytest`**) after **`pip install -e ".[dev]"`**.
 
 - Ensure `FPCALC` points to `bin/fpcalc` (or your system fpcalc).
 - CI sets `ENV`, `FPCALC`, `POOL_DIR_INTERNAL`, etc.; replicate those locally if you want CI-like results.
 - Test assets live in `test/samples/`; do not commit large or unrelated media files.
+- CI enforces a minimum coverage threshold (`[tool.coverage.report]` in `pyproject.toml`); run `python -m pytest --cov --cov-report=term-missing` locally to check for gaps before opening a PR.
 
 ### 5. Committing
 
@@ -227,7 +228,7 @@ Before submitting a Pull Request:
 
 **2. Tests**
 
-- All tests pass locally: `python -m unittest discover`.
+- All tests pass locally: `python -m pytest --cov` (also confirms the coverage threshold is met).
 - New features or bug fixes include or update tests where appropriate.
 
 **3. Documentation**
