@@ -48,8 +48,8 @@
 
 - [ ] Commit messages are concise and clear
 - [ ] Prefer small, focused commits (one logical change per commit)
-- [ ] No merge conflicts with target branch (`main`)
-- [ ] Branch is up to date with `main`
+- [ ] No merge conflicts with target branch (`develop`, or `main` for hotfixes)
+- [ ] Branch is up to date with the target branch
 - [ ] No accidental commits (large files, secrets, personal configs)
 
 ## Breaking Changes

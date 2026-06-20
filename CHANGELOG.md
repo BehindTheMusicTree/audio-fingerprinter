@@ -44,7 +44,13 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### CI
 
+- **Tests**: CI now runs `pytest` with coverage instead of `python -m unittest discover`, matching the pytest config already in `pyproject.toml`. Added unit tests for `audio_fingerprinter.py`, `env_var_loader.py`, `errors.py`, and `utils.py`. The coverage gate (`fail_under = 100` in `pyproject.toml`) is scoped to the `audio_fingerprinter` package only — `run.py`/`settings.py` are excluded since their incidental coverage depends on the runner's `fpcalc`/`ffmpeg` behavior (e.g. short test-audio files fail fingerprinting locally on macOS but succeed on CI's Linux runner), which made gating on them non-deterministic across environments.
+- **Tests**: The `Tests` workflow now also triggers on pull requests and pushes targeting `develop` (previously only `main`), and on direct pushes to either branch, so PRs into `develop` actually run CI and a direct push bypassing review still gets checked.
 - **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** — Coolify now builds and deploys the image directly from this git repository instead of the legacy GHCR tag-push flow. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
+
+### Documentation
+
+- **Contributing**: Documented the project's actual branching model (Gitflow: `develop` for integration, `main` for releases) in `CONTRIBUTING.md`, `README.md`, and the PR template — previously described a single-branch GitHub Flow that no longer matched how PRs are actually targeted.
 
 ## [1.4.4] - 2026-05-02
 
