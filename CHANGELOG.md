@@ -51,6 +51,7 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ### Documentation
 
 - **Contributing**: Documented the project's actual branching model (Gitflow: `develop` for integration, `main` for releases) in `CONTRIBUTING.md`, `README.md`, and the PR template — previously described a single-branch GitHub Flow that no longer matched how PRs are actually targeted.
+- **Dev tooling**: Added a `launch` Claude Code skill (`.claude/skills/launch/`) documenting how to start the service locally, including Python env setup, system dependencies (ffmpeg, fpcalc), and required env/filesystem prep.
 
 ## [1.4.4] - 2026-05-02
 
