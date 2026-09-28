@@ -42,10 +42,11 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+## [1.4.5] - 2026-09-28
+
 ### CI
 
 - **Build and deploy**: New `.github/workflows/build-and-deploy.yml` builds the Docker image on `ubuntu-latest` (off the VPS) and pushes it to `ghcr.io/behindthemusictree/afp` — `:staging` on `develop`, `:prod` on `main`, plus `:sha-<short>` — then triggers the Coolify deploy of the `afp` app (staging/production) via `trigger-coolify-deploy`, health-checking `/health`.
-
 - **Tests**: CI now runs `pytest` with coverage instead of `python -m unittest discover`, matching the pytest config already in `pyproject.toml`. Added unit tests for `audio_fingerprinter.py`, `env_var_loader.py`, `errors.py`, and `utils.py`. The coverage gate (`fail_under = 100` in `pyproject.toml`) is scoped to the `audio_fingerprinter` package only — `run.py`/`settings.py` are excluded since their incidental coverage depends on the runner's `fpcalc`/`ffmpeg` behavior (e.g. short test-audio files fail fingerprinting locally on macOS but succeed on CI's Linux runner), which made gating on them non-deterministic across environments.
 - **Tests**: The `Tests` workflow now also triggers on pull requests and pushes targeting `develop` (previously only `main`), and on direct pushes to either branch, so PRs into `develop` actually run CI and a direct push bypassing review still gets checked.
 - **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** (legacy GHCR tag-push flow), superseded by **Build and deploy** above. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
