@@ -1,0 +1,72 @@
+# Builds the image on a GitHub-hosted runner (this repo is public: free minutes, off the VPS CPU),
+# pushes it to GHCR, then triggers the Coolify deploy of the afp app, which pulls the moving
+# :staging (develop) / :prod (main) tag. Requires org-level vars COOLIFY_API_SUBDOMAIN, DOMAIN_NAME,
+# SERVER_HOST and org-level secret COOLIFY_API_TOKEN. The health check passes health_check_origin_ip
+# (SERVER_HOST) to curl --resolve directly to the origin, bypassing Cloudflare's Bot Fight Mode.
+name: Build and deploy
+
+on:
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-and-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/behindthemusictree/afp
+
+jobs:
+  build:
+    name: Build and push image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: docker/setup-buildx-action@v4.4.1
+
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=staging,enable=${{ github.ref == 'refs/heads/develop' }}
+            type=raw,value=prod,enable=${{ github.ref == 'refs/heads/main' }}
+            type=sha,prefix=sha-
+
+      - uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy (${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }})
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger afp deploy
+        uses: BehindTheMusicTree/github-workflows/.github/actions/trigger-coolify-deploy@v4.3.4
+        with:
+          app_name: afp
+          coolify_environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+          coolify_subdomain: ${{ vars.COOLIFY_API_SUBDOMAIN }}
+          domain: ${{ vars.DOMAIN_NAME }}
+          coolify_api_token: ${{ secrets.COOLIFY_API_TOKEN }}
+          health_check_path: /health
+          health_check_origin_ip: ${{ vars.SERVER_HOST }}

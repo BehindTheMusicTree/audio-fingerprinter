@@ -44,9 +44,15 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### CI
 
+- **Build and deploy**: New `.github/workflows/build-and-deploy.yml` builds the Docker image on `ubuntu-latest` (off the VPS) and pushes it to `ghcr.io/behindthemusictree/afp` — `:staging` on `develop`, `:prod` on `main`, plus `:sha-<short>` — then triggers the Coolify deploy of the `afp` app (staging/production) via `trigger-coolify-deploy`, health-checking `/health`.
+
 - **Tests**: CI now runs `pytest` with coverage instead of `python -m unittest discover`, matching the pytest config already in `pyproject.toml`. Added unit tests for `audio_fingerprinter.py`, `env_var_loader.py`, `errors.py`, and `utils.py`. The coverage gate (`fail_under = 100` in `pyproject.toml`) is scoped to the `audio_fingerprinter` package only — `run.py`/`settings.py` are excluded since their incidental coverage depends on the runner's `fpcalc`/`ffmpeg` behavior (e.g. short test-audio files fail fingerprinting locally on macOS but succeed on CI's Linux runner), which made gating on them non-deterministic across environments.
 - **Tests**: The `Tests` workflow now also triggers on pull requests and pushes targeting `develop` (previously only `main`), and on direct pushes to either branch, so PRs into `develop` actually run CI and a direct push bypassing review still gets checked.
-- **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** — Coolify now builds and deploys the image directly from this git repository instead of the legacy GHCR tag-push flow. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
+- **Publish**: Removed **`.github/workflows/publish.yaml`** and **`scripts/check-publish-env.sh`** (legacy GHCR tag-push flow), superseded by **Build and deploy** above. **`GHCR_IMAGE_NAMESPACE`** / **`AFP_IMAGE_REPO`** are no longer used.
+
+### Changed
+
+- **Docker image**: The `Dockerfile` no longer takes build arguments, so one prebuilt image serves every environment. `FLASK_LOG_*_FILENAME` / `GUNICORN_LOG_*_FILENAME` are now runtime env vars (already validated at startup), and `FPCALC` is baked in as `/app/bin/fpcalc`, where the image places the binary — `FPCALC_INTERNAL_PATH` is no longer a build input (the Tests workflow still uses it).
 
 ### Documentation
 

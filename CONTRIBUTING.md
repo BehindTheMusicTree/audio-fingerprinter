@@ -57,7 +57,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 - **Tests** (`.github/workflows/tests.yaml`): Runs on pull requests and pushes targeting `main` or `develop`
 - **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m pytest --cov` (enforces the minimum coverage threshold in `pyproject.toml`)
-- **Deploy**: Coolify builds and deploys the image directly from this git repository — there is no GitHub Actions publish workflow or GHCR image.
+- **Build and deploy** (`.github/workflows/build-and-deploy.yml`): On pushes to `develop` / `main`, builds the image and pushes it to `ghcr.io/behindthemusictree/afp` (`:staging` / `:prod`, plus `:sha-<short>`), then triggers the Coolify deploy of the `afp` app
 
 **Repository automation (maintainer-only):**
 
