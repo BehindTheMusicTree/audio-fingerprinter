@@ -154,26 +154,19 @@ The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment 
 
 ## Docker Deployment
 
-**CI:** Coolify builds and deploys the image directly from this git repository — there is no GitHub Actions publish workflow or GHCR image.
+**CI:** `.github/workflows/build-and-deploy.yml` builds the image on a GitHub-hosted runner and pushes it to `ghcr.io/behindthemusictree/afp` on every push to `develop` (`:staging`) and `main` (`:prod`), plus `:sha-<short>`, then triggers the Coolify deploy of the `afp` app in the matching environment.
 
 ### Build
 
-Build the Docker image with required build arguments (path vars are not build args; they are required at runtime):
+The image takes no build arguments — one image serves every environment:
 
 ```bash
-docker build \
-  --build-arg FPCALC_INTERNAL_PATH=/app/bin/fpcalc \
-  --build-arg FLASK_LOG_APP_FILENAME=app.log \
-  --build-arg FLASK_LOG_ERROR_FILENAME=error.log \
-  --build-arg FLASK_LOG_REQUESTS_FILENAME=requests.log \
-  --build-arg GUNICORN_LOG_ERROR_FILENAME=error.log \
-  --build-arg GUNICORN_LOG_ACCESS_FILENAME=access.log \
-  -t audio-fingerprinter:latest .
+docker build -t audio-fingerprinter:latest .
 ```
 
 ### Run
 
-Path variables are **required at runtime** (not baked into the image). Pass them with `-e` in every environment:
+Path and log filename variables are **required at runtime** (not baked into the image). Pass them with `-e` in every environment:
 
 ```bash
 docker run -d \
@@ -185,6 +178,11 @@ docker run -d \
   -e APP_PORT=5000 \
   -e GUNICORN_LOG_DIR=/var/log/audio-fingerprinter-gunicorn \
   -e FLASK_LOG_DIR_EXTERNAL=/var/log/audio-fingerprinter-flask \
+  -e FLASK_LOG_APP_FILENAME=app.log \
+  -e FLASK_LOG_ERROR_FILENAME=error.log \
+  -e FLASK_LOG_REQUESTS_FILENAME=requests.log \
+  -e GUNICORN_LOG_ERROR_FILENAME=error.log \
+  -e GUNICORN_LOG_ACCESS_FILENAME=access.log \
   audio-fingerprinter:latest
 ```
 
@@ -201,6 +199,11 @@ docker run -d \
   -e APP_PORT=3002 \
   -e GUNICORN_LOG_DIR=/app/log/gunicorn/ \
   -e FLASK_LOG_DIR_EXTERNAL=/app/log/flask \
+  -e FLASK_LOG_APP_FILENAME=app.log \
+  -e FLASK_LOG_ERROR_FILENAME=error.log \
+  -e FLASK_LOG_REQUESTS_FILENAME=requests.log \
+  -e GUNICORN_LOG_ERROR_FILENAME=error.log \
+  -e GUNICORN_LOG_ACCESS_FILENAME=access.log \
   audio-fingerprinter:latest
 ```
 
@@ -220,17 +223,6 @@ These environment variables are needed when running the app in development:
 - `FLASK_LOG_ERROR_FILENAME`
 - `FLASK_LOG_REQUESTS_FILENAME`
 
-### Build
-
-These environment variables are needed when building the container (path dirs are not build args):
-
-- `FPCALC_INTERNAL_PATH`
-- `FLASK_LOG_APP_FILENAME`
-- `FLASK_LOG_ERROR_FILENAME`
-- `FLASK_LOG_REQUESTS_FILENAME`
-- `GUNICORN_LOG_ERROR_FILENAME`
-- `GUNICORN_LOG_ACCESS_FILENAME`
-
 ### Runtime (required)
 
 These must be set when running the container (fail fast if missing):
@@ -238,6 +230,8 @@ These must be set when running the container (fail fast if missing):
 - `POOL_DIR_EXTERNAL` or `POOL_DIR_INTERNAL` – pool directory path inside the container
 - `APP_PORT` – port the app binds to
 - `GUNICORN_LOG_DIR` – when `APP_IS_EXPOSED=true` (default in image)
+- `FLASK_LOG_APP_FILENAME`, `FLASK_LOG_ERROR_FILENAME`, `FLASK_LOG_REQUESTS_FILENAME` – Flask log filenames
+- `GUNICORN_LOG_ERROR_FILENAME`, `GUNICORN_LOG_ACCESS_FILENAME` – when `APP_IS_EXPOSED=true`
 - `FLASK_LOG_DIR_EXTERNAL` or `FLASK_LOG_DIR_INTERNAL` – Flask log directory
 
 When running with `--user` (non-root), use writable paths: `GUNICORN_LOG_DIR=/app/log/gunicorn/`, `FLASK_LOG_DIR_EXTERNAL=/app/log/flask`.
