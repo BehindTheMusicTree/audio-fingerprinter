@@ -42,6 +42,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Added
+
+- **Manual build and deploy**: `build-and-deploy.yml` accepts `workflow_dispatch`, so the image can be rebuilt and redeployed for a branch by hand (e.g. after a failed image pull).
+
 ## [1.4.5] - 2026-09-28
 
 ### CI
