@@ -33,6 +33,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ```markdown
 ## [Unreleased]
 
+### Changed
+
+- Agent rules: migrated `.cursor/rules/*.mdc` to `.claude/rules/*.md` (`globs` → `paths`) and removed the remaining Cursor-specific files and references.
+
 ### CI
 
 - Deploys: bumped `trigger-coolify-deploy` to v4.4.0 — a Coolify deployment stuck past an hour is cancelled (its build container force-stopped over SSH) instead of blocking every later deploy, and a failed or cancelled deploy posts an alert to the env's Discord status-alerts channel

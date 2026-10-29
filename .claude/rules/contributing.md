@@ -1,6 +1,7 @@
 ---
 description: Contributing practices - GitHub Flow, committing, testing, code style
-globs: **/*
+paths:
+  - "**/*"
 ---
 
 # Contributing Practices

@@ -1,6 +1,7 @@
 ---
 description: Changelog format and practices - categories, Unreleased section, no Test category
-globs: CHANGELOG.md
+paths:
+  - "CHANGELOG.md"
 ---
 
 # Changelog Practices
