@@ -50,6 +50,11 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### CI
+
+- **Deployment**: Use separate variables for the SSH host and direct HTTP origin.
+
+
 ### Documentation
 
 - **Agent guidance**: Share project rules and startup instructions across Claude and Codex, with CI checking for drift.
