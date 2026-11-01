@@ -50,6 +50,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Documentation
+
+- **Agent guidance**: Share project rules and startup instructions across Claude and Codex, with CI checking for drift.
+
 ## [1.4.6] - 2026-09-29
 
 ### Added

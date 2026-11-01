@@ -1,18 +1,14 @@
 ---
-description: Contributing practices - GitHub Flow, committing, testing, code style
 paths:
   - "**/*"
 ---
 
-# Contributing Practices
+# Contributing practices
 
-Follow practices defined in [CONTRIBUTING.md](../CONTRIBUTING.md).
+Follow `CONTRIBUTING.md` for Gitflow, validation and PR requirements. Feature
+and chore branches start from and target `develop`; release and hotfix workflows
+are documented there. Do not commit directly to `main` or `develop`.
 
-## Key Points
-
-- **GitHub Flow**: Single long-lived branch `main`, short-lived feature branches (`feature/<name>`, `hotfix/<name>`, `chore/<name>`). No direct commits to `main` — all changes via Pull Requests.
-- **Branch names**: Include issue numbers when applicable (e.g. `feature/123-add-format-support`).
-- **Committing**: Concise messages, small focused commits, update `CHANGELOG.md` under `[Unreleased]` for user-facing changes.
-- **Testing**: Run `python -m unittest discover` before committing.
-- **Code**: Python 3.14, follow existing style, use type hints where appropriate. For API or config changes, update README and env templates as needed.
-- **Pre-PR**: Branch up to date with `main`, tests pass, CHANGELOG/README updated, no secrets or large binaries committed.
+Use Python 3.14 and the existing code style. For API or configuration changes,
+update the README and environment templates as appropriate. Run the documented
+pytest coverage command for relevant changes.

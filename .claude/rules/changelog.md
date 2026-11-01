@@ -1,16 +1,10 @@
 ---
-description: Changelog format and practices - categories, Unreleased section, no Test category
 paths:
   - "CHANGELOG.md"
 ---
 
-# Changelog Practices
+# Changelog practices
 
-Follow practices defined in [CHANGELOG.md](../CHANGELOG.md).
-
-## Key Points
-
-- Add entries to `[Unreleased]` section under appropriate category (Added, Changed, Improved, Deprecated, Removed, Fixed, Documentation, Performance, CI)
-- Format: `- **Feature/Component**: Description of change`
-- Group related changes together
-- **"Test" is NOT a valid changelog category** - mention tests within related feature/fix entries
+Follow `CHANGELOG.md`: add notable changes under `[Unreleased]` using its
+existing categories and `- **Feature/Component**: Description` format. Mention
+tests within the related entry; `Test` is not a changelog category.

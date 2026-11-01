@@ -1,31 +1,12 @@
 ---
-description: Agent rules location and format standards
 paths:
+  - ".agents/rules/**/*"
   - ".claude/rules/**/*"
 ---
 
-# Agent Rules Standards
+# Agent rule maintenance
 
-## Location
-
-- Agent rules must be stored in the `.claude/rules/` directory
-
-## File Format
-
-- Use the `.md` file extension
-- Frontmatter: `description`, plus `paths` for rules scoped to specific files (omit `paths` for always-loaded rules)
-- Frontmatter format:
-  ```yaml
-  ---
-  description: Brief summary of rule purpose
-  paths:
-    - "CHANGELOG.md"
-  ---
-  ```
-
-## Organization
-
-- Create focused, single-purpose rule files
-- Name files descriptively (e.g., `contributing.md`, `changelog.md`)
-- Reference main documentation files rather than duplicating content
-- Keep rules concise and actionable
+Keep shared rule sources in `.agents/rules/` and define their scopes in
+`.agents/scopes.json`. Generate Claude adapters from those sources; do not edit
+generated `.claude/rules/` files directly. Keep rules focused and reference
+canonical project documentation.

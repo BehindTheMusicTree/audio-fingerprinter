@@ -1,0 +1,21 @@
+{
+  "agent-rules": {
+    "source": ".agents/rules/agent-rules.md",
+    "paths": [
+      ".agents/rules/**/*",
+      ".claude/rules/**/*"
+    ]
+  },
+  "changelog": {
+    "source": ".agents/rules/changelog.md",
+    "paths": [
+      "CHANGELOG.md"
+    ]
+  },
+  "contributing": {
+    "source": ".agents/rules/contributing.md",
+    "paths": [
+      "**/*"
+    ]
+  }
+}
