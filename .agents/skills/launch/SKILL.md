@@ -26,8 +26,9 @@ pip install -e ".[dev]"
 
 ## 3. Env file
 
-Copy `env/.env.example` to `env/.env` and fill in required values (`APP_PORT`
-in particular — it has no default, the app won't start without it).
+If `env/.env` is absent, copy `env/.env.example` to `env/.env`; never overwrite
+an existing file. Fill in the required values, including `APP_PORT` and the
+`FPCALC` path. See `README.md` and `settings.py` for requirements.
 
 ## 4. Filesystem setup
 
@@ -47,7 +48,9 @@ Serves on `0.0.0.0:$APP_PORT`.
 ## 6. Verify
 
 ```bash
-curl http://localhost:$APP_PORT/health
+curl http://localhost:3002/health
 ```
 
+Replace `3002` with the value configured in `env/.env` (or the shell);
+the file is read by the application and does not export variables to your shell.
 Expect `{"status": "ok"}`.
