@@ -33,6 +33,14 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 ```markdown
 ## [Unreleased]
 
+### Changed
+
+- Agent rules: migrated `.cursor/rules/*.mdc` to `.claude/rules/*.md` (`globs` → `paths`) and removed the remaining Cursor-specific files and references.
+
+### CI
+
+- Deploys: bumped `trigger-coolify-deploy` to v4.4.0 — a Coolify deployment stuck past an hour is cancelled (its build container force-stopped over SSH) instead of blocking every later deploy, and a failed or cancelled deploy posts an alert to the env's Discord status-alerts channel
+
 ### Improved
 
 - **Docker image**: Added .dockerignore to exclude dev and test files from build context
@@ -41,6 +49,17 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 **Note:** During releases, maintainers will move entries from `[Unreleased]` to a versioned section (e.g., `## [0.2.0] - 2025-01-XX`).
 
 ## [Unreleased]
+
+## [1.4.7] - 2026-11-01
+
+### CI
+
+- **Deployment**: Use separate variables for the SSH host and direct HTTP origin.
+
+
+### Documentation
+
+- **Agent guidance**: Share project rules and startup instructions across Claude and Codex, with CI checking for drift.
 
 ## [1.4.6] - 2026-09-29
 
