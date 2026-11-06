@@ -262,22 +262,12 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Releases are cut by merging `develop` into `main` via Pull Request, then running the release script from `main` (requires `bump-my-version`; install with `pip install -e ".[dev]"`):
-
-```bash
-python3 scripts/release.py [patch|minor|major]
-# or: ./scripts/release [patch|minor|major]
-```
-
-`release.py` is Python — do not run `bash scripts/release.py` (the shell will mis-parse it). Use `python3` or the `scripts/release` shim above.
-
-Default is `patch`. The script will:
-
-1. Move `[Unreleased]` changelog entries into a new versioned section with the current date (ISO).
-2. Bump version in `pyproject.toml` via `bump-my-version` (`[tool.bumpversion]` and `[project]` version).
-3. Commit the changelog and version changes, create tag `vX.Y.Z`, and push branch and tag.
-
-CI will build and push the Docker image on tag push; ensure `APP_VERSION` (or equivalent) in the workflow matches the release.
+Prepare a release branch from `develop` and run `python3 scripts/release.py`
+(with `patch`, `minor`, or `major`) to update the changelog and version mirrors.
+Review and commit the changes, then open a release PR to `main`. The shared
+workflow creates the tag after the version change merges. Confirm that workflow
+succeeds, then back-merge `main` into `develop` through a PR. The existing image
+build and deployment workflows remain branch-triggered.
 
 ## License & Attribution
 

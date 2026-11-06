@@ -54,6 +54,8 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ### CI
 
+- **Release tags**: Create tags automatically after a release version merges to main.
+
 - **Deployment**: Use separate variables for the SSH host and direct HTTP origin.
 
 
