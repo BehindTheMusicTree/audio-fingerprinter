@@ -50,11 +50,15 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
-## [1.4.7] - 2026-11-01
+## [1.4.8] - 2026-11-06
 
 ### CI
 
 - **Release tags**: Create tags automatically after a release version merges to main.
+
+## [1.4.7] - 2026-11-01
+
+### CI
 
 - **Deployment**: Use separate variables for the SSH host and direct HTTP origin.
 
