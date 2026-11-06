@@ -50,6 +50,11 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### CI
+
+- **Release tags**: Create tags automatically after a release version merges to main.
+
+
 ## [1.4.7] - 2026-11-01
 
 ### CI
