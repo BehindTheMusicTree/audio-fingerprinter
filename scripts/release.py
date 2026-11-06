@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Release wrapper: bump version with bump-my-version, update CHANGELOG, commit, tag, push."""
+"""Prepare the version and changelog for a release PR."""
 
 import importlib.metadata
 import re
 import shutil
 import subprocess
 import sys
+import tomllib
 from datetime import date
 from pathlib import Path
 
@@ -91,17 +92,17 @@ def main() -> None:
     current = current_version_from_changelog()
     if not current:
         sys.exit("CHANGELOG: no versioned section found after [Unreleased]")
+    with (REPO_ROOT / "pyproject.toml").open("rb") as pyproject:
+        config = tomllib.load(pyproject)
+    if config["project"]["version"] != current or config["tool"]["bumpversion"]["current_version"] != current:
+        sys.exit("Version mismatch between pyproject.toml and CHANGELOG")
+    command = bump_my_version_cmd()
     new_version = bump(current, part)
     today = date.today().isoformat()
 
     update_changelog(new_version, today)
-    run(*bump_my_version_cmd(), "bump", part, "--new-version", new_version, "--allow-dirty")
-    run("git", "add", "CHANGELOG.md", "pyproject.toml")
-    run("git", "commit", "-m", f"Release {new_version}")
-    run("git", "tag", f"v{new_version}")
-    run("git", "push", "origin", "HEAD")
-    run("git", "push", "origin", f"v{new_version}")
-    print(f"Released {new_version} (tag v{new_version})")
+    run(*command, "bump", part, "--new-version", new_version, "--allow-dirty")
+    print(f"Prepared {new_version}; review the changes and open a release PR.")
 
 
 if __name__ == "__main__":
