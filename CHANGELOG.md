@@ -50,6 +50,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 ## [Unreleased]
 
+### Changed
+
+- Removed the local pull request template; the organization-wide template from `BehindTheMusicTree/.github` applies.
+
 ## [1.4.8] - 2026-11-06
 
 ### CI
