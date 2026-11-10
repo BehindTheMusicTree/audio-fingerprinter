@@ -20,3 +20,6 @@ htmlcov/
 
 .coverage
 .claude/worktrees/
+
+# graphify
+graphify-out/
