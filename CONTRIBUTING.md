@@ -251,13 +251,7 @@ Before submitting a Pull Request:
 
 - **Target branch:** `develop` (or `main` for `hotfix/<name>` branches).
 - **Title:** Short, imperative summary (e.g. "Add .dockerignore to reduce image size", "Fix fpcalc path in Docker").
-- **Description:** A PR template will be automatically provided when opening a PR. Fill it out with:
-  - Clear description of what changed and why
-  - Related issues (if any)
-  - Type of change
-  - Complete the Pre-PR Checklist
-  - Testing instructions
-  - Any additional context
+- **Description:** The organization-wide PR template (`BehindTheMusicTree/.github`) is provided automatically when opening a PR. Fill every section: Summary, Changes, Test plan, Screenshots, Risk, How to revert, Deployment notes. Complete the Pre-PR Checklist above first.
 - **CI:** Ensure the CI workflow (tests + Docker build) passes. Fix any failures before requesting review.
 
 ### 7. Releasing _(For Maintainers)_
