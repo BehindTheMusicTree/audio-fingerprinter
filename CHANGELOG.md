@@ -54,6 +54,10 @@ All contributors (including maintainers) should update `CHANGELOG.md` when creat
 
 - Removed the local pull request template; the organization-wide template from `BehindTheMusicTree/.github` applies.
 
+### CI
+
+- Pin the shared release workflows to the lag-tolerant github-workflows commit 79c1362, so tag creation tolerates GitHub read-after-write delays.
+
 ## [1.4.8] - 2026-11-06
 
 ### CI
