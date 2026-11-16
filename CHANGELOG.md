@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Agent directories**: Keep plans and scratch data out of Git while tracking the directory ignore rules.
+
 ### Documentation
 
 - Removed the contributor guidelines and example entry from `CHANGELOG.md`: the example duplicated the `[Unreleased]` heading and led agents to write entries in the wrong place, and the conventions now live in the shared `create-pr` skill.
