@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.10] - 2026-11-17
+
 ### Fixed
 
 - **Agent directories**: Keep plans and scratch data out of Git while tracking the directory ignore rules.
