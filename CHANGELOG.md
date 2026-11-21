@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### CI
+
+- Add the canonical `concurrency` groups to the `agent-drift`, `tests` and `release-tag` workflows.
+
 ## [1.4.11] - 2026-11-18
 
 ### Removed
