@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### CI
+
+- **Checks**: Isolate pull request concurrency by PR number and add organization conformance validation.
+
 ## [1.4.12] - 2026-11-22
 
 ### CI

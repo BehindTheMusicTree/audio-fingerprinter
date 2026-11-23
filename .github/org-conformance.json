@@ -1,0 +1,11 @@
+{
+  "concurrency": {
+    "exemptions": [
+      {
+        "workflow": "build-and-deploy.yml",
+        "form": "queue",
+        "reason": "Active deployments are not cancelled; newer pending runs can supersede older ones per branch."
+      }
+    ]
+  }
+}
