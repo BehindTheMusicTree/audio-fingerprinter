@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.14] - 2026-11-26
+
 ### CI
 
 - **Checks**: Enforce the shared coverage check (`coverage / coverage`) and add the `Tests success` gate job, which requires the tests and the coverage check to succeed.
