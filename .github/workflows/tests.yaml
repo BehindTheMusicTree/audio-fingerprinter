@@ -58,4 +58,27 @@ jobs:
           ENV: ${{ vars.ENV }}
           DEBUG: true
           APP_PORT: ${{ vars.APP_PORT }}
-        run: python -m pytest --cov --cov-report=term-missing
+        run: python -m pytest --cov --cov-report=term-missing --cov-report=xml:coverage-tests.xml --cov-fail-under=0
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-tests
+          path: coverage-tests.xml
+          if-no-files-found: error
+
+  coverage:
+    needs: tests
+    permissions:
+      contents: read
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/coverage.yml@18b90bc9c64b9abab0a86e7ea74f65acac93aec1 # v6.6.0
+
+  tests-success:
+    name: Tests success
+    needs: [tests, coverage]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success")' <<<"$NEEDS"
