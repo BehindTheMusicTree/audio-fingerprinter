@@ -21,7 +21,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "bump-my-version>=0.24.0",
     "pytest>=8.0",
     "pytest-cov>=5.0",
 ]
@@ -41,8 +40,6 @@ exclude_lines = ["if __name__ == .__main__.:"]
 
 [tool.bumpversion]
 current_version = "1.4.14"
-commit = false
-tag = false
 
 [tool.setuptools.packages.find]
 where = ["."]

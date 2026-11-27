@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### CI
+
+- **Release and deployment**: Prepare releases with Release Please on `main` and deploy staging from a manually selected commit.
+
 ## [1.4.14] - 2026-11-26
 
 ### CI

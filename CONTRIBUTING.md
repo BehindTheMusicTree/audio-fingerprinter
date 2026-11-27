@@ -45,19 +45,16 @@ The maintainer(s) are responsible for:
 - Ensuring code quality and project direction
 - Responding to critical issues
 - Maintaining the project's infrastructure
-- Moving "Unreleased" changelog entries to versioned sections during releases
 
-**Important:** Even maintainers must go through Pull Requests. No direct commits to `main` or `develop` are allowed — all changes must be submitted via Pull Requests and go through the standard review process.
-
-_Note: Contributors can submit fixes for critical issues via feature branches. Maintainers may promote these to hotfix branches when urgent production fixes are needed._
+**Important:** Even maintainers must go through Pull Requests. Submit every change to `main` by pull request.
 
 ### Infrastructure & Automation
 
 **Workflows:**
 
-- **Tests** (`.github/workflows/tests.yaml`): Runs on pull requests and pushes targeting `main` or `develop`
+- **Tests** (`.github/workflows/tests.yaml`): Runs on pull requests and pushes targeting `main`
 - **Tests**: Setup Python 3.14, install system dependencies via `scripts/install-dependencies.sh`, run `scripts/setup-filesystem.sh`, then `python -m pytest --cov` (enforces the minimum coverage threshold in `pyproject.toml`)
-- **Build and deploy** (`.github/workflows/build-and-deploy.yml`): On pushes to `develop` / `main`, builds the image and pushes it to `ghcr.io/behindthemusictree/afp` (`:staging` / `:prod`, plus `:sha-<short>`), then triggers the Coolify deploy of the `afp` app
+- **Build and deploy** and **Deploy staging** publish the AFP image and deploy it to Coolify. Production deploys on pushes to `main`. For staging, see [Docker deployment](README.md#docker-deployment).
 
 **Repository automation (maintainer-only):**
 
@@ -71,7 +68,7 @@ _Note: Contributors can submit fixes for critical issues via feature branches. M
 
 ## Development Workflow
 
-We follow [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow): two long-lived branches, `develop` (integration) and `main` (production/releases), with short-lived feature/hotfix/chore branches merged into `develop` via Pull Requests. `develop` is merged into `main` only at release time.
+We follow GitHub Flow. `main` is the integration, production and release branch.
 
 **Workflow steps:** Fork & Clone → Environment Setup → Branching → Developing → Testing → Committing → Pull Request Process → Releasing _(For Maintainers)_
 
@@ -111,7 +108,7 @@ Ensure you have:
   pip install -e ".[dev]"
   ```
 
-  **`[dev]`** includes **`bump-my-version`** and **`pytest`**. Prefer **`python -m pytest`** from the repo root (same interpreter as the venv) so **`pyproject.toml`** pytest options apply.
+  **`[dev]`** includes **`pytest`** and **`pytest-cov`**. Prefer **`python -m pytest`** from the repo root (same interpreter as the venv) so **`pyproject.toml`** pytest options apply.
 
 - **System dependencies** (required for fingerprinting and tests):
 
@@ -147,44 +144,13 @@ Ensure you have:
 
 ### 2. Branching
 
-#### Main branch (`main`)
+Create a short-lived branch from `main` for each feature, fix, or maintenance task. Open a pull request to `main` and squash-merge it after the required checks pass.
 
-- Production/release branch; always deployable
-- Receives merges only from `develop` (releases) or `hotfix/<name>` (urgent production fixes)
-- **No direct commits** — all changes go through Pull Requests
-- Releases are tagged from `main`
-
-#### Develop branch (`develop`)
-
-- Integration branch; default target for Pull Requests
-- All tests must pass before merging
-- **No direct commits** — all changes go through Pull Requests
-- Periodically merged into `main` to cut a release
-
-#### Feature branches (`feature/<name>`)
-
-- One branch per feature or bug fix; branch from `develop`
-- Include issue numbers when applicable: `feature/123-add-format-support`
-- Examples:
-
-  ```bash
-  git checkout develop && git pull origin develop
-  git checkout -b feature/improve-error-messages
-  git checkout -b feature/45-fix-fpcalc-path
-  ```
-
-- Merge into `develop` via Pull Request when complete and tested
-
-#### Hotfix branches (`hotfix/<name>`) _(For Maintainers)_
-
-- For urgent production fixes; branch from `main`
-- Merge into `main` via Pull Request after review, then merge (or cherry-pick) into `develop` so the fix isn't lost on the next release
-
-#### Chore branches (`chore/<name>`)
-
-- For maintenance, CI, docs, or dependency updates; branch from `develop`
-- Examples: `chore/update-deps`, `chore/ci-python-314`
-- Merge into `develop` via Pull Request when complete
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c feature/improve-error-messages
+```
 
 ### 3. Developing
 
@@ -219,7 +185,7 @@ Do **not** rely on a bare **`pytest`** on `PATH` while `(.venv)` is active: many
 
 - Use **concise, clear commit messages** that describe what changed and why.
 - Prefer small, focused commits (one logical change per commit).
-- **Update [CHANGELOG.md](CHANGELOG.md)** for user-facing changes: add an entry under the `[Unreleased]` section under the appropriate category (Added, Changed, Improved, Fixed, Documentation, etc.). See [CHANGELOG.md](CHANGELOG.md) for format and categories.
+- Use the PR title to describe the user-facing effect. Release Please uses conventional titles to generate release notes.
 
 ### 6. Pull Request Process
 
@@ -239,29 +205,26 @@ Before submitting a Pull Request:
 
 **3. Documentation**
 
-- [CHANGELOG.md](CHANGELOG.md) updated in the `[Unreleased]` section for any notable change.
+- The PR title describes the change for release notes.
 - [README.md](README.md) or env templates updated if you changed config, API, or run instructions.
 
 **4. Git**
 
-- Branch is up to date with `develop`.
+- Branch is up to date with `main`.
 - No secrets, large binaries, or personal config committed.
 
 #### 6.2. Opening a Pull Request
 
-- **Target branch:** `develop` (or `main` for `hotfix/<name>` branches).
-- **Title:** Short, imperative summary (e.g. "Add .dockerignore to reduce image size", "Fix fpcalc path in Docker").
+- **Target branch:** `main`.
+- **Title:** Use a Conventional Commit title, such as `fix: correct the fpcalc path in Docker`. The squash commit uses the PR title.
 - **Description:** The organization-wide PR template (`BehindTheMusicTree/.github`) is provided automatically when opening a PR. Fill every section: Summary, Changes, Test plan, Screenshots, Risk, How to revert, Deployment notes. Complete the Pre-PR Checklist above first.
-- **CI:** Ensure the CI workflow (tests + Docker build) passes. Fix any failures before requesting review.
+- **CI:** Ensure the required tests, agent drift and PR title checks pass. Fix any failures before requesting review.
 
 ### 7. Releasing _(For Maintainers)_
 
-Prepare a release branch from `develop` and run `python3 scripts/release.py`
-(with `patch`, `minor`, or `major`) to update the changelog and version mirrors.
-Review and commit the changes, then open a release PR to `main`. The shared
-workflow creates the tag after the version change merges. Confirm that workflow
-succeeds, then back-merge `main` into `develop` through a PR. The existing image
-build and deployment workflows remain branch-triggered.
+Release Please is paused during cutover. Once the App credentials and required PR title check are live, the activation PR will enable it.
+
+Release Please prepares a release pull request when a qualifying conventional PR is squash-merged into `main`. It updates the changelog and both version fields in `pyproject.toml`. The release PR auto-merges after required checks pass, and the shared release workflow validates the bump and creates the version tag. Container deployments follow the workflows above.
 
 ## License & Attribution
 

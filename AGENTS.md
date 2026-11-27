@@ -2,7 +2,7 @@
 
 Audio Fingerprinter is a Python 3.14 Flask API that generates Chromaprint audio
 fingerprints using `ffmpeg` and `fpcalc`. Read `README.md` for setup and API
-behavior and `CONTRIBUTING.md` for Gitflow, validation and release procedures.
+behavior and `CONTRIBUTING.md` for GitHub Flow, validation and release procedures.
 
 Before working on matching files, read the rule listed below. Paths are relative
 to the repository root; `**/` includes files at the root. Claude `paths:`

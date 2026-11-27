@@ -1,0 +1,23 @@
+{
+  "bootstrap-sha": "124858c143d451995d7dfd56d00a0f6ddb1ad477",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "pyproject.toml",
+          "jsonpath": "$.project.version"
+        },
+        {
+          "type": "toml",
+          "path": "pyproject.toml",
+          "jsonpath": "$.tool.bumpversion.current_version"
+        }
+      ]
+    }
+  }
+}
