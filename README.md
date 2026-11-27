@@ -157,7 +157,7 @@ The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment 
 Pushes to `main` build and deploy `ghcr.io/behindthemusictree/afp:prod` to Coolify production. Maintainers can deploy `:staging` manually from the **Deploy staging** workflow. Run the workflow from `main` and supply the full SHA of the commit to deploy.
 
 ```bash
-gh workflow run deploy-staging.yml --ref main -f source-sha=<full-commit-sha>
+gh workflow run deploy-staging.yml --ref main -f "source-sha=<full-commit-sha>"
 ```
 
 Both workflows also publish a `:sha-<short>` image tag and check `/health` after deploying.
