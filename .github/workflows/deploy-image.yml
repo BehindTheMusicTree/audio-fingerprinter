@@ -47,6 +47,7 @@ jobs:
             *) exit 1 ;;
           esac
           printf 'moving_tag=%s\n' "$moving_tag" >> "$GITHUB_OUTPUT"
+          printf 'short_sha=%s\n' "${SOURCE_SHA:0:7}" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v7.0.1
         with:
@@ -69,11 +70,13 @@ jobs:
       - id: meta
         uses: docker/metadata-action@v6.2.0
         with:
-          context: git
           images: ${{ env.IMAGE }}
+          # A staging dispatch can select a different SHA from the workflow run.
           tags: |
             type=raw,value=${{ steps.image-tags.outputs.moving_tag }}
-            type=sha,prefix=sha-
+            type=raw,priority=100,value=sha-${{ steps.image-tags.outputs.short_sha }}
+          labels: |
+            org.opencontainers.image.revision=${{ inputs.source-sha }}
 
       - uses: docker/build-push-action@v7.4.0
         with:
