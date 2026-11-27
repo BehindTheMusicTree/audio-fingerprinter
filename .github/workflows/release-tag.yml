@@ -1,4 +1,4 @@
-name: Release tag
+name: Release
 on:
   push:
     branches: [main]
@@ -10,8 +10,19 @@ concurrency:
   cancel-in-progress: false
 jobs:
   release:
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/release-tag.yml@79c136234b5d487bb99e0cd2050f38f6b3e06747
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/release-tag.yml@18b90bc9c64b9abab0a86e7ea74f65acac93aec1 # v6.6.0
     with:
       app-id: ${{ vars.RELEASE_APP_ID }}
     secrets:
       release-app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+  release-please:
+    # Activate once the App credentials and required title check are live.
+    if: vars.AFP_RELEASE_PLEASE_ENABLED == 'true'
+    needs: release
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/release-please.yml@18b90bc9c64b9abab0a86e7ea74f65acac93aec1 # v6.6.0
+    with:
+      app-id: ${{ vars.RELEASE_PR_APP_ID }}
+      release-policies: .github/release-policy.json
+      auto-merge: true
+    secrets:
+      release-pr-app-private-key: ${{ secrets.RELEASE_PR_APP_PRIVATE_KEY }}

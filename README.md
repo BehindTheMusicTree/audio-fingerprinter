@@ -61,7 +61,7 @@ A Flask-based REST API service for generating audio fingerprints using Chromapri
    ```bash
    pip install -e ".[dev]"
    ```
-   **`[dev]`** adds **`bump-my-version`** and **`pytest`**. If you use **pytest**, run **`python -m pytest`** from the repo root so **`pyproject.toml`** (`testpaths`, `pythonpath`) applies. Runtime-only install: **`pip install .`**
+   **`[dev]`** adds **`pytest`** and **`pytest-cov`**. If you use **pytest**, run **`python -m pytest`** from the repo root so **`pyproject.toml`** (`testpaths`, `pythonpath`) applies. Runtime-only install: **`pip install .`**
 
 4. Install system dependencies:
    - **Ubuntu/Linux**: Run `sudo -E bash scripts/install-dependencies.sh` (set `APP_IS_DOCKERIZED=false`)
@@ -154,7 +154,13 @@ The service will start on `0.0.0.0:PORT` (configured via `APP_PORT` environment 
 
 ## Docker Deployment
 
-**CI:** `.github/workflows/build-and-deploy.yml` builds the image on a GitHub-hosted runner and pushes it to `ghcr.io/behindthemusictree/afp` on every push to `develop` (`:staging`) and `main` (`:prod`), plus `:sha-<short>`, then triggers the Coolify deploy of the `afp` app in the matching environment.
+Pushes to `main` build and deploy `ghcr.io/behindthemusictree/afp:prod` to Coolify production. Maintainers can deploy `:staging` manually from the **Deploy staging** workflow. Run the workflow from `main` and supply the full SHA of the commit to deploy.
+
+```bash
+gh workflow run deploy-staging.yml --ref main -f source-sha=<full-commit-sha>
+```
+
+Both workflows also publish a `:sha-<short>` image tag and check `/health` after deploying.
 
 ### Build
 
