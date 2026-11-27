@@ -222,8 +222,6 @@ Before submitting a Pull Request:
 
 ### 7. Releasing _(For Maintainers)_
 
-Release Please is paused during cutover. Once the App credentials and required PR title check are live, the activation PR will enable it.
-
 Release Please prepares a release pull request when a qualifying conventional PR is squash-merged into `main`. It updates the changelog and both version fields in `pyproject.toml`. The release PR auto-merges after required checks pass, and the shared release workflow validates the bump and creates the version tag. Container deployments follow the workflows above.
 
 ## License & Attribution

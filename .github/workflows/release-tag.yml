@@ -18,8 +18,6 @@ jobs:
     secrets:
       release-app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
   release-please:
-    # Activate once the App credentials and required title check are live.
-    if: vars.AFP_RELEASE_PLEASE_ENABLED == 'true'
     needs: release
     uses: BehindTheMusicTree/github-workflows/.github/workflows/release-please.yml@18b90bc9c64b9abab0a86e7ea74f65acac93aec1 # v6.6.0
     with:
