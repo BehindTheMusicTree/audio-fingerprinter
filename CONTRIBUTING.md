@@ -185,7 +185,7 @@ Do **not** rely on a bare **`pytest`** on `PATH` while `(.venv)` is active: many
 
 - Use **concise, clear commit messages** that describe what changed and why.
 - Prefer small, focused commits (one logical change per commit).
-- **Update [CHANGELOG.md](CHANGELOG.md)** for user-facing changes: add an entry under the `[Unreleased]` section under the appropriate category (Added, Changed, Improved, Fixed, Documentation, etc.). See [CHANGELOG.md](CHANGELOG.md) for format and categories.
+- Use the PR title to describe the user-facing effect. Release Please uses conventional titles to generate release notes.
 
 ### 6. Pull Request Process
 
@@ -205,7 +205,7 @@ Before submitting a Pull Request:
 
 **3. Documentation**
 
-- [CHANGELOG.md](CHANGELOG.md) updated in the `[Unreleased]` section for any notable change.
+- The PR title describes the change for release notes.
 - [README.md](README.md) or env templates updated if you changed config, API, or run instructions.
 
 **4. Git**

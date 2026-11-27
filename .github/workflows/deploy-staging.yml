@@ -1,4 +1,5 @@
 name: Deploy staging
+run-name: Deploy staging from ${{ inputs.source-sha }}
 
 on:
   workflow_dispatch:
